@@ -174,6 +174,14 @@ public class Main extends SimpleApplication implements ActionListener {
         Material mat = new Material(getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Red);
+        Material chasisMat = new Material(getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        chasisMat.getAdditionalRenderState().setWireframe(true);
+        chasisMat.setBoolean("UseMaterialColors",true);    
+        chasisMat.setColor("Specular",ColorRGBA.White);
+        chasisMat.setColor("Diffuse",ColorRGBA.White);
+        chasisMat.setFloat("Shininess", 5f); // [1,128] 
+        
+        
 
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
@@ -185,6 +193,19 @@ public class Main extends SimpleApplication implements ActionListener {
         Node vehicleNode = new Node("vehicleNode");
         vehicle = new VehicleControl(compoundShape, 1000);
         vehicleNode.addControl(vehicle);
+        
+        Node meshNode = (Node) assetManager.loadModel("Models/simpleCar.scene");
+        Geometry chasis1 = findGeom(meshNode, "Cube-geom-1");
+        Geometry glass = findGeom(meshNode, "Cube-geom-2");
+        
+        //Spatial chasis = (Spatial)assetManager.loadModel("Models/Cube.mesh.xml");
+        vehicleNode.attachChild(chasis1);
+        vehicleNode.attachChild(glass);
+        //chasis.setMaterial(chasisMat);
+        //chasis.setLocalTranslation(0, 0.5f, 0);
+        
+        //Spatial glass = (Spatial)assetManager.loadModel("Models/");
+        
          
         //Load model and get chassis Geometry
         /*Node vehicleNode = (Node)assetManager.loadModel("Models/cars/Cube.mesh.xml");
@@ -221,34 +242,39 @@ public class Main extends SimpleApplication implements ActionListener {
         Cylinder wheelMesh = new Cylinder(16, 16, radius, radius * 0.6f, true);
 
         Node node1 = new Node("wheel 1 node");
-        Geometry wheels1 = new Geometry("wheel 1", wheelMesh);
+        //Geometry wheels1 = new Geometry("wheel 1", wheelMesh);
+        Geometry wheels1 = findGeom(meshNode, "Cylinder-geom-1");
         node1.attachChild(wheels1);
-        wheels1.rotate(0, FastMath.HALF_PI, 0);
-        wheels1.setMaterial(mat);
+        wheels1.rotate(0, 0, 1.55f);
+        wheels1.scale(0.5f);
+        //wheels1.setMaterial(mat);
         vehicle.addWheel(node1, new Vector3f(-xOff, yOff, zOff),
                 wheelDirection, wheelAxle, restLength, radius, true);
 
         Node node2 = new Node("wheel 2 node");
-        Geometry wheels2 = new Geometry("wheel 2", wheelMesh);
+        Geometry wheels2 = findGeom(meshNode, "Cylinder.001-geom-1");
         node2.attachChild(wheels2);
-        wheels2.rotate(0, FastMath.HALF_PI, 0);
-        wheels2.setMaterial(mat);
+        wheels2.rotate(0, 0, 1.55f);
+        wheels2.scale(0.5f);
+        //wheels2.setMaterial(mat);
         vehicle.addWheel(node2, new Vector3f(xOff, yOff, zOff),
                 wheelDirection, wheelAxle, restLength, radius, true);
 
         Node node3 = new Node("wheel 3 node");
-        Geometry wheels3 = new Geometry("wheel 3", wheelMesh);
+        Geometry wheels3 = findGeom(meshNode, "Cylinder.002-geom-1");
         node3.attachChild(wheels3);
-        wheels3.rotate(0, FastMath.HALF_PI, 0);
-        wheels3.setMaterial(mat);
+        wheels3.rotate(0, 0, 1.55f);
+        wheels3.scale(0.5f);
+        //wheels3.setMaterial(mat);
         vehicle.addWheel(node3, new Vector3f(-xOff, yOff, -zOff),
                 wheelDirection, wheelAxle, restLength, radius, false);
 
         Node node4 = new Node("wheel 4 node");
-        Geometry wheels4 = new Geometry("wheel 4", wheelMesh);
+        Geometry wheels4 = findGeom(meshNode, "Cylinder.003-geom-1");
         node4.attachChild(wheels4);
-        wheels4.rotate(0, FastMath.HALF_PI, 0);
-        wheels4.setMaterial(mat);
+        wheels4.rotate(0, 0, 1.55f);
+        wheels4.scale(0.5f);
+        //wheels4.setMaterial(mat);
         vehicle.addWheel(node4, new Vector3f(xOff, yOff, -zOff),
                 wheelDirection, wheelAxle, restLength, radius, false);
 
@@ -263,7 +289,8 @@ public class Main extends SimpleApplication implements ActionListener {
         //set forward camera node that follows the character
         camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 1, -15));
+        camNode.setLocalTranslation(new Vector3f(0, 4, -15));
+        //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
         camNode.lookAt(vehicleNode.getLocalTranslation(), Vector3f.UNIT_Y);
         vehicleNode.attachChild(camNode);
        

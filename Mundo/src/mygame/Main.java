@@ -87,7 +87,7 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-//        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
+        bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
             bsr.setDirection(new Vector3f(-0.5f, -0.3f, -0.3f).normalizeLocal());
@@ -260,6 +260,6 @@ public class Main extends SimpleApplication implements ActionListener {
 
     @Override
     public void simpleUpdate(float tpf) {
-        cam.lookAt(carNode.getWorldTranslation(), Vector3f.UNIT_Y);
+        //cam.lookAt(carNode.getWorldTranslation(), Vector3f.UNIT_Y);
     }
 }

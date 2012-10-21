@@ -4,7 +4,7 @@
   <useStyles filename="nifty-default-styles.xml" />
   <useControls filename="nifty-default-controls.xml" />  
   
-  <screen id="start" controller="controlador.MenuController">
+  <screen id="start" controller="vista.Menu">
     <layer id="background" childLayout="center">
       <image filename="Interface/Menu/start_background.jpg"></image>
     </layer>

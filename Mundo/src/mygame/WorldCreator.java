@@ -55,7 +55,7 @@ public class WorldCreator {
            
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
+        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad2/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,0.25f,20);
         
@@ -82,11 +82,83 @@ public class WorldCreator {
         //Obstacle creation
         Box obstacleBox = new Box(2,2,2);
         Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(10, -4, 2);
+        obstacleModel.setLocalTranslation(2, -2, -10);
         Material mat_obs = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat_obs.setTexture("ColorMap", 
             assetManager.loadTexture("Models/Box/BoxTexture.jpg"));
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 2
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(2, -2, -100);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 3
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-50, -2, -100);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 4
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-100, -2, -100);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 5
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-100, -2, -50);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 6
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-100, -2, 0);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 7
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-100, -2, 100);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 8
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(-50, -2, 100);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
+        
+        //Obstacle 9
+        obstacleBox = new Box(2,2,2);
+        obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(0, -2, 100);
         obstacleModel.setMaterial(mat_obs);
         obstacleModel.addControl(new RigidBodyControl(2));
         rootNode.attachChild(obstacleModel);

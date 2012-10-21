@@ -135,10 +135,10 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(sceneModel);
         
         //Añadimos el mundo en la colisiones
-        bulletAppState.getPhysicsSpace().add(landscape);
+        bulletAppState.getPhysicsSpace().add(landscape);       
         
-        //Añadimos el menu creador con nifty
-        startScreen = new MenuController();
+        //Añadimos el menu creado con nifty
+        startScreen = new MenuController(assetManager,rootNode);
         stateManager.attach(startScreen);
         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay( assetManager, inputManager, audioRenderer, guiViewPort);
         Nifty nifty = niftyDisplay.getNifty();

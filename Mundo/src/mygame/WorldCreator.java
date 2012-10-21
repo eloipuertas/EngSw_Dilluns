@@ -21,7 +21,10 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Plane;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
@@ -55,7 +58,13 @@ public class WorldCreator {
         Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,0.25f,20);
-
+        
+        Material mat = new Material( 
+            assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", 
+            assetManager.loadTexture("Models/AngularRoad/RoadTexture3.jpg"));
+        sceneModel.setMaterial(mat);
+        
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass zero.
         CollisionShape sceneShape =
@@ -74,11 +83,11 @@ public class WorldCreator {
         Box obstacleBox = new Box(2,2,2);
         Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
         obstacleModel.setLocalTranslation(10, -4, 2);
-        Material mat = new Material( 
+        Material mat_obs = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", 
+        mat_obs.setTexture("ColorMap", 
             assetManager.loadTexture("Models/Box/BoxTexture.jpg"));
-        obstacleModel.setMaterial(mat);
+        obstacleModel.setMaterial(mat_obs);
         obstacleModel.addControl(new RigidBodyControl(2));
         rootNode.attachChild(obstacleModel);
         space.getPhysicsSpace().add(obstacleModel);

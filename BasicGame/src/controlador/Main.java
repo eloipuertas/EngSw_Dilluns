@@ -64,6 +64,7 @@ import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Cylinder;
 import model.VehicleProtagonista;
+import vista.Display;
 
 
 public class Main extends SimpleApplication implements ActionListener {
@@ -76,6 +77,9 @@ public class Main extends SimpleApplication implements ActionListener {
     private final float accelerationForce = 1000.0f;
     private final float brakeForce = 100.0f;
     private CameraNode camNode;
+    
+    private MenuController menu;
+    private Display display;
 
 
     public static void main(String[] args) {
@@ -131,6 +135,7 @@ public class Main extends SimpleApplication implements ActionListener {
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         
         car.buildCar();
+        display = new Display(assetManager,settings,guiNode,guiFont);
         
         
         //Añadimos la scena
@@ -153,6 +158,8 @@ public class Main extends SimpleApplication implements ActionListener {
         
         //Añadimos el mundo en la colisiones
         bulletAppState.getPhysicsSpace().add(landscape);
+        
+        menu = new MenuController(stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer);   
     }
 
     private void setUpLight() {
@@ -211,7 +218,16 @@ public class Main extends SimpleApplication implements ActionListener {
             }
         }
     }
-
+    
+    private void updateDisplay(){
+        if (menu.isGameStarted() && !display.isDisplayAdded()){
+            display.addDisplay((int)(settings.getWidth()/1.28),(int)(settings.getHeight()/4.8));
+        }
+        else if (menu.isGameStarted()){
+            display.updateDisplay((float)Math.sqrt((Math.pow(car.getVehicle().getLinearVelocity().x,2)+Math.pow(car.getVehicle().getLinearVelocity().z,2)+Math.pow(car.getVehicle().getLinearVelocity().y,2))),1);
+        }
+    } 
+    
     @Override
     public void simpleUpdate(float tpf) {
         flyCam.setEnabled(false);
@@ -219,6 +235,6 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
         
         camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
-        
+        updateDisplay();
     }
 }

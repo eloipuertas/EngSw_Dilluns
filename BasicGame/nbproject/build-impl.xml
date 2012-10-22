@@ -136,12 +136,16 @@ is divided into following sections:
         </condition>
         <condition property="have.tests">
 <<<<<<< HEAD
+<<<<<<< HEAD
             <or>
                 <available file="${test.test.dir}"/>
             </or>
 =======
             <or/>
 >>>>>>> Grup-B
+=======
+            <or/>
+>>>>>>> origin/Grup-A
         </condition>
         <condition property="have.sources">
             <or>
@@ -235,9 +239,12 @@ is divided into following sections:
     <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init" name="-init-check">
         <fail unless="src.dir">Must set src.dir</fail>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <fail unless="test.test.dir">Must set test.test.dir</fail>
 =======
 >>>>>>> Grup-B
+=======
+>>>>>>> origin/Grup-A
         <fail unless="build.dir">Must set build.dir</fail>
         <fail unless="dist.dir">Must set dist.dir</fail>
         <fail unless="build.classes.dir">Must set build.classes.dir</fail>
@@ -412,6 +419,7 @@ is divided into following sections:
                 <property name="junit.forkmode" value="perTest"/>
                 <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.test.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                             <filename name="@{testincludes}"/>
@@ -420,6 +428,9 @@ is divided into following sections:
 =======
                     <batchtest todir="${build.test.results.dir}"/>
 >>>>>>> Grup-B
+=======
+                    <batchtest todir="${build.test.results.dir}"/>
+>>>>>>> origin/Grup-A
                     <syspropertyset>
                         <propertyref prefix="test-sys-prop."/>
                         <mapper from="test-sys-prop.*" to="*" type="glob"/>
@@ -445,6 +456,7 @@ is divided into following sections:
                     <isset property="test.method"/>
                 </condition>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <union id="test.set">
                     <fileset dir="${test.test.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
                         <filename name="@{testincludes}"/>
@@ -453,6 +465,9 @@ is divided into following sections:
 =======
                 <union id="test.set"/>
 >>>>>>> Grup-B
+=======
+                <union id="test.set"/>
+>>>>>>> origin/Grup-A
                 <taskdef classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}" name="testng"/>
                 <testng classfilesetref="test.set" failureProperty="tests.failed" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="BasicGame" testname="TestNG tests" workingDir="${work.dir}">
                     <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
@@ -561,6 +576,7 @@ is divided into following sections:
                 <property name="junit.forkmode" value="perTest"/>
                 <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <batchtest todir="${build.test.results.dir}">
                         <fileset dir="${test.test.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                             <filename name="@{testincludes}"/>
@@ -569,6 +585,9 @@ is divided into following sections:
 =======
                     <batchtest todir="${build.test.results.dir}"/>
 >>>>>>> Grup-B
+=======
+                    <batchtest todir="${build.test.results.dir}"/>
+>>>>>>> origin/Grup-A
                     <syspropertyset>
                         <propertyref prefix="test-sys-prop."/>
                         <mapper from="test-sys-prop.*" to="*" type="glob"/>
@@ -1252,6 +1271,7 @@ is divided into following sections:
     </target>
     <target if="do.depend.true" name="-compile-test-depend">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.test.dir}"/>
     </target>
     <target depends="init,deps-jar,compile,-pre-pre-compile-test,-pre-compile-test,-compile-test-depend" if="have.tests" name="-do-compile-test">
@@ -1260,12 +1280,17 @@ is divided into following sections:
             <fileset dir="${test.test.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
 =======
+=======
+>>>>>>> origin/Grup-A
         <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir=""/>
     </target>
     <target depends="init,deps-jar,compile,-pre-pre-compile-test,-pre-compile-test,-compile-test-depend" if="have.tests" name="-do-compile-test">
         <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" processorpath="${javac.test.processorpath}" srcdir=""/>
         <copy todir="${build.test.classes.dir}"/>
+<<<<<<< HEAD
 >>>>>>> Grup-B
+=======
+>>>>>>> origin/Grup-A
     </target>
     <target name="-post-compile-test">
         <!-- Empty placeholder for easier customization. -->
@@ -1280,6 +1305,7 @@ is divided into following sections:
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
         <j2seproject3:force-recompile destdir="${build.test.classes.dir}"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}" processorpath="${javac.test.processorpath}" sourcepath="${test.test.dir}" srcdir="${test.test.dir}"/>
         <copy todir="${build.test.classes.dir}">
             <fileset dir="${test.test.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
@@ -1288,6 +1314,10 @@ is divided into following sections:
         <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}" processorpath="${javac.test.processorpath}" sourcepath="" srcdir=""/>
         <copy todir="${build.test.classes.dir}"/>
 >>>>>>> Grup-B
+=======
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}" processorpath="${javac.test.processorpath}" sourcepath="" srcdir=""/>
+        <copy todir="${build.test.classes.dir}"/>
+>>>>>>> origin/Grup-A
     </target>
     <target name="-post-compile-test-single">
         <!-- Empty placeholder for easier customization. -->

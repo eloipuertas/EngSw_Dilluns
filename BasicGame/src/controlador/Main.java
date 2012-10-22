@@ -64,6 +64,7 @@ import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Cylinder;
 import model.VehicleProtagonista;
+import model.WorldCreator;
 import vista.Display;
 
 
@@ -109,16 +110,9 @@ public class Main extends SimpleApplication implements ActionListener {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         
-        // We load the scene from the zip file and adjust its size.
-        assetManager.registerLocator("town.zip", ZipLocator.class);
-        sceneModel = assetManager.loadModel("main.scene");
-        sceneModel.setLocalScale(2f);
-        
-        CollisionShape sceneShape =
-        CollisionShapeFactory.createMeshShape((Node) sceneModel);
-        landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.addControl(landscape);
-        
+        //Cargamos la escena
+        WorldCreator.createWorld(rootNode, assetManager, bulletAppState);
+
             
         /*if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
@@ -137,10 +131,6 @@ public class Main extends SimpleApplication implements ActionListener {
         car.buildCar();
         display = new Display(assetManager,settings,guiNode,guiFont);
         
-        
-        //Añadimos la scena
-        rootNode.attachChild(sceneModel);
-        
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());
         
@@ -154,10 +144,6 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
         rootNode.attachChild(camNode);
-        
-        
-        //Añadimos el mundo en la colisiones
-        bulletAppState.getPhysicsSpace().add(landscape);
         
         menu = new MenuController(stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer);   
     }

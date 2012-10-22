@@ -55,14 +55,14 @@ public class WorldCreator {
            
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
+        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,0.25f,20);
         
         Material mat = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", 
-            assetManager.loadTexture("Models/AngularRoad/RoadTexture3.jpg"));
+            assetManager.loadTexture("Textures/RoadTexture.jpg"));
         sceneModel.setMaterial(mat);
         
         // We set up collision detection for the scene by creating a
@@ -86,7 +86,7 @@ public class WorldCreator {
         Material mat_obs = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat_obs.setTexture("ColorMap", 
-            assetManager.loadTexture("Models/Box/BoxTexture.jpg"));
+            assetManager.loadTexture("Textures/BoxTexture.jpg"));
         obstacleModel.setMaterial(mat_obs);
         obstacleModel.addControl(new RigidBodyControl(2));
         rootNode.attachChild(obstacleModel);

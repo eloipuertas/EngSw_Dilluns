@@ -109,10 +109,6 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        
-        //Cargamos la escena
-        WorldCreator.createWorld(rootNode, assetManager, bulletAppState);
-
             
         /*if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
@@ -144,6 +140,9 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
         rootNode.attachChild(camNode);
+        
+        //Cargamos la escena
+        WorldCreator.createWorld(rootNode, assetManager, bulletAppState, camNode, inputManager);
         
         menu = new MenuController(stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer);   
     }

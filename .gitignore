@@ -13,3 +13,5 @@
 >>>>>>> origin/Grup-A
 
 *.class
+/RainTest/build/
+/RainTest/dist/

@@ -160,8 +160,8 @@ public class VehicleProtagonista {
         vehicleNode.attachChild(node3);
         vehicleNode.attachChild(node4);
         
-        vehicle.getWheel(0).setFrictionSlip(12);
-        vehicle.getWheel(1).setFrictionSlip(12);
+        vehicle.getWheel(0).setFrictionSlip(9.8f);
+        vehicle.getWheel(1).setFrictionSlip(9.8f);
         
         
         //rootNode.attachChild(vehicleNode);

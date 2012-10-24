@@ -32,10 +32,10 @@ public class VehicleProtagonista {
     private float mass;
     private VehicleControl vehicle;
     private Geometry chasis1;
-    private Geometry wheel_fr;
-    private Geometry wheel_br;
-    private Geometry wheel_fl;
-    private Geometry wheel_bl;
+    private Geometry wheel1;
+    private Geometry wheel3;
+    private Geometry wheel2;
+    private Geometry wheel4;
     private float wheelRadius;
     private AssetManager assetManager;
     private CameraNode camNode;
@@ -102,7 +102,7 @@ public class VehicleProtagonista {
         
         //setting suspension values for wheels, this can be a bit tricky
         //see also https://docs.google.com/Doc?docid=0AXVUZ5xw6XpKZGNuZG56a3FfMzU0Z2NyZnF4Zmo&hl=en
-        float stiffness = 120.0f;//200=f1 car
+        float stiffness = 200.0f;//200=f1 car
         float compValue = .2f; //(should be lower than damp)
         float dampValue = .3f;
         vehicle.setSuspensionCompression(compValue * 2.0f * FastMath.sqrt(stiffness));
@@ -121,38 +121,38 @@ public class VehicleProtagonista {
 
 
         Node node1 = new Node("wheel 1 node");
-        wheel_fr = findGeom(meshNode, "WheelFrontRight");
-        node1.attachChild(wheel_fr);
-        wheel_fr.center();
-        box = (BoundingBox) wheel_fr.getModelBound();
+        wheel1 = findGeom(meshNode, "WheelFrontRight");
+        node1.attachChild(wheel1);
+        wheel1.center();
+        box = (BoundingBox) wheel1.getModelBound();
         wheelRadius = box.getYExtent();
         float back_wheel_h = (wheelRadius * 1.7f) - 1f;
         float front_wheel_h = (wheelRadius * 1.9f) - 1f;
-        vehicle.addWheel(wheel_fr.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node2 = new Node("wheel 2 node");
-        wheel_fl = findGeom(meshNode, "WheelFrontLeft");
-        node2.attachChild(wheel_fl);
-        wheel_fl.center();
-        box = (BoundingBox) wheel_fl.getModelBound();
-        vehicle.addWheel(wheel_fl.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+        wheel2 = findGeom(meshNode, "WheelFrontLeft");
+        node2.attachChild(wheel2);
+        wheel2.center();
+        box = (BoundingBox) wheel2.getModelBound();
+        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node3 = new Node("wheel 3 node");
-        wheel_br = findGeom(meshNode, "WheelBackRight");
-        node3.attachChild(wheel_br);
-        wheel_br.center();
-        box = (BoundingBox) wheel_br.getModelBound();
-        vehicle.addWheel(wheel_br.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+        wheel3 = findGeom(meshNode, "WheelBackRight");
+        node3.attachChild(wheel3);
+        wheel3.center();
+        box = (BoundingBox) wheel3.getModelBound();
+        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         Node node4 = new Node("wheel 4 node");
-        wheel_bl = findGeom(meshNode, "WheelBackLeft");
-        node4.attachChild(wheel_bl);
-        wheel_bl.center();
-        box = (BoundingBox) wheel_bl.getModelBound();
-        vehicle.addWheel(wheel_bl.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+        wheel4 = findGeom(meshNode, "WheelBackLeft");
+        node4.attachChild(wheel4);
+        wheel4.center();
+        box = (BoundingBox) wheel4.getModelBound();
+        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         vehicleNode.attachChild(node1);
@@ -160,8 +160,8 @@ public class VehicleProtagonista {
         vehicleNode.attachChild(node3);
         vehicleNode.attachChild(node4);
         
-        vehicle.getWheel(0).setFrictionSlip(4);
-        vehicle.getWheel(1).setFrictionSlip(4);
+        vehicle.getWheel(0).setFrictionSlip(12);
+        vehicle.getWheel(1).setFrictionSlip(12);
         
         
         //rootNode.attachChild(vehicleNode);

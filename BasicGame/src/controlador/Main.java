@@ -81,6 +81,10 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private MenuController menu;
     private Display display;
+    
+    //Factores para disminuir y aumentar la acceleracion y la frenadas
+    private int accelerationFactor = 2; //Factor multiplicativo
+    private int brakeForceFactor = 2;   //Factor de division
 
 
     public static void main(String[] args) {
@@ -181,14 +185,16 @@ public class Main extends SimpleApplication implements ActionListener {
             car.getVehicle().steer(steeringValue);
         } else if (binding.equals("Ups")) {
             if (value) {
-                accelerationValue += accelerationForce;
+                accelerationValue += (accelerationForce*accelerationFactor);
             } else {
-                accelerationValue -= accelerationForce;
+                accelerationValue -= (accelerationForce*accelerationFactor);
             }
+            System.out.println("Accelerar "+accelerationValue);
+            System.out.println("AcceleraForce "+accelerationForce);
             car.getVehicle().accelerate(accelerationValue);
         } else if (binding.equals("Downs")) {
             if (value) {
-                car.getVehicle().brake(brakeForce);
+                car.getVehicle().brake(brakeForce/brakeForceFactor);
             } else {
                 car.getVehicle().brake(0f);
             }

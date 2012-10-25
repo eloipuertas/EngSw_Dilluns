@@ -17,12 +17,14 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
+import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
@@ -31,6 +33,8 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -57,15 +61,21 @@ public class WorldCreator {
      * @param space
      */
     
-    public static void createWorld(Node rootNode, AssetManager assetManager, BulletAppState space, CameraNode camNode, InputManager inputManager) {
-        AmbientLight light = new AmbientLight();
-        light.setColor(ColorRGBA.LightGray);
-        rootNode.addLight(light);
-        Node sky = new Node();
+    public static void createWorld(Node rootNode, AssetManager assetManager, BulletAppState space) {
+        //Afegim la llum
+        DirectionalLight sun = new DirectionalLight();
+        Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
+        sun.setDirection(lightDir);
+        sun.setColor(ColorRGBA.White.clone().multLocal(2));
+        //AmbientLight sun = new AmbientLight();
+        //sun.setColor(ColorRGBA.LightGray);
+        rootNode.addLight(sun);
         
+        //Afegim el cel
+        Node sky = new Node();
         sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sky);
-           
+        
         //Road creation
         // We load the scene
         Spatial sceneModel = assetManager.loadModel("Models/AngularRoad.j3o");
@@ -176,59 +186,40 @@ public class WorldCreator {
         obstacleModel.addControl(new RigidBodyControl(2));
         rootNode.attachChild(obstacleModel);
         space.getPhysicsSpace().add(obstacleModel);
-        
-        Camera cam = camNode.getCamera();
-        Rain rain =new Rain(assetManager,cam,1);
-        rootNode.attachChild(rain);
-        Sphere ball = new Sphere(32, 32, 2f);
-        Geometry ballGeom = new Geometry("Ball Name", ball);
-        Material mat3 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat3.setColor("Color", new ColorRGBA(0, 0, 1, 0.6f));
-        mat3.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        ballGeom.setMaterial(mat3);
-        ballGeom.setQueueBucket(Bucket.Transparent);
-        rootNode.attachChild(ballGeom);
-        /*ChaseCamera chaser = new ChaseCamera(cam,ballGeom,inputManager);
-        chaser.setMaxDistance(1200);
-        chaser.setSmoothMotion(true);*/
-        rain.setTarget(ballGeom);
-        
-      /*  ParticleEmitter fire = 
-            new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
-        Material mat_red = new Material(assetManager, 
-                "Common/MatDefs/Water/Water.j3md");
-        mat_red.setTexture("Texture", assetManager.loadTexture(
-                "Common/MatDefs/Water/Textures/caustics.jpg"));
-        fire.setMaterial(mat_red);
-        fire.setImagesX(2); 
-        fire.setImagesY(2); // 2x2 texture animation
-        fire.setEndColor(  new ColorRGBA(1f, 0f, 0f, 1f));   // red
-        fire.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
-        fire.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
-        fire.setStartSize(1.5f);
-        fire.setEndSize(0.1f);
-        fire.setGravity(0, 0, 0);
-        fire.setLowLife(1f);
-        fire.setHighLife(3f);
-        fire.getParticleInfluencer().setVelocityVariation(0.3f);
-        rootNode.attachChild(fire);
 
-        ParticleEmitter debris = 
-                new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 10);
-        Material debris_mat = new Material(assetManager, 
-                "Common/MatDefs/Water/Water.j3md");
-        debris_mat.setTexture("Texture", assetManager.loadTexture(
-                "Common/MatDefs/Water/Textures/caustics.jpg"));
-        debris.setMaterial(debris_mat);
-        debris.setImagesX(3); 
-        debris.setImagesY(3); // 3x3 texture animation
-        debris.setRotateSpeed(4);
-        debris.setSelectRandomImage(true);
-        debris.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 4, 0));
-        debris.setStartColor(ColorRGBA.White);
-        debris.setGravity(0, 6, 0);
-        debris.getParticleInfluencer().setVelocityVariation(.60f);
-        rootNode.attachChild(debris);
-        debris.emitAllParticles();*/
+        //Creem el efecte de neu
+        ParticleEmitter snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
+        Material mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat_snow.setTexture("Texture", assetManager.loadTexture("Textures/snow.png"));
+        snow.setMaterial(mat_snow);
+        snow.setImagesX(2); snow.setImagesY(2); // 2x2 texture animation
+        snow.setShape(new EmitterBoxShape(new Vector3f(-10f,10f,-10f),new Vector3f(10f,10f,10f)));
+        snow.setStartColor(ColorRGBA.White);
+        snow.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-2,0));
+        snow.setStartSize(10.11f);
+        snow.setEndSize(10.11f);
+        snow.setGravity(0,2,0);
+        snow.setLowLife(6.5f);
+        snow.setHighLife(6.5f);
+        snow.getParticleInfluencer().setVelocityVariation(0.3f);
+        rootNode.attachChild(snow);
+        
+        //Creem el efecte de pluja
+        ParticleEmitter rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
+        Material mat_rain = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat_rain.setTexture("Texture", assetManager.loadTexture("Textures/teardrop.png"));
+        rain.setMaterial(mat_rain);
+        rain.setImagesX(2); rain.setImagesY(2); // 2x2 texture animation
+        rain.setShape(new EmitterBoxShape(new Vector3f(-10f,10f,-10f),new Vector3f(10f,10f,10f)));
+        rain.setStartColor(ColorRGBA.Blue);
+        rain.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-2,0));
+        rain.setStartSize(1.11f);
+        rain.setEndSize(1.11f);
+        rain.setGravity(0,2,0);
+        rain.setLowLife(6.5f);
+        rain.setHighLife(6.5f);
+        rain.getParticleInfluencer().setVelocityVariation(0.3f);
+        rain.move(0f,0f,25f);
+        rootNode.attachChild(rain);
     }
 }

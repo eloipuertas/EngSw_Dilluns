@@ -337,7 +337,7 @@ public class Main extends SimpleApplication implements ActionListener {
         flyCam.setMoveSpeed(10);
 
         setupKeys();
-        WorldCreator.createWorld(rootNode, assetManager, bulletAppState);
+        WorldCreator.createWorld(rootNode, assetManager, bulletAppState, this.getViewPort(), this.getRenderer());
 //        setupFloor();
         buildPlayer();
 

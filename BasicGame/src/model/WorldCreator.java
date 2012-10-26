@@ -77,7 +77,7 @@ public class WorldCreator {
      * @param space
      */
     
-    public static void createWorld(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort, Renderer renderer) {        
+    public static void createWorld(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort) {        
         //Afegim la llum
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
@@ -91,7 +91,7 @@ public class WorldCreator {
         /*FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
         FogFilter fog=new FogFilter();
         fog.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
-        fog.setFogDistance(155);
+        fog.setFogDistance(100);
         fog.setFogDensity(2.0f);
         fpp.addFilter(fog);
         viewPort.addProcessor(fpp);*/
@@ -235,12 +235,12 @@ public class WorldCreator {
         space.getPhysicsSpace().add(obstacleModel);
 
         //Creem el efecte de neu
-        snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100);
+       /* snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
         Material mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat_snow.setTexture("Texture", assetManager.loadTexture("Textures/snow.png"));
         snow.setMaterial(mat_snow);
         snow.setImagesX(2); snow.setImagesY(2); // 2x2 texture animation
-        snow.setShape(new EmitterBoxShape(new Vector3f(-10f,10f,-10f),new Vector3f(10f,10f,10f)));
+        snow.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
         snow.setStartColor(ColorRGBA.White);
         snow.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-2,0));
         snow.setStartSize(10.11f);
@@ -249,16 +249,18 @@ public class WorldCreator {
         snow.setLowLife(6.5f);
         snow.setHighLife(6.5f);
         snow.getParticleInfluencer().setVelocityVariation(0.3f);
-        rootNode.attachChild(snow);
+        snow.setLocalTranslation(0f, 0f, 0f);
+        snow.setParticlesPerSec(200);
+        rootNode.attachChild(snow);*/
         
         //Creem el efecte de pluja
-        rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 10000);
+        rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100000);
         Material mat_rain = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat_rain.setTexture("Texture", assetManager.loadTexture("Textures/teardrop.png"));
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);
         rain.setImagesX(2); rain.setImagesY(2); // 2x2 texture animation
-        rain.setShape(new EmitterBoxShape(new Vector3f(-10f,10f,-10f),new Vector3f(10f,10f,10f)));
+        rain.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
         rain.setStartColor(new ColorRGBA(192f,192f,192f,0.2f));
         //rain.setStartColor(new ColorRGBA(0f,0f,255f,1f));
         rain.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-25,0));
@@ -268,11 +270,11 @@ public class WorldCreator {
         rain.setGravity(0,1,0);
         rain.setLowLife(6.5f);
         rain.setHighLife(6.5f);
-        rain.setParticlesPerSec(100);
-        rain.move(0f,0f,25f);
+        rain.setParticlesPerSec(2000);
         rootNode.attachChild(rain);
     }
 
-    public static void updateWorld(Transform translation) {
+    public static void updateWorld(Vector3f localToWorld) {
+//        snow.setLocalTranslation(localToWorld);
     }
 }

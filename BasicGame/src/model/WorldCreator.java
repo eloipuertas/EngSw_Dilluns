@@ -4,61 +4,29 @@
  */
 package model;
 
-import com.bulletphysics.linearmath.Transform;
-import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
-import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.MeshCollisionShape;
-import com.jme3.bullet.collision.shapes.PlaneCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
-import com.jme3.input.ChaseCamera;
-import com.jme3.input.InputManager;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Plane;
-import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.HDRRenderer;
-import com.jme3.post.filters.BloomFilter;
 import com.jme3.post.filters.FogFilter;
-import com.jme3.post.filters.LightScatteringFilter;
-import com.jme3.renderer.Camera;
-import com.jme3.renderer.Caps;
-import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
-import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.WireFrustum;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
-import com.jme3.scene.shape.Sphere.TextureMode;
 import com.jme3.shadow.BasicShadowRenderer;
-import com.jme3.shadow.PssmShadowRenderer;
-import com.jme3.shadow.PssmShadowRenderer.CompareMode;
-import com.jme3.shadow.PssmShadowRenderer.FilterMode;
-import com.jme3.shadow.ShadowUtil;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 
@@ -69,6 +37,22 @@ import com.jme3.util.SkyFactory;
 public class WorldCreator {
     private static ParticleEmitter rain;
     private static ParticleEmitter snow;
+    
+    private static Box brick;
+    static float bLength = 0.48f;
+    static float bWidth = 0.24f;
+    static float bHeight = 0.12f;
+    
+    private Node rootNode;
+    private AssetManager assetManager;
+    private BulletAppState space;
+    private ViewPort viewPort;
+    
+    private Material mat;
+    private Material mat2;
+    private Material mat_obs;
+    private Material mat_snow;
+    private Material mat_rain;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -77,7 +61,17 @@ public class WorldCreator {
      * @param space
      */
     
-    public static void createWorld(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort) {        
+    public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort) {
+        this.rootNode = rootNode;
+        this.assetManager = assetManager;
+        this.space = space;
+        this.viewPort = viewPort;
+        initMaterial();
+        
+    }
+    
+    
+    public void createWorld() {        
         //Afegim la llum
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
@@ -87,26 +81,16 @@ public class WorldCreator {
         //sun.setColor(ColorRGBA.LightGray);
         rootNode.addLight(sun);
         
-        //Afegim boira
-        /*FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-        FogFilter fog=new FogFilter();
-        fog.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
-        fog.setFogDistance(100);
-        fog.setFogDensity(2.0f);
-        fpp.addFilter(fog);
-        viewPort.addProcessor(fpp);*/
+        brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
+        brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
         
-        /*FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-        BloomFilter bloom=new BloomFilter();
-        //bloom.setBlurScale(0.5f);
-        bloom.setBloomIntensity(1.25f);
-        fpp.addFilter(bloom);
-        viewPort.addProcessor(fpp);*/
+        //Afegim boira
+        initBoira();
         
         //Afegim ombres
         BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 256);
         bsr.setDirection(new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f)); // light direction
-        viewPort.addProcessor(bsr);
+        viewPort.addProcessor(bsr); 
         
         //Afegim el cel
         Node sky = new Node();
@@ -119,10 +103,7 @@ public class WorldCreator {
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,0.25f,20);
         
-        Material mat = new Material( 
-            assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", 
-            assetManager.loadTexture("Textures/RoadTexture.jpg"));
+        
         sceneModel.setMaterial(mat);
         
         // We set up collision detection for the scene by creating a
@@ -138,16 +119,15 @@ public class WorldCreator {
         rootNode.attachChild(sceneModel);
         
         
-        space.getPhysicsSpace().add(landscape);
+        space.getPhysicsSpace().add(sceneModel);
+        
+        //wall creation
+        initWall();
 
         //Obstacle creation
         Box obstacleBox = new Box(2,2,2);
         Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
         obstacleModel.setLocalTranslation(2, -2, -10);
-        Material mat_obs = new Material( 
-            assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        mat_obs.setTexture("DiffuseMap", 
-            assetManager.loadTexture("Textures/BoxTexture.jpg"));
         obstacleModel.setMaterial(mat_obs);
         obstacleModel.addControl(new RigidBodyControl(2));
         obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
@@ -235,9 +215,20 @@ public class WorldCreator {
         space.getPhysicsSpace().add(obstacleModel);
 
         //Creem el efecte de neu
-       /* snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
-        Material mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat_snow.setTexture("Texture", assetManager.loadTexture("Textures/snow.png"));
+        initNeu();
+        
+        
+        //Creem el efecte de pluja
+        initPluja();
+    }
+    
+
+    public static void updateWorld(Vector3f localToWorld) {
+//        snow.setLocalTranslation(localToWorld);
+    }
+    
+    public void initNeu() {
+        snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
         snow.setMaterial(mat_snow);
         snow.setImagesX(2); snow.setImagesY(2); // 2x2 texture animation
         snow.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
@@ -251,12 +242,11 @@ public class WorldCreator {
         snow.getParticleInfluencer().setVelocityVariation(0.3f);
         snow.setLocalTranslation(0f, 0f, 0f);
         snow.setParticlesPerSec(200);
-        rootNode.attachChild(snow);*/
-        
-        //Creem el efecte de pluja
+        rootNode.attachChild(snow);
+    }
+    
+    public void initPluja() {
         rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100000);
-        Material mat_rain = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat_rain.setTexture("Texture", assetManager.loadTexture("Textures/teardrop.png"));
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);
         rain.setImagesX(2); rain.setImagesY(2); // 2x2 texture animation
@@ -273,8 +263,74 @@ public class WorldCreator {
         rain.setParticlesPerSec(2000);
         rootNode.attachChild(rain);
     }
-
-    public static void updateWorld(Vector3f localToWorld) {
-//        snow.setLocalTranslation(localToWorld);
+    
+    public void initBoira() {
+        FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+        FogFilter fog=new FogFilter();
+        fog.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
+        fog.setFogDistance(100);
+        fog.setFogDensity(2.0f);
+        fpp.addFilter(fog);
+        viewPort.addProcessor(fpp);
+        
+        /*FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
+        BloomFilter bloom=new BloomFilter();
+        //bloom.setBlurScale(0.5f);
+        bloom.setBloomIntensity(1.25f);
+        fpp.addFilter(bloom);
+        viewPort.addProcessor(fpp);*/
     }
+    
+    public void initWall() {
+        float startpt = bLength / 4;
+        float height = 0;
+        for (int j = 0; j < 15; j++) {
+            for (int i = 0; i < 4; i++) {
+                Vector3f vt = new Vector3f(i * bLength * 2 + startpt, bHeight + height-5, 10);
+                addBrick(vt);
+            }
+            startpt = -startpt;
+            height += 2 * bHeight;
+        }
+    }
+    
+    public void initMaterial() {
+        
+        mat = new Material( 
+            assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("ColorMap", 
+            assetManager.loadTexture("Textures/RoadTexture.jpg"));
+
+        mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        TextureKey key2 = new TextureKey("Textures/Terrain/Rock/Rock.PNG");
+        key2.setGenerateMips(true);
+        Texture tex2 = assetManager.loadTexture(key2);
+        mat2.setTexture("ColorMap", tex2);
+        
+        mat_obs = new Material( 
+            assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        mat_obs.setTexture("DiffuseMap", 
+            assetManager.loadTexture("Textures/BoxTexture.jpg"));
+        
+        mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat_snow.setTexture("Texture", assetManager.loadTexture("Textures/snow.png"));
+        
+        mat_rain = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat_rain.setTexture("Texture", assetManager.loadTexture("Textures/teardrop.png"));
+
+    }
+
+    public void addBrick(Vector3f ori) {
+
+        Geometry reBoxg = new Geometry("brick", brick);
+        reBoxg.setMaterial(mat2);
+        reBoxg.setLocalTranslation(ori);
+        //for geometry with sphere mesh the physics system automatically uses a sphere collision shape
+        reBoxg.addControl(new RigidBodyControl(1.5f));
+        reBoxg.setShadowMode(ShadowMode.CastAndReceive);
+        reBoxg.getControl(RigidBodyControl.class).setFriction(0.6f);
+        rootNode.attachChild(reBoxg);
+        space.getPhysicsSpace().add(reBoxg);
+    }
+
 }

@@ -75,6 +75,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private float steeringValue = 0;
     private float accelerationValue = 0;
     private VehicleProtagonista car;
+    private WorldCreator world;
     private Spatial sceneModel;
     private final float accelerationForce = 1000.0f;
     private final float brakeForce = 100.0f;
@@ -112,7 +113,8 @@ public class Main extends SimpleApplication implements ActionListener {
         stateManager.attach(bulletAppState);
         
         //Cargamos la escena
-        WorldCreator.createWorld(rootNode, assetManager, bulletAppState, this.viewPort);
+        world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort);
+        world.createWorld();
 
             
         /*if (settings.getRenderer().startsWith("LWJGL")) {

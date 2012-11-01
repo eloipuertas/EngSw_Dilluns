@@ -39,9 +39,9 @@ public class WorldCreator {
     private static ParticleEmitter snow;
     
     private static Box brick;
-    static float bLength = 0.48f;
-    static float bWidth = 0.24f;
-    static float bHeight = 0.12f;
+    static float bLength = 0.6f;
+    static float bWidth = 0.40f;
+    static float bHeight = 0.2f;
     
     private Node rootNode;
     private AssetManager assetManager;
@@ -85,7 +85,7 @@ public class WorldCreator {
         brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
         
         //Afegim boira
-        initBoira();
+        //initBoira();
         
         //Afegim ombres
         BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 256);
@@ -101,7 +101,7 @@ public class WorldCreator {
         // We load the scene
         Spatial sceneModel = assetManager.loadModel("Models/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(20,0.25f,20);
+        sceneModel.scale(10,0.25f,10);
         
         
         sceneModel.setMaterial(mat);
@@ -122,97 +122,20 @@ public class WorldCreator {
         space.getPhysicsSpace().add(sceneModel);
         
         //wall creation
-        initWall();
+        crearMur(-2,-5,10);
+        crearMur(-55,-5,-15);
 
         //Obstacle creation
-        Box obstacleBox = new Box(2,2,2);
-        Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(2, -2, -10);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 2
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(2, -2, -100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 3
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-50, -2, -100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 4
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-100, -2, -100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 5
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-100, -2, -50);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 6
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-100, -2, 0);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 7
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-100, -2, 100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 8
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(-50, -2, 100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
-        
-        //Obstacle 9
-        obstacleBox = new Box(2,2,2);
-        obstacleModel = new Geometry("Obstacle", obstacleBox);
-        obstacleModel.setLocalTranslation(0, -2, 100);
-        obstacleModel.setMaterial(mat_obs);
-        obstacleModel.addControl(new RigidBodyControl(2));
-        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
-        space.getPhysicsSpace().add(obstacleModel);
+        crearCaixa(2,-2,-10);
+        crearCaixa(2,-2,-50);
+        crearCaixa(-25,-2,-50);
+        crearCaixa(-50,-2,-50);
+        crearCaixa(-25,-2,-25);
+        crearCaixa(-50,-2,0);
+        crearCaixa(-50,-2,50);
+        crearCaixa(-50,-2,25);
+        crearCaixa(0,-2,50);
+
 
         //Creem el efecte de neu
         initNeu();
@@ -281,17 +204,28 @@ public class WorldCreator {
         viewPort.addProcessor(fpp);*/
     }
     
-    public void initWall() {
+    public void crearMur(int x, int y, int z) {
         float startpt = bLength / 4;
         float height = 0;
-        for (int j = 0; j < 15; j++) {
-            for (int i = 0; i < 4; i++) {
-                Vector3f vt = new Vector3f(i * bLength * 2 + startpt, bHeight + height-5, 10);
+        for (int j = 0; j < 10; j++) {
+            for (int i = 0; i < 6; i++) {
+                Vector3f vt = new Vector3f(i * bLength * 2 + startpt+x, bHeight + height+y, z);
                 addBrick(vt);
             }
             startpt = -startpt;
             height += 2 * bHeight;
         }
+    }
+    
+    public void crearCaixa(int x, int y, int z) {
+        Box obstacleBox = new Box(1,1,1);
+        Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
+        obstacleModel.setLocalTranslation(x, y, z);
+        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.addControl(new RigidBodyControl(2));
+        obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
+        rootNode.attachChild(obstacleModel);
+        space.getPhysicsSpace().add(obstacleModel);
     }
     
     public void initMaterial() {
@@ -302,7 +236,7 @@ public class WorldCreator {
             assetManager.loadTexture("Textures/RoadTexture.jpg"));
 
         mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        TextureKey key2 = new TextureKey("Textures/Terrain/Rock/Rock.PNG");
+        TextureKey key2 = new TextureKey("Textures/ladrillo2.jpg");
         key2.setGenerateMips(true);
         Texture tex2 = assetManager.loadTexture(key2);
         mat2.setTexture("ColorMap", tex2);

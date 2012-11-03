@@ -6,51 +6,79 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
+import com.jme3.system.Timer;
 import com.jme3.ui.Picture;
 
 public class Display {
     
     private Node displayNode;    
     private BitmapText pos;
-    private BitmapFont guiFont;
+    private BitmapText chronograph;
+    private BitmapText posText;
+    private BitmapFont posFont;
+    private BitmapFont textFont;
+    private BitmapFont chronographFont;
     private AssetManager assetManager;
     private AppSettings settings;
-    private Node guiNode;    
+    private Node guiNode;
+    private Timer timer;
     
-    public Display(AssetManager assetManager, AppSettings settings,Node guiNode,BitmapFont guiFont){
+    public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
         
         this.assetManager = assetManager;
         this.settings = settings;
-        this.guiNode = guiNode;      
-        this.guiFont = guiFont;
-        this.displayNode = new Node("Display");               
+        this.guiNode = guiNode;        
+        this.displayNode = new Node("Display");
+        this.timer = timer;
     }
     
-    public void addDisplay(int x,int y){
+    public void addDisplay(int xDisplay,int yDisplay,float scaleValueDisplay,int xPosText, int yPosText, float scaleValuePosText,int xPos, int yPos,float scaleValuePos, int xChronograph, int yChronograph, float scaleValueChronograph){
         
-        pos = new BitmapText(guiFont, false);          
-        pos.setSize(guiFont.getCharSet().getRenderedSize());      // font size
-        pos.setColor(ColorRGBA.White);                            // font color
-        pos.setText("Pos:");                                    // the text
-        pos.setLocalTranslation(settings.getWidth()-50,y+100,0);     // position
+        float minDimension = Math.min(settings.getWidth(),settings.getHeight());      
+        
+        //añadimos el cronoemtro
+        chronographFont = assetManager.loadFont("Interface/Fonts/DS-Digital.fnt");
+        chronograph = new BitmapText(chronographFont, false);        
+        chronograph.setSize(minDimension/scaleValueChronograph);      // font size
+        chronograph.setColor(ColorRGBA.White);                            // font color        
+        chronograph.setText("00:00");                                    // the text
+        chronograph.setLocalTranslation(xChronograph-(chronograph.getLineWidth()/2),yChronograph,0);     // position
+        guiNode.attachChild(chronograph);
+        
+        //añadimos el la posicion
+        posFont = assetManager.loadFont("Interface/Fonts/MotorOil1937M54.fnt");
+        pos = new BitmapText(posFont, false);        
+        pos.setSize(minDimension/scaleValuePos);      // font size
+        pos.setColor(ColorRGBA.Yellow);                            // font color
+        pos.setText("1");                                    // the text
+        pos.setLocalTranslation(xPos,yPos,0);     // position
         guiNode.attachChild(pos);
         
-        //Agregar fondo marcador
+        //añadimos el texto POS
+        textFont = assetManager.loadFont("Interface/Fonts/DejaVuSansCondensed.fnt");
+        posText = new BitmapText(textFont, false);       
+        posText.setSize(minDimension/scaleValuePosText);      // font size
+        posText.setColor(ColorRGBA.White);                            // font color
+        posText.setText("POS");                                    // the text
+        posText.setLocalTranslation(xPosText,yPosText,0);     // position
+        guiNode.attachChild(posText);
+        
+        //Agregar fondo marcador        
         Picture display = new Picture("display");
         display.setImage(assetManager, "Textures/Display/gauge.png", true);        
-        float maxDimension = Math.max(settings.getWidth(),settings.getHeight());
-        display.setWidth(maxDimension/3f);
-        display.setHeight(maxDimension/3f);        
+          
+        display.setWidth(minDimension/scaleValueDisplay);
+        display.setHeight(minDimension/scaleValueDisplay);        
         display.setPosition(0,0);
         display.center();
-        display.move(x,y, -1); //-1 para estar debajo de la aguja        
+        display.move(xDisplay,yDisplay, -1); //-1 para estar debajo de la aguja        
         guiNode.attachChild(display);
         
         //Agregar aguja
         Picture arrow = new Picture("arrow");
         arrow.setImage(assetManager, "Textures/Display/arrow.png", true);        
-        arrow.setWidth(maxDimension/3f);
-        arrow.setHeight(maxDimension/3f);
+        arrow.setWidth(minDimension/scaleValueDisplay);
+        arrow.setHeight(minDimension/scaleValueDisplay);
         arrow.setPosition(0,0);
         arrow.center();
         arrow.move(0, 0, 1); //1 para poner por encima del marcador                
@@ -58,14 +86,42 @@ public class Display {
         displayNode.attachChild(arrow);        
               
         guiNode.attachChild(displayNode);
-        this.displayNode.move(x,y,0);       
+        this.displayNode.move(xDisplay,yDisplay,0);       
     }
     
-    public void updateDisplay(float speed,int pos){
+    public void startChronograph(){
+        this.chronograph.setText("00:00");
+        this.timer.reset();        
+    }
+    
+    public void updateChronograph(){
+        float totalSeconds = this.timer.getTimeInSeconds();
+        int seconds = (int)totalSeconds%60;
+        int minutes = (int)totalSeconds/60;
+        if (seconds < 10 && minutes < 10){
+            this.chronograph.setText("0"+minutes+":0"+seconds);            
+        }
+        else if(seconds < 10){
+            this.chronograph.setText(minutes+":0"+seconds);     
+        }
+        else if (minutes < 10){
+            this.chronograph.setText("0"+minutes+":"+seconds);     
+        }
+        else{
+            this.chronograph.setText(minutes+":"+seconds);     
+        }
+    }
+    
+    public void updatePosition(int pos){
+        if (pos > 0){
+            this.pos.setText(""+pos);
+        }
+    }
+    
+    public void updateDisplay(float speed){
         
         if(isDisplayAdded()){ //comprobamos si el display se ha creado, en caso contratio no hacemos nada            
-            this.pos.setText("Pos: "+pos);            
-            
+                     
             if (speed > 200){
                 speed=200;
             }

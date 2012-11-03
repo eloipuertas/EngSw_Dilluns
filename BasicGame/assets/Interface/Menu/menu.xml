@@ -6,22 +6,187 @@
   
   <screen id="start" controller="vista.Menu">
     <layer id="background" childLayout="center">
-      <image filename="Interface/Menu/start_background.jpg"></image>
+        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
+    
     <layer id="foreground" childLayout="vertical">
-      <panel id="panel_top" height="40%" width="75%" align="center" childLayout="center">  
+      <panel id="panel_top" height="30%" width="75%" align="center" childLayout="center">  
         <text text="TÍTULO JUEGO" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
       </panel>
-      <panel id="panel_mid" height="20%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Start" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
-            <interact onClick="startGame(hud)" />
+      
+      <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Carrera" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="controlsScreen(carrera)" />
         </control>         
       </panel>
-      <panel id="panel_bottom" height="5%" width="75%" align="center" childLayout="center">  
-        <control name="button" label="Quit" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+      
+      <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Contrareloj" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="controlsScreen(contrareloj)" />
+        </control>         
+      </panel>
+      
+      <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Persecución" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="controlsScreen(persecucion)" />
+        </control>         
+      </panel>
+      
+      <panel id="panel_mid4" height="10%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Opciones" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="gotoScreen(options)" />
+        </control>         
+      </panel>
+      
+      <panel id="panel_bottom" height="15%" width="75%" align="center" childLayout="center">  
+        <control name="button" label="Salir" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
             <interact onClick="quitGame()"/>
         </control>       
       </panel>
+      
     </layer>
-  </screen>  
+      
+  </screen>
+  
+  
+  
+  
+  
+  
+    
+  
+  <screen id="options" controller="vista.Menu">
+    
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">
+        
+      <panel id="panel_top" height="40%" width="75%" align="center" childLayout="center">  
+        <text text="OPCIONES" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+      </panel>    
+      
+      <panel id="panel_mid" height="7%" width="75%" align="center" childLayout="horizontal">       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Num. de rivales" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
+          
+          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            
+            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
+                <control name="button" label="-" id="enemyLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setEnemies(-)" />
+                </control>
+            </panel>
+              
+            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
+                <text text="${CALL.getInitNumEnemies()}" id="enemyText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel> 
+                                    
+            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
+                <control name="button" label="+" id="enemyMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setEnemies(+)" />
+                </control>
+            </panel>    
+            
+          </panel>       
+      </panel>
+      
+      <panel id="panel_laps" height="7%" width="75%" align="center" childLayout="horizontal">       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Num. de vueltas" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
+          
+          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
+         
+            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
+                <control name="button" label="-" id="lapsLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setLaps(-)" />
+                </control>
+            </panel>
+              
+            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
+                <text text="${CALL.getInitNumLaps()}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel> 
+                                    
+            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
+                <control name="button" label="+" id="lapsMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setLaps(+)" />
+                </control>
+            </panel>    
+            
+        </panel>       
+      </panel>     
+      
+      <panel id="panel_debugInfo" height="7%" width="75%" align="center" childLayout="horizontal" >       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Debug INFO" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
+          
+          <panel id="panel_bottom_right" height="50%" width="25%" valign="center" childLayout="center">  
+            <control name="button" label="OFF" id="debug" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                <interact onClick="setDebugInfo()" />
+            </control>           
+        </panel>
+               
+      </panel>
+      
+      <panel id="panel_volume" height="7%" width="75%" align="center" childLayout="horizontal">       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Volume" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
+          
+          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
+         
+            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
+                <control name="button" label="-" id="volumeLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setVolume(-)" />
+                </control>
+            </panel>
+              
+            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
+                <text text="${CALL.getInitNumVolume()}" id="volumeText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel> 
+                                    
+            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
+                <control name="button" label="+" id="volumeMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                    <interact onClick="setVolume(+)" />
+                </control>
+            </panel>    
+            
+        </panel>       
+      </panel>             
+      
+      <panel id="panel_bottom" height="30%" width="75%" align="center" childLayout="center">       
+          <control name="button" label="Volver" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+            <interact onClick="gotoScreen(start)"/>
+        </control>              
+      </panel>
+      
+    </layer>
+    
+  </screen>
+  
+  
+  
+  
+  
+  <screen id="controls" controller="vista.Menu">    
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/controls.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+    </layer>
+    <layer id="foreground" childLayout="vertical">
+         <panel id="panel_bottom" height="194%" width="75%" align="center" childLayout="center">  
+        <control name="button" label="Empezar" id="startButton" align="center" valign="center" visibleToMouse="true" > 
+            <interact onClick="startGame()"/>
+        </control>       
+      </panel>
+    </layer>     
+  </screen>
+   
 </nifty>

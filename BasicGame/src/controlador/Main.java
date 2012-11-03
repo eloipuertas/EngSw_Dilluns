@@ -133,7 +133,7 @@ public class Main extends SimpleApplication implements ActionListener {
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         
         car.buildCar();
-        display = new Display(assetManager,settings,guiNode,guiFont);
+        display = new Display(assetManager,settings,guiNode,this.timer);
         
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());
@@ -149,7 +149,7 @@ public class Main extends SimpleApplication implements ActionListener {
         
         rootNode.attachChild(camNode);
         
-        menu = new MenuController(stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer);   
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1);   
     }
 
     private void setUpLight() {
@@ -213,10 +213,15 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void updateDisplay(){
         if (menu.isGameStarted() && !display.isDisplayAdded()){
-            display.addDisplay((int)(settings.getWidth()/1.28),(int)(settings.getHeight()/4.8));
+            float minDimension = Math.min(settings.getWidth(),settings.getHeight());
+            display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f);
+            display.startChronograph();
+            display.updatePosition(1);
         }
         else if (menu.isGameStarted()){
-            display.updateDisplay((float)Math.sqrt((Math.pow(car.getVehicle().getLinearVelocity().x,2)+Math.pow(car.getVehicle().getLinearVelocity().z,2)+Math.pow(car.getVehicle().getLinearVelocity().y,2))),1);
+            display.updateDisplay((float)Math.sqrt((Math.pow(car.getVehicle().getLinearVelocity().x,2)+Math.pow(car.getVehicle().getLinearVelocity().z,2)+Math.pow(car.getVehicle().getLinearVelocity().y,2))));
+            display.updateChronograph();
+            display.updatePosition(1);
         }
     } 
     

@@ -59,6 +59,7 @@ public class WorldCreator {
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,0.25f,20);
         
+        
         Material mat = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", 

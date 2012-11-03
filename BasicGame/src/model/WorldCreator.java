@@ -104,8 +104,14 @@ public class WorldCreator {
         // We load the scene
         Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(10,10,10);
+        sceneModel.scale(10,0.25f,10);
         sceneModel.setMaterial(mat_road);
+        
+        //We load the limits of the scene
+        Spatial boundsModel = assetManager.loadModel("Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene");
+        boundsModel.setLocalTranslation(0, -5, 0);
+        boundsModel.scale(10,10,10);
+        boundsModel.setMaterial(mat_bounds);
         
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass zero.
@@ -114,13 +120,21 @@ public class WorldCreator {
         RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
         sceneModel.setShadowMode(ShadowMode.Receive);
-        sceneModel.setQueueBucket(RenderQueue.Bucket.Transparent);
+        
+        // We set up collision detection for the walls.
+        CollisionShape boundsShape =
+                CollisionShapeFactory.createMeshShape((Node) boundsModel);
+        RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
+        boundsModel.addControl(limits);
+        boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);
 
 
-        // We attach the scene to the rootNode and the physics space,
+        // We attach the scene  and its limits to the rootNode and the physics space,
         // to make them appear in the game world.
         rootNode.attachChild(sceneModel);
         space.getPhysicsSpace().add(sceneModel);
+        rootNode.attachChild(boundsModel);
+        space.getPhysicsSpace().add(boundsModel);
         
         //wall creation
         crearMur(-2,-5,10);
@@ -139,7 +153,7 @@ public class WorldCreator {
 
 
         //Creem el efecte de neu
-        initNeu();
+        //initNeu();
         
         
         //Creem el efecte de pluja
@@ -223,7 +237,7 @@ public class WorldCreator {
         Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
         obstacleModel.setLocalTranslation(x, y, z);
         obstacleModel.setMaterial(mat_box);
-        obstacleModel.addControl(new RigidBodyControl(2));
+        obstacleModel.addControl(new RigidBodyControl(5));
         obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
         rootNode.attachChild(obstacleModel);
         space.getPhysicsSpace().add(obstacleModel);
@@ -235,8 +249,13 @@ public class WorldCreator {
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat_road.setTexture("ColorMap", 
             assetManager.loadTexture("Textures/RoadTexture.jpg"));
-        mat_road.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        mat_road.setTransparent(true);
+        
+        mat_bounds = new Material(
+                assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_bounds.setTexture("ColorMap",
+                assetManager.loadTexture("Textures/transparentTexture.png"));
+        mat_bounds.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        mat_bounds.setTransparent(true);
 
         mat_brick = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         TextureKey key2 = new TextureKey("Textures/ladrillo2.jpg");

@@ -5,10 +5,13 @@
 package model;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.VehicleControl;
+import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -29,10 +32,11 @@ public class VehicleProtagonista {
     private float mass;
     private VehicleControl vehicle;
     private Geometry chasis1;
-    private Geometry wheels1;
-    private Geometry wheels2;
-    private Geometry wheels3;
-    private Geometry wheels4;
+    private Geometry wheel1;
+    private Geometry wheel3;
+    private Geometry wheel2;
+    private Geometry wheel4;
+    private float wheelRadius;
     private AssetManager assetManager;
     private CameraNode camNode;
     private Node vehicleNode;
@@ -63,7 +67,7 @@ public class VehicleProtagonista {
     }
 
     public void buildCar() {
-        mass = 900;
+        mass = 400;
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Red);
@@ -71,40 +75,41 @@ public class VehicleProtagonista {
 
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
-        CompoundCollisionShape compoundShape = new CompoundCollisionShape();
-        BoxCollisionShape box = new BoxCollisionShape(new Vector3f(1.2f, 0.5f, 2.4f));
-        compoundShape.addChildShape(box, new Vector3f(0, 1, 0));
-
-        //create vehicle node
-        vehicleNode = new Node("vehicleNode");
-        vehicle = new VehicleControl(compoundShape, mass);
-        vehicleNode.addControl(vehicle);
+        //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
         
         Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
         
         chasis1 = findGeom(meshNode, "Car");
         chasis1.rotate(0, 3.135f, 0);
+        
+        CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
+        BoundingBox box = (BoundingBox) chasis1.getModelBound();
+        //BoxCollisionShape box = new BoxCollisionShape(new Vector3f(1.2f, 0.5f, 2.4f));
+        //compoundShape.addChildShape(box, new Vector3f(0, 1, 0));
+
+        //create vehicle node
+        vehicleNode = new Node("vehicleNode");
+        vehicle = new VehicleControl(carHull, mass);
+        vehicleNode.addControl(vehicle);
+        
+        
         //Geometry glass = findGeom(meshNode, "Cube2");
         
         //Spatial chasis = (Spatial)assetManager.loadModel("Models/Cube.mesh.xml");
         vehicleNode.attachChild(chasis1);
         //vehicleNode.attachChild(glass);
-        
-        //chasis1.scale(1, 1, 1.8f);
-        //glass.scale(1, 1, 1.8f);
-        //chasis.setMaterial(chasisMat);
-        //chasis.setLocalTranslation(0, 0.5f, 0);
+
         
         //setting suspension values for wheels, this can be a bit tricky
         //see also https://docs.google.com/Doc?docid=0AXVUZ5xw6XpKZGNuZG56a3FfMzU0Z2NyZnF4Zmo&hl=en
-        float stiffness = 60.0f;//200=f1 car
-        float compValue = .3f; //(should be lower than damp)
-        float dampValue = .4f;
-        vehicle.setSuspensionCompression(compValue * 10.0f * FastMath.sqrt(stiffness));
+        float stiffness = 200.0f;//200=f1 car
+        float compValue = .2f; //(should be lower than damp)
+        float dampValue = .3f;
+        vehicle.setSuspensionCompression(compValue * 2.0f * FastMath.sqrt(stiffness));
         vehicle.setSuspensionDamping(dampValue * 2.0f * FastMath.sqrt(stiffness));
         vehicle.setSuspensionStiffness(stiffness);
         vehicle.setMaxSuspensionForce(10000.0f);
-
+        
         //Create four wheels and add them at their locations
         Vector3f wheelDirection = new Vector3f(0, -1, 0); // was 0, -1, 0
         Vector3f wheelAxle = new Vector3f(-1, 0, 0); // was -1, 0, 0
@@ -116,43 +121,50 @@ public class VehicleProtagonista {
 
 
         Node node1 = new Node("wheel 1 node");
-        wheels1 = findGeom(meshNode, "WheelFrontRight");
-        node1.attachChild(wheels1);
-        wheels1.center();
-        vehicle.addWheel(node1, new Vector3f(-xOff, yOff, zOff),
-                wheelDirection, wheelAxle, restLength, radius, true);
+        wheel1 = findGeom(meshNode, "WheelFrontRight");
+        node1.attachChild(wheel1);
+        wheel1.center();
+        box = (BoundingBox) wheel1.getModelBound();
+        wheelRadius = box.getYExtent();
+        float back_wheel_h = (wheelRadius * 1.7f) - 1f;
+        float front_wheel_h = (wheelRadius * 1.9f) - 1f;
+        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node2 = new Node("wheel 2 node");
-        wheels2 = findGeom(meshNode, "WheelFrontLeft");
-        node2.attachChild(wheels2);
-        wheels2.center();
-        vehicle.addWheel(node2, new Vector3f(xOff, yOff, zOff),
-                wheelDirection, wheelAxle, restLength, radius, true);
+        wheel2 = findGeom(meshNode, "WheelFrontLeft");
+        node2.attachChild(wheel2);
+        wheel2.center();
+        box = (BoundingBox) wheel2.getModelBound();
+        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node3 = new Node("wheel 3 node");
-        wheels3 = findGeom(meshNode, "WheelBackRight");
-        node3.attachChild(wheels3);
-        wheels3.center();
-        vehicle.addWheel(node3, new Vector3f(-xOff, yOff, -zOff),
-                wheelDirection, wheelAxle, restLength, radius, false);
+        wheel3 = findGeom(meshNode, "WheelBackRight");
+        node3.attachChild(wheel3);
+        wheel3.center();
+        box = (BoundingBox) wheel3.getModelBound();
+        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         Node node4 = new Node("wheel 4 node");
-        wheels4 = findGeom(meshNode, "WheelBackLeft");
-        node4.attachChild(wheels4);
-        wheels4.center();
-        vehicle.addWheel(node4, new Vector3f(xOff, yOff, -zOff),
-                wheelDirection, wheelAxle, restLength, radius, false);
+        wheel4 = findGeom(meshNode, "WheelBackLeft");
+        node4.attachChild(wheel4);
+        wheel4.center();
+        box = (BoundingBox) wheel4.getModelBound();
+        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         vehicleNode.attachChild(node1);
         vehicleNode.attachChild(node2);
         vehicleNode.attachChild(node3);
         vehicleNode.attachChild(node4);
         
+        vehicle.getWheel(0).setFrictionSlip(9.8f);
+        vehicle.getWheel(1).setFrictionSlip(9.8f);
+        
         
         //rootNode.attachChild(vehicleNode);
-        
-        vehicle.getWheel(2).setFrictionSlip(10);
-        vehicle.getWheel(3).setFrictionSlip(10);
         
         physicsSpace.add(vehicle);
         

@@ -15,12 +15,14 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FogFilter;
 import com.jme3.renderer.ViewPort;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -48,11 +50,12 @@ public class WorldCreator {
     private BulletAppState space;
     private ViewPort viewPort;
     
-    private Material mat;
-    private Material mat2;
-    private Material mat_obs;
+    private Material mat_road;
+    private Material mat_brick;
+    private Material mat_box;
     private Material mat_snow;
     private Material mat_rain;
+    private Material mat_bounds;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -99,12 +102,10 @@ public class WorldCreator {
         
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad.j3o");
+        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(10,0.25f,10);
-        
-        
-        sceneModel.setMaterial(mat);
+        sceneModel.scale(10,10,10);
+        sceneModel.setMaterial(mat_road);
         
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass zero.
@@ -113,12 +114,12 @@ public class WorldCreator {
         RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
         sceneModel.setShadowMode(ShadowMode.Receive);
+        sceneModel.setQueueBucket(RenderQueue.Bucket.Transparent);
+
 
         // We attach the scene to the rootNode and the physics space,
         // to make them appear in the game world.
         rootNode.attachChild(sceneModel);
-        
-        
         space.getPhysicsSpace().add(sceneModel);
         
         //wall creation
@@ -221,7 +222,7 @@ public class WorldCreator {
         Box obstacleBox = new Box(1,1,1);
         Geometry obstacleModel = new Geometry("Obstacle", obstacleBox);
         obstacleModel.setLocalTranslation(x, y, z);
-        obstacleModel.setMaterial(mat_obs);
+        obstacleModel.setMaterial(mat_box);
         obstacleModel.addControl(new RigidBodyControl(2));
         obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
         rootNode.attachChild(obstacleModel);
@@ -230,20 +231,22 @@ public class WorldCreator {
     
     public void initMaterial() {
         
-        mat = new Material( 
+        mat_road = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", 
+        mat_road.setTexture("ColorMap", 
             assetManager.loadTexture("Textures/RoadTexture.jpg"));
+        mat_road.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        mat_road.setTransparent(true);
 
-        mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat_brick = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         TextureKey key2 = new TextureKey("Textures/ladrillo2.jpg");
         key2.setGenerateMips(true);
         Texture tex2 = assetManager.loadTexture(key2);
-        mat2.setTexture("ColorMap", tex2);
+        mat_brick.setTexture("ColorMap", tex2);
         
-        mat_obs = new Material( 
+        mat_box = new Material( 
             assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        mat_obs.setTexture("DiffuseMap", 
+        mat_box.setTexture("DiffuseMap", 
             assetManager.loadTexture("Textures/BoxTexture.jpg"));
         
         mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
@@ -257,7 +260,7 @@ public class WorldCreator {
     public void addBrick(Vector3f ori) {
 
         Geometry reBoxg = new Geometry("brick", brick);
-        reBoxg.setMaterial(mat2);
+        reBoxg.setMaterial(mat_brick);
         reBoxg.setLocalTranslation(ori);
         //for geometry with sphere mesh the physics system automatically uses a sphere collision shape
         reBoxg.addControl(new RigidBodyControl(1.5f));

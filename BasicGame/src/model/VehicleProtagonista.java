@@ -77,10 +77,10 @@ public class VehicleProtagonista {
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
         //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
         
-        Node meshNode = (Node) assetManager.loadModel("Models/mazdaCar/Car.scene");
+        Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
         
         chasis1 = findGeom(meshNode, "Car");
-        //chasis1.rotate(0, 3.135f, 0);
+        chasis1.rotate(0, 3.135f, 0);
         
         CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
         BoundingBox box = (BoundingBox) chasis1.getModelBound();

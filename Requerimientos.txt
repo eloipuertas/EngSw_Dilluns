@@ -1,4 +1,0 @@
-Requerimientos
-
-- Crear protagonista
-- Mover protagonista

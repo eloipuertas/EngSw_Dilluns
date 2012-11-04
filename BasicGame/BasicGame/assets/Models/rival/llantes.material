@@ -1,0 +1,35 @@
+// llantes genrated by blender2ogre 0.5.8
+
+material llantes 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass llantes
+        {
+            ambient 0.3126365840435028 0.2923932373523712 0.07324777543544769 1.0
+            diffuse 0.25010927096172075 0.23391459336749598 0.05859822122153968 1.0
+            specular 0.5 0.5 0.5 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}

@@ -1,4 +1,4 @@
-EngSw_Dilluns
+﻿Branch del Grup D
 =============
 
-Carpeta Compartida per les pràctiques d'Enginyeria del Software - Grup Dilluns
+Carpeta Compartida per les pràctiques d'Enginyeria del Software - Grup D, Dilluns

@@ -66,6 +66,7 @@ import com.jme3.scene.shape.Cylinder;
 import model.VehicleProtagonista;
 import model.WorldCreator;
 import vista.Display;
+import model.Rival;
 
 
 public class Main extends SimpleApplication implements ActionListener {
@@ -74,6 +75,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private float steeringValue = 0;
     private float accelerationValue = 0;
     private VehicleProtagonista car;
+    private Rival rival;
     private WorldCreator world;
     private Spatial sceneModel;
     private final float accelerationForce = 1000.0f;
@@ -86,8 +88,15 @@ public class Main extends SimpleApplication implements ActionListener {
     //Factores para disminuir y aumentar la acceleracion y la frenadas
     private int accelerationFactor = 2; //Factor multiplicativo
     private int brakeForceFactor = 2;   //Factor de division
-
-
+    
+/*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
+ * a dins de la classe Rival*/
+    int estado=1;
+    public Vector3f direccioCar;
+    public Vector3f direccioRival;
+    public Vector2f r = new Vector2f(1.0f,0.1f);
+    float angle;
+    
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
@@ -135,10 +144,17 @@ public class Main extends SimpleApplication implements ActionListener {
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         
         car.buildCar();
+         //Aqui creem la classe rival i la afegim al rootNode
+        rival = new Rival(getAssetManager(), getPhysicsSpace());
+        rival.buildCar();
+        
         display = new Display(assetManager,settings,guiNode,this.timer);
         
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());
+        
+        //Añadimos Rival
+        rootNode.attachChild(rival.getSpatial());
         
         //Settejem la camera
         
@@ -226,7 +242,14 @@ public class Main extends SimpleApplication implements ActionListener {
             display.updatePosition(1);
         }
     } 
-    
+     /*Metode per comprovar que el cotxe protagonista esta en moviment*/
+    public boolean comprovaMoviment (){
+        if (car.getVehicle().getLinearVelocity().length()>=5) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     @Override
     public void simpleUpdate(float tpf) {
         flyCam.setEnabled(false);
@@ -234,6 +257,111 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
         
         camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+        System.out.println(car.getVehicle().getPhysicsLocation().getX());
+        /*Codi per a moure el rival, cal moure-ho d'aqui*/
+        switch (estado) {
+            case 1:
+                if(comprovaMoviment()==true) {
+                    estado = 2;
+                }
+                break;
+            case 2:
+                
+                if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
+                    System.out.println("curva 1");
+                    estado = 3;
+                }
+                if (rival.velocitat == 0) {
+                    rival.moureEndavant();
+                }
+                break;
+                
+            case 3:
+                r.setX(rival.getVehicle().getLinearVelocity().getX());
+                r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                r = r.normalize();
+                if (r.getX()<-0.9f && r.getY()<-0.2f) {
+                    rival.getVehicle().steer(0);
+                    estado = 4;
+                    System.out.println("recta2");
+                    
+                } else {
+                    rival.girarCurva1();
+                }
+                break;
+            case 4:
+                if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
+                     System.out.println("curva 2");
+                     estado = 5;
+                }                
+                rival.moureEndavant();
+                break;
+            case 5:
+                r.setX(rival.getVehicle().getLinearVelocity().getX());
+                r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                r = r.normalize();
+                
+                System.out.println("Vector :\t"+r+"\n");
+                
+                if (r.getX()>+.2f && r.getY()<-.9f) {
+                    System.out.println(r);
+                    System.out.println("recta 3");
+                    estado = 6;
+                    rival.getVehicle().steer(0);
+                } else {
+                    rival.girarCurva1();
+                }
+                break;
+            case 6:
+                if (rival.getVehicle().getPhysicsLocation().getZ()<=-54.f) {
+                    estado = 7;
+                    System.out.println("curva 3");
+                }
+                System.out.println(rival.getVehicle().getPhysicsLocation().getZ());
+                rival.moureEndavant();
+                break;
+            case 7:
+                r.setX(rival.getVehicle().getLinearVelocity().getX());
+                r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                r = r.normalize();
+                /*System.out.println("eeee");
+                System.out.println(r);*/
+                if (r.getX()>+.9f && r.getY()>+0.f) {
+                    System.out.println("recta 4");
+                    System.out.println(r);
+                    estado = 8;
+                    rival.getVehicle().steer(0);
+                } else {
+                    rival.girarCurva1();
+                }
+                break;
+            case 8:
+                if (rival.getVehicle().getPhysicsLocation().getX()>=0.f) {
+                    estado = 9;
+                    System.out.println("curva 4");
+                }
+                System.out.println(rival.getVehicle().getPhysicsLocation().getX());
+                rival.moureEndavant();
+                break;
+            case 9:
+                r.setX(rival.getVehicle().getLinearVelocity().getX());
+                r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                r = r.normalize();
+                /*System.out.println("eeee");
+                System.out.println(r);*/
+                if (r.getX()<-.2f && r.getY()>+.9f) {
+                    System.out.println(r);
+                    estado = 2;
+                    rival.getVehicle().steer(0);
+                } else {
+                    rival.girarCurva1();
+                }
+                break;    
+            default:
+                
+        }
+        
+
         updateDisplay();
     }
 }

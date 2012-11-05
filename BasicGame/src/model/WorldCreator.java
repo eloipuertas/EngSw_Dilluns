@@ -102,16 +102,16 @@ public class WorldCreator {
         
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
+        Spatial sceneModel = assetManager.loadModel("Models/StraightRoad/StraightRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(10,0.25f,10);
-        sceneModel.setMaterial(mat_road);
+        sceneModel.scale(20,20,20);
+        //sceneModel.setMaterial(mat_road);
 
         //We load the limits of the scene
-        Spatial boundsModel = assetManager.loadModel("Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene");
+        /*Spatial boundsModel = assetManager.loadModel("Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene");
         boundsModel.setLocalTranslation(0, -5, 0);
         boundsModel.scale(10,10,10);
-        boundsModel.setMaterial(mat_bounds);
+        boundsModel.setMaterial(mat_bounds);*/
         
         // We set up collision detection for the scene by creating a
         // compound collision shape and a static RigidBodyControl with mass zero.
@@ -122,19 +122,19 @@ public class WorldCreator {
         sceneModel.setShadowMode(ShadowMode.Receive);
         
         // We set up collision detection for the walls.
-        CollisionShape boundsShape =
+        /*CollisionShape boundsShape =
                 CollisionShapeFactory.createMeshShape((Node) boundsModel);
         RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
         boundsModel.addControl(limits);
-        boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);
+        boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);*/
 
 
         // We attach the scene  and its limits to the rootNode and the physics space,
         // to make them appear in the game world.
         rootNode.attachChild(sceneModel);
         space.getPhysicsSpace().add(sceneModel);
-        rootNode.attachChild(boundsModel);
-        space.getPhysicsSpace().add(boundsModel);
+        //rootNode.attachChild(boundsModel);
+        //space.getPhysicsSpace().add(boundsModel);
         
         //wall creation
         crearMur(-2,-5,10);

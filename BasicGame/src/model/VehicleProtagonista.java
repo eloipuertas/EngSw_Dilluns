@@ -15,6 +15,7 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
@@ -43,6 +44,19 @@ public class VehicleProtagonista {
     private PhysicsSpace physicsSpace;
     private Camera cam;
     
+    //Propiedades del coche
+    private float steeringValue = 0;
+    private float accelerationValue = 0;
+    private final float accelerationForce = 1000.0f;
+    private final float brakeForce = 100.0f;
+    
+     //Factores para disminuir y aumentar la acceleracion y la frenadas
+    private int accelerationFactor = 2; //Factor multiplicativo
+    private int brakeForceFactor = 2;   //Factor de division
+    
+    //Variable per saber si estas en mode normal o marcha atras.
+    private boolean reverseMode = false;
+    
     public VehicleProtagonista(AssetManager asset, PhysicsSpace phy, Camera cam){
         assetManager = asset;
         physicsSpace = phy;
@@ -66,11 +80,13 @@ public class VehicleProtagonista {
         return null;
     }
 
-    public void buildCar() {
+    public void buildCar(ColorRGBA colorChasis, ColorRGBA colorWheel) {
         mass = 400;
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setWireframe(true);
-        mat.setColor("Color", ColorRGBA.Red);
+        Material matChasis = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        Material matWheel = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        //mat.getAdditionalRenderState().setWireframe(true);
+        matChasis.setColor("Color", colorChasis);
+        matWheel.setColor("Color", colorWheel);
 
 
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
@@ -81,6 +97,7 @@ public class VehicleProtagonista {
         
         chasis1 = findGeom(meshNode, "Car");
         chasis1.rotate(0, 3.135f, 0);
+        chasis1.setMaterial(matChasis);
         
         CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
         BoundingBox box = (BoundingBox) chasis1.getModelBound();
@@ -122,6 +139,7 @@ public class VehicleProtagonista {
 
         Node node1 = new Node("wheel 1 node");
         wheel1 = findGeom(meshNode, "WheelFrontRight");
+        wheel1.setMaterial(matWheel);
         node1.attachChild(wheel1);
         wheel1.center();
         box = (BoundingBox) wheel1.getModelBound();
@@ -134,6 +152,7 @@ public class VehicleProtagonista {
         Node node2 = new Node("wheel 2 node");
         wheel2 = findGeom(meshNode, "WheelFrontLeft");
         node2.attachChild(wheel2);
+        wheel2.setMaterial(matWheel);
         wheel2.center();
         box = (BoundingBox) wheel2.getModelBound();
         vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
@@ -141,6 +160,7 @@ public class VehicleProtagonista {
 
         Node node3 = new Node("wheel 3 node");
         wheel3 = findGeom(meshNode, "WheelBackRight");
+        wheel3.setMaterial(matWheel);
         node3.attachChild(wheel3);
         wheel3.center();
         box = (BoundingBox) wheel3.getModelBound();
@@ -149,6 +169,7 @@ public class VehicleProtagonista {
 
         Node node4 = new Node("wheel 4 node");
         wheel4 = findGeom(meshNode, "WheelBackLeft");
+        wheel4.setMaterial(matWheel);
         node4.attachChild(wheel4);
         wheel4.center();
         box = (BoundingBox) wheel4.getModelBound();
@@ -188,6 +209,67 @@ public class VehicleProtagonista {
     public Spatial getSpatial() {
         return (Spatial)vehicleNode;
     }
-
+    /*
+    public void turnLeft(boolean value){
+        try{
+            if (value) {
+                steeringValue += .5f;
+            } else {
+                steeringValue += -.5f;
+            }
+            vehicle.steer(steeringValue);
+        }catch (Exception e){
+            
+        }   
+    }
+    * 
     
+    public void turnRight(boolean value){
+        if (value) {
+            steeringValue += -.5f;
+        } else {
+            steeringValue += .5f;
+        }
+        vehicle.steer(steeringValue);
+    }
+    
+    public void forward(boolean value){
+        if (value) {
+            accelerationValue += (accelerationForce*accelerationFactor);
+        } else {
+            accelerationValue -= (accelerationForce*accelerationFactor);
+        }
+        vehicle.accelerate(accelerationValue);
+    }
+    
+    public void reset(boolean value){
+        if (value) {
+            System.out.println("Reset");
+            vehicle.setPhysicsLocation(Vector3f.ZERO);
+            vehicle.setPhysicsRotation(new Matrix3f());
+            vehicle.setLinearVelocity(Vector3f.ZERO);
+            vehicle.setAngularVelocity(Vector3f.ZERO);
+            vehicle.resetSuspension();
+        } else {
+        }    
+    }
+    
+    public void brake(boolean value){
+        vehicle.brake(brakeForce/brakeForceFactor);    
+    }
+    */
+    public void setReverseMode(boolean value){
+        reverseMode = value;
+    }
+    
+    public boolean getReverseMode(){
+        return reverseMode;
+    }
+    
+    public float getSpeed(){
+        return vehicle.getLinearVelocity().length();
+        //return (float)Math.sqrt((Math.pow(vehicle.getLinearVelocity().x,2)+Math.pow(vehicle.getLinearVelocity().z,2)+Math.pow(vehicle.getLinearVelocity().y,2)));
+    }
+    
+   
 }

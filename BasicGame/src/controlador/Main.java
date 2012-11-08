@@ -88,6 +88,7 @@ public class Main extends SimpleApplication implements ActionListener {
     //Factores para disminuir y aumentar la acceleracion y la frenadas
     private int accelerationFactor = 2; //Factor multiplicativo
     private int brakeForceFactor = 2;   //Factor de division
+    private double reverseFactor = 8;    //Factor de division
     
 /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
  * a dins de la classe Rival*/
@@ -142,8 +143,9 @@ public class Main extends SimpleApplication implements ActionListener {
         setUpLight();
         
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
-        
-        car.buildCar();
+        ColorRGBA colorChasis = ColorRGBA.Orange;
+        ColorRGBA colorWheel = ColorRGBA.Gray;
+        car.buildCar(colorChasis, colorWheel);
          //Aqui creem la classe rival i la afegim al rootNode
         rival = new Rival(getAssetManager(), getPhysicsSpace());
         rival.buildCar();
@@ -188,6 +190,7 @@ public class Main extends SimpleApplication implements ActionListener {
 
     public void onAction(String binding, boolean value, float tpf) {
         if (binding.equals("Lefts")) {
+            
             if (value) {
                 steeringValue += .5f;
             } else {
@@ -203,17 +206,64 @@ public class Main extends SimpleApplication implements ActionListener {
             car.getVehicle().steer(steeringValue);
         } else if (binding.equals("Ups")) {
             if (value) {
+                car.setReverseMode(false);
+                accelerationValue = 0; //Reset the acceleration value
                 accelerationValue += (accelerationForce*accelerationFactor);
             } else {
                 accelerationValue -= (accelerationForce*accelerationFactor);
             }
-            System.out.println("Accelerar "+accelerationValue);
-            System.out.println("AcceleraForce "+accelerationForce);
+            //System.out.println("Accelerar "+accelerationValue);
+            //System.out.println("AcceleraForce "+accelerationForce);
             car.getVehicle().accelerate(accelerationValue);
         } else if (binding.equals("Downs")) {
             if (value) {
-                car.getVehicle().brake(brakeForce/brakeForceFactor);
+                System.out.println("Car speed "+car.getSpeed());
+                
+                
+                if(car.getReverseMode()){
+                     System.out.println("Marxa enrerar acceleracio");
+                     accelerationValue -= (accelerationForce/reverseFactor);
+                     car.getVehicle().accelerate(accelerationValue);
+                }else{
+                    if(car.getSpeed() < 5){
+                        System.out.println("Activate reverse mode");
+                        car.setReverseMode(true);
+                        accelerationValue -= (accelerationForce/reverseFactor);
+                        car.getVehicle().accelerate(accelerationValue);
+                    }else{
+                        System.out.println("Brake");
+                        car.getVehicle().brake(brakeForce/brakeForceFactor);
+                    }
+                }
+                
+                if(car.getReverseMode()){
+                     System.out.println("Marxa enrerar acceleracio");
+                     accelerationValue -= (accelerationForce/reverseFactor);
+                     car.getVehicle().accelerate(accelerationValue);
+                }else{
+                    if(car.getSpeed() < 5){
+                        System.out.println("Activate reverse mode");
+                        car.setReverseMode(true);
+                        accelerationValue -= (accelerationForce/reverseFactor);
+                        car.getVehicle().accelerate(accelerationValue);
+                    }else{
+                        System.out.println("Brake");
+                        car.getVehicle().brake(brakeForce/brakeForceFactor);
+                    }
+                }
+                
+                /*
+                if(car.getSpeed() < 5f){
+                    System.out.println("Reverse Mode");
+                    car.setReverseMode(true);
+                    
+                    //car.reverse();
+                }else{
+                    System.out.println("Brake 1");
+                    car.getVehicle().brake(brakeForce/brakeForceFactor);
+                }*/
             } else {
+                System.out.println("Deixar anar boto down");
                 car.getVehicle().brake(0f);
             }
         } else if (binding.equals("Reset")) {
@@ -257,7 +307,7 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
         
         camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
-        System.out.println(car.getVehicle().getPhysicsLocation().getX());
+        //System.out.println(car.getVehicle().getPhysicsLocation().getX());
         /*Codi per a moure el rival, cal moure-ho d'aqui*/
         switch (estado) {
             case 1:
@@ -268,7 +318,7 @@ public class Main extends SimpleApplication implements ActionListener {
             case 2:
                 
                 if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
-                    System.out.println("curva 1");
+                    //System.out.println("curva 1");
                     estado = 3;
                 }
                 if (rival.velocitat == 0) {
@@ -283,7 +333,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 if (r.getX()<-0.9f && r.getY()<-0.2f) {
                     rival.getVehicle().steer(0);
                     estado = 4;
-                    System.out.println("recta2");
+                    //System.out.println("recta2");
                     
                 } else {
                     rival.girarCurva1();
@@ -291,7 +341,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 break;
             case 4:
                 if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
-                     System.out.println("curva 2");
+                     //System.out.println("curva 2");
                      estado = 5;
                 }                
                 rival.moureEndavant();
@@ -301,11 +351,11 @@ public class Main extends SimpleApplication implements ActionListener {
                 r.setY(rival.getVehicle().getLinearVelocity().getZ());
                 r = r.normalize();
                 
-                System.out.println("Vector :\t"+r+"\n");
+               // System.out.println("Vector :\t"+r+"\n");
                 
                 if (r.getX()>+.2f && r.getY()<-.9f) {
                     System.out.println(r);
-                    System.out.println("recta 3");
+                    //System.out.println("recta 3");
                     estado = 6;
                     rival.getVehicle().steer(0);
                 } else {
@@ -315,9 +365,9 @@ public class Main extends SimpleApplication implements ActionListener {
             case 6:
                 if (rival.getVehicle().getPhysicsLocation().getZ()<=-54.f) {
                     estado = 7;
-                    System.out.println("curva 3");
+                    //System.out.println("curva 3");
                 }
-                System.out.println(rival.getVehicle().getPhysicsLocation().getZ());
+                //System.out.println(rival.getVehicle().getPhysicsLocation().getZ());
                 rival.moureEndavant();
                 break;
             case 7:
@@ -327,8 +377,8 @@ public class Main extends SimpleApplication implements ActionListener {
                 /*System.out.println("eeee");
                 System.out.println(r);*/
                 if (r.getX()>+.9f && r.getY()>+0.f) {
-                    System.out.println("recta 4");
-                    System.out.println(r);
+                    //System.out.println("recta 4");
+                    //System.out.println(r);
                     estado = 8;
                     rival.getVehicle().steer(0);
                 } else {
@@ -338,9 +388,9 @@ public class Main extends SimpleApplication implements ActionListener {
             case 8:
                 if (rival.getVehicle().getPhysicsLocation().getX()>=0.f) {
                     estado = 9;
-                    System.out.println("curva 4");
+                    //System.out.println("curva 4");
                 }
-                System.out.println(rival.getVehicle().getPhysicsLocation().getX());
+                //System.out.println(rival.getVehicle().getPhysicsLocation().getX());
                 rival.moureEndavant();
                 break;
             case 9:
@@ -350,7 +400,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 /*System.out.println("eeee");
                 System.out.println(r);*/
                 if (r.getX()<-.2f && r.getY()>+.9f) {
-                    System.out.println(r);
+                    //System.out.println(r);
                     estado = 2;
                     rival.getVehicle().steer(0);
                 } else {

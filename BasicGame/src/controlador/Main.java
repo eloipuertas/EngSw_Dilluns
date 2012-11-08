@@ -143,9 +143,9 @@ public class Main extends SimpleApplication implements ActionListener {
         setUpLight();
         
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
-        ColorRGBA colorChasis = ColorRGBA.Orange;
-        ColorRGBA colorWheel = ColorRGBA.Gray;
-        car.buildCar(colorChasis, colorWheel);
+        
+        car.setCocheProtagonista(1, "Violet");
+        
          //Aqui creem la classe rival i la afegim al rootNode
         rival = new Rival(getAssetManager(), getPhysicsSpace());
         rival.buildCar();

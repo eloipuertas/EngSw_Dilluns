@@ -32,6 +32,7 @@ public class VehicleProtagonista {
     
     private float mass;
     private VehicleControl vehicle;
+    private MaterialsVehicle materials;
     private Geometry chasis1;
     private Geometry wheel1;
     private Geometry wheel3;
@@ -80,15 +81,16 @@ public class VehicleProtagonista {
         return null;
     }
 
-    public void buildCar(ColorRGBA colorChasis, ColorRGBA colorWheel) {
+    public void setCocheProtagonista(int idModel, String idColor){
+        materials = new MaterialsVehicle(assetManager, idColor);
+        materials.initMaterials();
+        
+        buildCar();
+    }
+    
+    public void buildCar() {
         mass = 400;
-        Material matChasis = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        Material matWheel = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        //mat.getAdditionalRenderState().setWireframe(true);
-        matChasis.setColor("Color", colorChasis);
-        matWheel.setColor("Color", colorWheel);
-
-
+        
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
         //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
@@ -97,7 +99,7 @@ public class VehicleProtagonista {
         
         chasis1 = findGeom(meshNode, "Car");
         chasis1.rotate(0, 3.135f, 0);
-        chasis1.setMaterial(matChasis);
+        chasis1.setMaterial(materials.getMatChasis());
         
         CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
         BoundingBox box = (BoundingBox) chasis1.getModelBound();
@@ -139,7 +141,7 @@ public class VehicleProtagonista {
 
         Node node1 = new Node("wheel 1 node");
         wheel1 = findGeom(meshNode, "WheelFrontRight");
-        wheel1.setMaterial(matWheel);
+        wheel1.setMaterial(materials.getMatWheels());
         node1.attachChild(wheel1);
         wheel1.center();
         box = (BoundingBox) wheel1.getModelBound();
@@ -152,7 +154,7 @@ public class VehicleProtagonista {
         Node node2 = new Node("wheel 2 node");
         wheel2 = findGeom(meshNode, "WheelFrontLeft");
         node2.attachChild(wheel2);
-        wheel2.setMaterial(matWheel);
+        wheel2.setMaterial(materials.getMatWheels());
         wheel2.center();
         box = (BoundingBox) wheel2.getModelBound();
         vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
@@ -160,7 +162,7 @@ public class VehicleProtagonista {
 
         Node node3 = new Node("wheel 3 node");
         wheel3 = findGeom(meshNode, "WheelBackRight");
-        wheel3.setMaterial(matWheel);
+        wheel3.setMaterial(materials.getMatWheels());
         node3.attachChild(wheel3);
         wheel3.center();
         box = (BoundingBox) wheel3.getModelBound();
@@ -169,7 +171,7 @@ public class VehicleProtagonista {
 
         Node node4 = new Node("wheel 4 node");
         wheel4 = findGeom(meshNode, "WheelBackLeft");
-        wheel4.setMaterial(matWheel);
+        wheel4.setMaterial(materials.getMatWheels());
         node4.attachChild(wheel4);
         wheel4.center();
         box = (BoundingBox) wheel4.getModelBound();

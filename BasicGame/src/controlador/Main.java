@@ -53,6 +53,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -103,6 +104,8 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private RigidBodyControl landscape;
+    private Vector3f initialPos;
+    private Quaternion initialRot;
 
     private void setupKeys() {
         inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
@@ -126,8 +129,6 @@ public class Main extends SimpleApplication implements ActionListener {
         
         //Cargamos la escena
         world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort);
-        world.createWorld();
-
             
         /*if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
@@ -139,7 +140,6 @@ public class Main extends SimpleApplication implements ActionListener {
          */
 
         setupKeys();
-        setUpLight();
         
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         
@@ -150,6 +150,11 @@ public class Main extends SimpleApplication implements ActionListener {
         
         display = new Display(assetManager,settings,guiNode,this.timer);
         
+        initialPos = world.getInitialPos();
+        initialRot = world.getInitialRot();
+        //Trasladamos el coche protagonista a su posición de salida
+        car.getVehicle().setPhysicsLocation(initialPos);
+        car.getVehicle().setPhysicsRotation(initialRot);
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());
         
@@ -168,18 +173,6 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(camNode);
         
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1);   
-    }
-
-    private void setUpLight() {
-        // We add light so we see the scene
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
-
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White);
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -219,8 +212,8 @@ public class Main extends SimpleApplication implements ActionListener {
         } else if (binding.equals("Reset")) {
             if (value) {
                 System.out.println("Reset");
-                car.getVehicle().setPhysicsLocation(Vector3f.ZERO);
-                car.getVehicle().setPhysicsRotation(new Matrix3f());
+                car.getVehicle().setPhysicsLocation(initialPos);
+                car.getVehicle().setPhysicsRotation(initialRot);
                 car.getVehicle().setLinearVelocity(Vector3f.ZERO);
                 car.getVehicle().setAngularVelocity(Vector3f.ZERO);
                 car.getVehicle().resetSuspension();

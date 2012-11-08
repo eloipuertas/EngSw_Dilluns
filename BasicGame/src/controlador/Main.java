@@ -217,58 +217,36 @@ public class Main extends SimpleApplication implements ActionListener {
             car.getVehicle().accelerate(accelerationValue);
         } else if (binding.equals("Downs")) {
             if (value) {
-                System.out.println("Car speed "+car.getSpeed());
-                
-                
                 if(car.getReverseMode()){
-                     System.out.println("Marxa enrerar acceleracio");
                      accelerationValue -= (accelerationForce/reverseFactor);
                      car.getVehicle().accelerate(accelerationValue);
                 }else{
                     if(car.getSpeed() < 5){
-                        System.out.println("Activate reverse mode");
                         car.setReverseMode(true);
                         accelerationValue -= (accelerationForce/reverseFactor);
                         car.getVehicle().accelerate(accelerationValue);
                     }else{
-                        System.out.println("Brake");
                         car.getVehicle().brake(brakeForce/brakeForceFactor);
                     }
                 }
                 
                 if(car.getReverseMode()){
-                     System.out.println("Marxa enrerar acceleracio");
                      accelerationValue -= (accelerationForce/reverseFactor);
                      car.getVehicle().accelerate(accelerationValue);
                 }else{
                     if(car.getSpeed() < 5){
-                        System.out.println("Activate reverse mode");
                         car.setReverseMode(true);
                         accelerationValue -= (accelerationForce/reverseFactor);
                         car.getVehicle().accelerate(accelerationValue);
                     }else{
-                        System.out.println("Brake");
                         car.getVehicle().brake(brakeForce/brakeForceFactor);
                     }
                 }
-                
-                /*
-                if(car.getSpeed() < 5f){
-                    System.out.println("Reverse Mode");
-                    car.setReverseMode(true);
-                    
-                    //car.reverse();
-                }else{
-                    System.out.println("Brake 1");
-                    car.getVehicle().brake(brakeForce/brakeForceFactor);
-                }*/
             } else {
-                System.out.println("Deixar anar boto down");
                 car.getVehicle().brake(0f);
             }
         } else if (binding.equals("Reset")) {
             if (value) {
-                System.out.println("Reset");
                 car.getVehicle().setPhysicsLocation(Vector3f.ZERO);
                 car.getVehicle().setPhysicsRotation(new Matrix3f());
                 car.getVehicle().setLinearVelocity(Vector3f.ZERO);

@@ -198,14 +198,14 @@ public class Rival {
     public void girarCurva1(){
         //System.out.println(vehicle.getLinearVelocity().length());
         if (vehicle.getLinearVelocity().length()<70 && vehicle.getLinearVelocity().length()>10) {
-            System.out.println("frenant");
+            //System.out.println("frenant");
             vehicle.brake(100f);
         } else if (vehicle.getLinearVelocity().length()>=3 && vehicle.getLinearVelocity().length()<=10){
-            System.out.println("girant");
+            //System.out.println("girant");
             vehicle.steer(-.5f);
             vehicle.brake(0f);
         }else{
-            System.out.println("accelerar");
+            //System.out.println("accelerar");
             vehicle.accelerate(100f);
             vehicle.brake(0f);
         }

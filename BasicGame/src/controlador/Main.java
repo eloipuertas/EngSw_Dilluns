@@ -31,42 +31,26 @@
  */
 package controlador;
 
-import com.jme3.bullet.BulletAppState;
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.plugins.ZipLocator;
-import com.jme3.bounding.BoundingBox;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
-import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.control.VehicleControl;
-import com.jme3.bullet.objects.VehicleWheel;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.control.CameraControl.ControlDirection;
-import com.jme3.scene.shape.Cylinder;
+import model.Rival;
 import model.VehicleProtagonista;
 import model.WorldCreator;
 import vista.Display;
-import model.Rival;
 
 
 public class Main extends SimpleApplication implements ActionListener {
@@ -167,7 +151,7 @@ public class Main extends SimpleApplication implements ActionListener {
         
         rootNode.attachChild(camNode);
         
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1);   
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0);   
     }
 
     private void setUpLight() {
@@ -257,7 +241,7 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
         
         camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
-        System.out.println(car.getVehicle().getPhysicsLocation().getX());
+        //System.out.println(car.getVehicle().getPhysicsLocation().getX());
         /*Codi per a moure el rival, cal moure-ho d'aqui*/
         switch (estado) {
             case 1:
@@ -268,7 +252,6 @@ public class Main extends SimpleApplication implements ActionListener {
             case 2:
                 
                 if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
-                    System.out.println("curva 1");
                     estado = 3;
                 }
                 if (rival.velocitat == 0) {
@@ -283,7 +266,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 if (r.getX()<-0.9f && r.getY()<-0.2f) {
                     rival.getVehicle().steer(0);
                     estado = 4;
-                    System.out.println("recta2");
                     
                 } else {
                     rival.girarCurva1();
@@ -291,7 +273,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 break;
             case 4:
                 if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
-                     System.out.println("curva 2");
                      estado = 5;
                 }                
                 rival.moureEndavant();
@@ -301,7 +282,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 r.setY(rival.getVehicle().getLinearVelocity().getZ());
                 r = r.normalize();
                 
-                System.out.println("Vector :\t"+r+"\n");
                 
                 if (r.getX()>+.2f && r.getY()<-.9f) {
                     System.out.println(r);
@@ -317,7 +297,6 @@ public class Main extends SimpleApplication implements ActionListener {
                     estado = 7;
                     System.out.println("curva 3");
                 }
-                System.out.println(rival.getVehicle().getPhysicsLocation().getZ());
                 rival.moureEndavant();
                 break;
             case 7:
@@ -327,8 +306,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 /*System.out.println("eeee");
                 System.out.println(r);*/
                 if (r.getX()>+.9f && r.getY()>+0.f) {
-                    System.out.println("recta 4");
-                    System.out.println(r);
                     estado = 8;
                     rival.getVehicle().steer(0);
                 } else {
@@ -340,7 +317,6 @@ public class Main extends SimpleApplication implements ActionListener {
                     estado = 9;
                     System.out.println("curva 4");
                 }
-                System.out.println(rival.getVehicle().getPhysicsLocation().getX());
                 rival.moureEndavant();
                 break;
             case 9:
@@ -350,7 +326,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 /*System.out.println("eeee");
                 System.out.println(r);*/
                 if (r.getX()<-.2f && r.getY()>+.9f) {
-                    System.out.println(r);
+                   
                     estado = 2;
                     rival.getVehicle().steer(0);
                 } else {

@@ -16,25 +16,31 @@
       
       <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="center">       
         <control name="button" label="Carrera" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
-            <interact onClick="controlsScreen(carrera)" />
+            <interact onClick="gotoScreenCarSelect(carrera)" />
         </control>         
       </panel>
       
       <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="center">       
         <control name="button" label="Contrareloj" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
-            <interact onClick="controlsScreen(contrareloj)" />
+            <interact onClick="gotoScreenCarSelect(contrareloj)" />
         </control>         
       </panel>
       
       <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="center">       
         <control name="button" label="Persecución" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
-            <interact onClick="controlsScreen(persecucion)" />
+            <interact onClick="gotoScreenCarSelect(persecucion)" />
         </control>         
       </panel>
       
       <panel id="panel_mid4" height="10%" width="75%" align="center" childLayout="center">       
         <control name="button" label="Opciones" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
             <interact onClick="gotoScreen(options)" />
+        </control>         
+      </panel>
+      
+      <panel id="panel_mid5" height="10%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Controles" id="ControlesButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="gotoScreen(controls)" />
         </control>         
       </panel>
       
@@ -182,10 +188,99 @@
     </layer>
     <layer id="foreground" childLayout="vertical">
          <panel id="panel_bottom" height="194%" width="75%" align="center" childLayout="center">  
-        <control name="button" label="Empezar" id="startButton" align="center" valign="center" visibleToMouse="true" > 
-            <interact onClick="startGame()"/>
+        <control name="button" label="Volver" id="startButton" align="center" valign="center" visibleToMouse="true" > 
+            <interact onClick="gotoScreen(start)"/>
         </control>       
       </panel>
+    </layer>     
+  </screen>
+  
+  
+  
+  
+  <screen id="coches" controller="vista.Menu">    
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">
+        
+        <panel id="margen_superior" height="5%" width="100%" align="center">                   
+        </panel>       
+                      
+        <panel id="panel_coche" height="60%" width="100%" childLayout="horizontal">              
+                
+                <panel id="panel_izq" height="100%" width="10%" align="center" childLayout="center">       
+                    <control name="button" label="-" id="volumeLess" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCar(-)" />
+                    </control>
+                </panel>
+              
+                <panel id="panel_imagen" height="100%" width="80%" align="center" childLayout="center">       
+                    <image id="carImage" name="carImage" filename="${CALL.getCarPhotoFilename()}" height="100%" width="100%"></image>
+                </panel> 
+
+                <panel id="panel_dch" height="100%" width="10%" align="center" childLayout="center">       
+                    <control name="button" label="-" id="volumeMore" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCar(+)" />
+                    </control>
+                </panel>         
+                   
+        </panel>
+            
+        <panel id="panel_color" height="10%" width="100%" childLayout="horizontal">  
+                
+                <panel id="panel_botonmenos" height="50%" width="40%" align="center" valign="center" childLayout="center" >       
+                    <control name="button" label="-" id="lapsLess" height="100%" width="20%" align="right" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCarColor(-)" />
+                    </control>
+                </panel>
+              
+                <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
+                    <text text="${CALL.getCarColor()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                </panel> 
+                                    
+                <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
+                    <control name="button" label="-" id="lapsMore" height="100%" width="20%" align="left" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCarColor(+)"/>
+                    </control>
+                </panel>    
+                
+                    
+         </panel>
+         
+        <panel id="panel_clima" height="10%" width="100%" childLayout="horizontal">
+            
+            <panel id="panel_botonmenos" height="50%" width="40%" align="center" valign="center" childLayout="center" >       
+                    <control name="button" label="-" id="lapsLess" height="100%" width="20%" align="right" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setClima(-)" />
+                    </control>
+            </panel>
+              
+            <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
+                    <text text="${CALL.getClima()}" id="climaText" name="climaText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel> 
+                                    
+            <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
+                <control name="button" label="-" id="lapsMore" height="100%" width="20%" align="left" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setClima(+)"/>
+                </control>
+            </panel> 
+            
+        </panel>
+    
+                
+
+
+        <panel id="panel_empezar" height="10%" width="100%" align="center" childLayout="center">       
+            <control name="button" label="Empezar" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+                <interact onClick="startGame()"/>
+            </control>              
+        </panel>
+        
+        
+
+              
     </layer>     
   </screen>
    

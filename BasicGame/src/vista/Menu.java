@@ -8,13 +8,15 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
-import com.jme3.system.Timer;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.button.ButtonControl;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.util.ArrayList;
 
 public class Menu extends AbstractAppState implements ScreenController {
 
@@ -39,9 +41,14 @@ public class Menu extends AbstractAppState implements ScreenController {
   private int maxNumVolume;
   private int numVolume;
   private AppSettings settings;
-  
+  private ArrayList<String> cars = new ArrayList<String>();  
+  private int actualCar;
+  private ArrayList<String> colors = new ArrayList<String>();
+  private int actualColor;
+  private int actualClima;
+  private ArrayList<String> clima = new ArrayList<String>();
 
-  public Menu(AppSettings settings,AssetManager manager, Node rootNode, SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume) {
+  public Menu(AppSettings settings,AssetManager manager, Node rootNode, SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume,int initCar, int initCarColor,int initClima) {
       isGameStarted = false;
       
       this.settings = settings;      
@@ -71,19 +78,32 @@ public class Menu extends AbstractAppState implements ScreenController {
       //Quitamos la informacion de debug por defecto
       this.main.setDisplayFps(this.debugInfo); // to hide the FPS
       this.main.setDisplayStatView(this.debugInfo); // to hide the statistics 
+  
+      cars.add("coche1");
+      cars.add("Interface/Menu/coche1.jpg");
+      cars.add("coche2");
+      cars.add("Interface/Menu/coche2.jpeg");
+      colors.add("Rojo");
+      colors.add("Verde");
+      colors.add("Azul");
+      clima.add("Soleado");
+      clima.add("Lluvioso");
+      actualCar = initCar;
+      actualColor = initCarColor;
+      actualClima = initClima;
   }
 
   public void startGame() {      
     isGameStarted = true;    
     menu_sound.stop();    
-    nifty.exit();  // switch to another screen    
+    nifty.exit();      
   }
   
-  public void controlsScreen(String mode){
+  public void gotoScreenCarSelect(String mode){
       this.mode=mode;
-      gotoScreen("controls");
+      nifty.gotoScreen("coches");
   }
-  
+    
   public void gotoScreen(String screen){
       nifty.gotoScreen(screen);      
   }  
@@ -169,7 +189,88 @@ public class Menu extends AbstractAppState implements ScreenController {
     }  
     this.main.setDisplayFps(this.debugInfo); 
     this.main.setDisplayStatView(this.debugInfo); 
-  }  
+  }
+  
+  public String getCarPhotoFilename(){
+      return cars.get(actualCar+1);       
+  }
+  
+  public String getCarName(){
+      return cars.get(actualCar);
+  }
+  
+  public void setCar(String scroll){
+      
+      if (scroll.equals("-")){
+          actualCar = actualCar -2;          
+      }
+      else{
+          actualCar= actualCar +2;          
+      }      
+      
+      if(actualCar >= cars.size()){
+          actualCar = 0;
+      }
+      else if (actualCar < 0){
+          actualCar = cars.size()-2;
+      }      
+      
+      // first load the new image
+      NiftyImage newImage = nifty.getRenderEngine().createImage(cars.get(actualCar+1), false); // false means don't linear filter the image, true would apply linear filtering
+
+      // find the element with it's id
+      Element element = screen.findElementByName("carImage");
+
+      // change the image with the ImageRenderer
+      element.getRenderer(ImageRenderer.class).setImage(newImage); 
+  }
+  
+  public void setCarColor(String scroll){
+      if(scroll.equals("-")){
+          actualColor=actualColor-1;
+      }
+      else{
+          actualColor=actualColor+1;
+      }
+      
+      if(actualColor >= colors.size()){
+          actualColor=0;
+      }
+      else if(actualColor < 0){
+          actualColor= colors.size()-1;
+      }
+      
+      Element colorText = nifty.getCurrentScreen().findElementByName("colorText");
+      colorText.getRenderer(TextRenderer.class).setText(colors.get(actualColor));
+      
+  }
+  
+  public String getCarColor(){      
+      return colors.get(actualColor);
+  }
+  
+  public String getClima(){
+      return clima.get(actualClima);
+  }
+  
+  public void setClima(String scroll){
+      if(scroll.equals("-")){
+          actualClima=actualClima-1;
+      }
+      else{
+          actualClima=actualClima+1;
+      }
+      
+      if(actualClima >= clima.size()){
+          actualClima=0;
+      }
+      else if(actualClima < 0){
+          actualClima= clima.size()-1;
+      }
+      
+      Element colorText = nifty.getCurrentScreen().findElementByName("climaText");
+      colorText.getRenderer(TextRenderer.class).setText(clima.get(actualClima));
+ }
   
   public int getNumLaps(){
       return numLaps;

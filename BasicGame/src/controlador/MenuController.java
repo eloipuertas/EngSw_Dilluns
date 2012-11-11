@@ -17,9 +17,9 @@ public class MenuController {
     
     private Menu controller=null;
     
-    public MenuController(AppSettings settings,AppStateManager stateManager,AssetManager assetManager,Node rootNode,ViewPort guiViewPort,InputManager inputManager, AudioRenderer audioRenderer,SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume){
+    public MenuController(AppSettings settings,AppStateManager stateManager,AssetManager assetManager,Node rootNode,ViewPort guiViewPort,InputManager inputManager, AudioRenderer audioRenderer,SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume,int initCar,int initCarColor,int initClima){
         //Añadimos el menu creado con nifty
-        controller = new Menu(settings,assetManager,rootNode,main,debugInfo,initNumEnemies,minNumEnemies,maxNumEnemies,initNumLaps,minNumLaps,maxNumLaps,initNumVolume,minNumVolume,maxNumVolume);
+        controller = new Menu(settings,assetManager,rootNode,main,debugInfo,initNumEnemies,minNumEnemies,maxNumEnemies,initNumLaps,minNumLaps,maxNumLaps,initNumVolume,minNumVolume,maxNumVolume,initCar,initCarColor,initClima);
         stateManager.attach(controller);
         NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, guiViewPort);
         Nifty nifty = niftyDisplay.getNifty();
@@ -38,5 +38,25 @@ public class MenuController {
     
     public String getMode(){
         return controller.getMode();
+    }
+    
+    public String getCarColor(){
+        return controller.getCarColor();
+    }
+    
+    public String getCarName(){
+        return controller.getCarName();
+    }
+    
+    public int getNumLaps(){
+        return controller.getNumLaps();
+    }
+    
+    public int getNumEnemies(){
+        return controller.getInitNumEnemies();
+    }
+    
+    public String getClima(){
+        return controller.getClima();
     }
 }

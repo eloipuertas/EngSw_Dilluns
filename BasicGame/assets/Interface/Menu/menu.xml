@@ -217,7 +217,7 @@
                 </panel>
               
                 <panel id="panel_imagen" height="100%" width="80%" align="center" childLayout="center">       
-                    <image id="carImage" name="carImage" filename="${CALL.getCarPhotoFilename()}" height="100%" width="100%"></image>
+                    <image id="carImage" name="carImage" filename="${CALL.getCarImagePath()}" height="100%" width="100%"></image>
                 </panel> 
 
                 <panel id="panel_dch" height="100%" width="10%" align="center" childLayout="center">       
@@ -237,7 +237,7 @@
                 </panel>
               
                 <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
-                    <text text="${CALL.getCarColor()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                    <text text="${CALL.getCarColorName()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
                 </panel> 
                                     
                 <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
@@ -247,23 +247,73 @@
                 </panel>    
                 
                     
-         </panel>
+         </panel>   
+        
+        
+        
+        <panel id="panel_empezar" height="10%" width="100%" align="center" childLayout="center">       
+            <control name="button" label="Seleccionar circuito" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+                <interact onClick="gotoScreen(circuit)"/>
+            </control>              
+        </panel>
+        
+        
+
+              
+    </layer>     
+  </screen>
+  
+  
+  
+  
+  
+  <screen id="circuit" controller="vista.Menu">    
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">
+        
+        <panel id="margen_superior" height="5%" width="100%" align="center">                   
+        </panel>       
+                      
+        <panel id="panel_coche" height="60%" width="100%" childLayout="horizontal">              
+                
+                <panel id="panel_izq" height="100%" width="10%" align="center" childLayout="center">       
+                    <control name="button" label="-" id="volumeLess" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCircuit(-)" />
+                    </control>
+                </panel>
+              
+                <panel id="panel_imagen" height="100%" width="80%" align="center" childLayout="center">       
+                    <image id="circuitImage" name="circuitImage" filename="${CALL.getCircuitImagePath()}" height="100%" width="100%"></image>
+                </panel> 
+
+                <panel id="panel_dch" height="100%" width="10%" align="center" childLayout="center">       
+                    <control name="button" label="-" id="volumeMore" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                        <interact onClick="setCircuit(+)" />
+                    </control>
+                </panel>         
+                   
+        </panel>
+            
+        
          
         <panel id="panel_clima" height="10%" width="100%" childLayout="horizontal">
             
             <panel id="panel_botonmenos" height="50%" width="40%" align="center" valign="center" childLayout="center" >       
                     <control name="button" label="-" id="lapsLess" height="100%" width="20%" align="right" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setClima(-)" />
+                        <interact onClick="setWeather(-)" />
                     </control>
             </panel>
               
             <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
-                    <text text="${CALL.getClima()}" id="climaText" name="climaText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                    <text text="${CALL.getWeatherName()}" id="weatherText" name="weatherText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
             </panel> 
                                     
             <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
                 <control name="button" label="-" id="lapsMore" height="100%" width="20%" align="left" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setClima(+)"/>
+                        <interact onClick="setWeather(+)"/>
                 </control>
             </panel> 
             
@@ -283,5 +333,12 @@
               
     </layer>     
   </screen>
+  
+  
+  
+  
+  
+  
+  
    
 </nifty>

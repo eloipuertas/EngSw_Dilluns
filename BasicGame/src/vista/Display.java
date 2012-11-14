@@ -86,15 +86,18 @@ public class Display {
         displayNode.attachChild(arrow);        
               
         guiNode.attachChild(displayNode);
-        this.displayNode.move(xDisplay,yDisplay,0);       
+        this.displayNode.move(xDisplay,yDisplay,0);
+        
+        this.startChronograph();
+        this.updatePosition(0);
     }
     
-    public void startChronograph(){
+    private void startChronograph(){
         this.chronograph.setText("00:00");
         this.timer.reset();        
     }
     
-    public void updateChronograph(){
+    private void updateChronograph(){
         float totalSeconds = this.timer.getTimeInSeconds();
         int seconds = (int)totalSeconds%60;
         int minutes = (int)totalSeconds/60;
@@ -112,13 +115,13 @@ public class Display {
         }
     }
     
-    public void updatePosition(int pos){
+    private void updatePosition(int pos){
         if (pos > 0){
             this.pos.setText(""+pos);
         }
     }
     
-    public void updateDisplay(float speed){
+    private void updateGauge(float speed){
         
         if(isDisplayAdded()){ //comprobamos si el display se ha creado, en caso contratio no hacemos nada            
                      
@@ -142,5 +145,11 @@ public class Display {
         else{
             return false;
         }
+    }
+    
+    public void updateDisplay(float speed,int position){        
+        this.updateGauge(speed);
+        this.updateChronograph();
+        this.updatePosition(position);        
     }
 }

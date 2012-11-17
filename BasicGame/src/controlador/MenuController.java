@@ -58,10 +58,14 @@ public class MenuController {
     }
     
     public int getNumEnemies(){
-        return controller.getInitNumEnemies();
+        return controller.getNumEnemies();
     }
     
     public String getWeatherName(){
         return controller.getWeatherName();
+    }
+    
+    public String getCircuitName(){
+        return controller.getCircuitName();
     }
 }

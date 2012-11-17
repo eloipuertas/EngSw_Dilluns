@@ -4,6 +4,10 @@ import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
@@ -22,6 +26,7 @@ public class Display {
     private AppSettings settings;
     private Node guiNode;
     private Timer timer;
+    private Camera camTrasera;
     
     public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
         
@@ -86,11 +91,34 @@ public class Display {
         displayNode.attachChild(arrow);        
               
         guiNode.attachChild(displayNode);
-        this.displayNode.move(xDisplay,yDisplay,0);
+        this.displayNode.move(xDisplay,yDisplay,0);      
         
         this.startChronograph();
         this.updatePosition(0);
     }
+    
+    public void addMirror(int xMirror,int yMirror,float scaleValueMirror,RenderManager renderManager,Camera cam,Vector3f lookAtRear,Node rootNode){
+        float minDimension = Math.min(settings.getWidth(),settings.getHeight());      
+        
+        //Agregar retrovisor        
+        Picture mirror = new Picture("mirror");
+        mirror.setImage(assetManager, "Textures/Display/retrovisor.png", true);
+        
+        mirror.setWidth(minDimension/scaleValueMirror);
+        mirror.setHeight(minDimension/scaleValueMirror);        
+        mirror.setPosition(0,0);
+        mirror.center();
+        mirror.move(xMirror,yMirror,0);                
+        guiNode.attachChild(mirror);
+        
+        camTrasera = cam.clone();
+        camTrasera.setViewPort(0.39f,0.61f ,0.76f,0.94f);
+        camTrasera.setLocation(new Vector3f(0, 3, 0));
+        camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);
+        ViewPort view2 = renderManager.createMainView("Camara trasera", camTrasera);
+        view2.setClearFlags(true, true, true);
+        view2.attachScene(rootNode);
+    }           
     
     private void startChronograph(){
         this.chronograph.setText("00:00");
@@ -150,6 +178,12 @@ public class Display {
     public void updateDisplay(float speed,int position){        
         this.updateGauge(speed);
         this.updateChronograph();
-        this.updatePosition(position);        
+        this.updatePosition(position);      
+    }
+    
+    public void updateMirror(Vector3f lookAtRear, Vector3f cameraPos){
+         //Actualizamos camara
+        camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);
+        camTrasera.setLocation(cameraPos);
     }
 }

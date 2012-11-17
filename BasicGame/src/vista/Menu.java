@@ -376,7 +376,11 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public String getCircuitImagePath(){
       return imagesPath+circuits.get(actualCircuit).circuitImageFileName+weathers.get(actualWeather).weatherImageFilename+circuits.get(actualCircuit).imageExtension;       
-  }  
+  }
+  
+  public String getCircuitName(){
+      return circuits.get(actualCircuit).circuitName;
+  }
   
   public int getNumLaps(){
       return numLaps;

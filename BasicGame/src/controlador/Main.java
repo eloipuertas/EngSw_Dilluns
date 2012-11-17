@@ -3,7 +3,6 @@ package controlador;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
@@ -22,24 +21,15 @@ import vista.Display;
 
 public class Main extends SimpleApplication implements ActionListener {
 
-    private BulletAppState bulletAppState;
-    private float steeringValue = 0;
-    private float accelerationValue = 0;
+    private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
     private Rival rival;
     private WorldCreator world;
-    private final float accelerationForce = 1000.0f;
-    private final float brakeForce = 100.0f;
-    private CameraNode camNode;
-    
+    private CameraNode camNode;    
     private MenuController menu;
     private Display display;
-    private boolean gameStarted = false;
-    
-    //Factores para disminuir y aumentar la acceleracion y la frenadas
-    private int accelerationFactor = 2; //Factor multiplicativo
-    private int brakeForceFactor = 2;   //Factor de division
-    
+    private boolean gameStarted = false;    
+        
     
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
@@ -52,9 +42,7 @@ public class Main extends SimpleApplication implements ActionListener {
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
-    }
-    
-    private RigidBodyControl landscape;
+    }    
 
     private void setupKeys() {
         inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
@@ -134,14 +122,14 @@ public class Main extends SimpleApplication implements ActionListener {
         
         flyCam.setEnabled(false);
         
-        if(menu.isMenuFinished() && !gameStarted){
-            setupKeys();
+        if(menu.isMenuFinished() && !gameStarted){            
             setUpLight();
             addWorld();            
             addProtagonista();
             addRival();
             addDisplay();
-            gameStarted = true;          
+            gameStarted = true;
+            setupKeys();
         }
         
         if(gameStarted){
@@ -243,7 +231,8 @@ public class Main extends SimpleApplication implements ActionListener {
                 default:
             }
             
-            display.updateDisplay(car.getSpeed(),1);            
+            display.updateDisplay(car.getSpeed(),1);      
+            display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
         }
 
     }
@@ -260,7 +249,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private void addDisplay(){        
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());
         display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f);        
-    }
+        display.addMirror(settings.getWidth()/2, (int)(settings.getHeight()*0.88f), 3f,renderManager,cam,car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),rootNode);        
+    }        
     
     private void addProtagonista(){
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);

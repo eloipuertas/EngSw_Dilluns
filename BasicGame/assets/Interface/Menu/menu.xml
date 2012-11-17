@@ -6,12 +6,12 @@
   
   <screen id="start" controller="vista.Menu">
     <layer id="background" childLayout="center">
-        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+        <image filename="Interface/Menu/start_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
     
     <layer id="foreground" childLayout="vertical">
       <panel id="panel_top" height="30%" width="75%" align="center" childLayout="center">  
-        <text text="TÍTULO JUEGO" font="Interface/Fonts/Default.fnt" width="100%" height="100%" />
+	<image filename="Interface/Menu/titulo.png" height="50%" width="70%"></image>
       </panel>
       
       <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="center">       
@@ -64,7 +64,7 @@
   <screen id="options" controller="vista.Menu">
     
     <layer id="background" childLayout="center">
-        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+        <image filename="Interface/Menu/start_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
     
     <layer id="foreground" childLayout="vertical">
@@ -200,7 +200,7 @@
   
   <screen id="coches" controller="vista.Menu">    
     <layer id="background" childLayout="center">
-        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+        <image filename="Interface/Menu/select_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
     
     <layer id="foreground" childLayout="vertical">
@@ -251,8 +251,8 @@
         
         
         
-        <panel id="panel_empezar" height="10%" width="100%" align="center" childLayout="center">       
-            <control name="button" label="Seleccionar circuito" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+        <panel id="panel_empezar" height="25%" width="100%" align="center" childLayout="center">       
+            <control name="button" label="Selec. circuito" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
                 <interact onClick="gotoScreen(circuit)"/>
             </control>              
         </panel>
@@ -269,7 +269,7 @@
   
   <screen id="circuit" controller="vista.Menu">    
     <layer id="background" childLayout="center">
-        <image filename="Interface/Menu/start_background.jpg" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+        <image filename="Interface/Menu/select_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
     
     <layer id="foreground" childLayout="vertical">
@@ -322,7 +322,7 @@
                 
 
 
-        <panel id="panel_empezar" height="10%" width="100%" align="center" childLayout="center">       
+        <panel id="panel_empezar" height="25%" width="100%" align="center" childLayout="center">       
             <control name="button" label="Empezar" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
                 <interact onClick="startGame()"/>
             </control>              

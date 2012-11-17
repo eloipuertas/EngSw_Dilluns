@@ -5,7 +5,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
@@ -24,8 +23,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   private Nifty nifty;
   private Application app;
   private Screen screen;
-  private boolean isMenuFinished;  
-  private final AudioNode menu_sound;
+  private boolean isMenuFinished;    
   private int numEnemies;
   private int initNumEnemies;
   private int minNumEnemies;
@@ -118,12 +116,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       
       mode = null;
       this.main = main;
-      this.debugInfo = debugInfo;      
-      menu_sound = new AudioNode(manager, "Sounds/song_menu.wav", false);
-      menu_sound.setLooping(true);  // activate continuous playing    
-      menu_sound.setVolume(this.numVolume);
-      rootNode.attachChild(menu_sound);
-      menu_sound.play(); // play continuously!
+      this.debugInfo = debugInfo;            
       
       //Quitamos la informacion de debug por defecto
       this.main.setDisplayFps(this.debugInfo); // to hide the FPS
@@ -149,8 +142,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
 
   public void startGame() {      
-    isMenuFinished = true;    
-    menu_sound.stop();    
+    isMenuFinished = true;      
     nifty.exit();      
   }
   
@@ -229,8 +221,7 @@ public class Menu extends AbstractAppState implements ScreenController {
             numVolume = numVolume - 1;
             volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
           }
-      }
-      menu_sound.setVolume(this.numVolume);
+      }      
   }
   
   public void setDebugInfo(){
@@ -388,18 +379,10 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public int getNumEnemies(){
       return numEnemies;
-  }
+  } 
   
-  public int getInitNumEnemies(){
-      return initNumEnemies;
-  }
-  
-  public int getInitNumLaps(){
-      return initNumLaps;
-  }
-  
-  public int getInitNumVolume(){
-      return initNumVolume;
+  public int getVolume(){
+      return numVolume;
   }
   
   public String getMode(){

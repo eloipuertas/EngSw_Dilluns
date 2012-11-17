@@ -61,6 +61,10 @@ public class MenuController {
         return controller.getNumEnemies();
     }
     
+    public int getVolume(){
+        return controller.getVolume();
+    }
+    
     public String getWeatherName(){
         return controller.getWeatherName();
     }

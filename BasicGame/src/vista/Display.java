@@ -26,7 +26,7 @@ public class Display {
     private AppSettings settings;
     private Node guiNode;
     private Timer timer;
-    private Camera camTrasera;
+    private Camera camTrasera;    
     
     public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
         
@@ -114,10 +114,11 @@ public class Display {
         camTrasera = cam.clone();
         camTrasera.setViewPort(0.39f,0.61f ,0.76f,0.94f);
         camTrasera.setLocation(new Vector3f(0, 3, 0));
-        camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);
+        camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);      
+
         ViewPort view2 = renderManager.createMainView("Camara trasera", camTrasera);
-        view2.setClearFlags(true, true, true);
-        view2.attachScene(rootNode);
+        view2.setClearFlags(true, true, true);        
+        view2.attachScene(rootNode);        
     }           
     
     private void startChronograph(){
@@ -182,7 +183,7 @@ public class Display {
     }
     
     public void updateMirror(Vector3f lookAtRear, Vector3f cameraPos){
-         //Actualizamos camara
+         //Actualizamos camara        
         camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);
         camTrasera.setLocation(cameraPos);
     }

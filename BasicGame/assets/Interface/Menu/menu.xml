@@ -88,7 +88,7 @@
             </panel>
               
             <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getInitNumEnemies()}" id="enemyText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                <text text="${CALL.getNumEnemies()}" id="enemyText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
             </panel> 
                                     
             <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
@@ -115,7 +115,7 @@
             </panel>
               
             <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getInitNumLaps()}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                <text text="${CALL.getNumLaps()}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
             </panel> 
                                     
             <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
@@ -156,7 +156,7 @@
             </panel>
               
             <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getInitNumVolume()}" id="volumeText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                <text text="${CALL.getVolume()}" id="volumeText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
             </panel> 
                                     
             <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       

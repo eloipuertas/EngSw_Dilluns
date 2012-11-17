@@ -144,7 +144,7 @@ public class Main extends SimpleApplication implements ActionListener {
         
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         
-        car.setCocheProtagonista(1, "Yellow");
+        car.setCocheProtagonista(1, "Red");
         
          //Aqui creem la classe rival i la afegim al rootNode
         rival = new Rival(getAssetManager(), getPhysicsSpace());

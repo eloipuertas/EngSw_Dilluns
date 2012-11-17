@@ -140,7 +140,7 @@ public class VehicleProtagonista {
 
 
         Node node1 = new Node("wheel 1 node");
-        wheel1 = findGeom(meshNode, "WheelFrontRight");
+        wheel1 = findGeom(meshNode, "WheelFrontLeft");
         wheel1.setMaterial(materials.getMatWheels());
         node1.attachChild(wheel1);
         wheel1.center();
@@ -148,34 +148,34 @@ public class VehicleProtagonista {
         wheelRadius = box.getYExtent();
         float back_wheel_h = (wheelRadius * 1.7f) - 1f;
         float front_wheel_h = (wheelRadius * 1.9f) - 1f;
-        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node2 = new Node("wheel 2 node");
-        wheel2 = findGeom(meshNode, "WheelFrontLeft");
+        wheel2 = findGeom(meshNode, "WheelFrontRight");
         node2.attachChild(wheel2);
         wheel2.setMaterial(materials.getMatWheels());
         wheel2.center();
         box = (BoundingBox) wheel2.getModelBound();
-        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -front_wheel_h, 0),
+        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node3 = new Node("wheel 3 node");
-        wheel3 = findGeom(meshNode, "WheelBackRight");
+        wheel3 = findGeom(meshNode, "WheelBackLeft");
         wheel3.setMaterial(materials.getMatWheels());
         node3.attachChild(wheel3);
         wheel3.center();
         box = (BoundingBox) wheel3.getModelBound();
-        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         Node node4 = new Node("wheel 4 node");
-        wheel4 = findGeom(meshNode, "WheelBackLeft");
+        wheel4 = findGeom(meshNode, "WheelBackRight");
         wheel4.setMaterial(materials.getMatWheels());
         node4.attachChild(wheel4);
         wheel4.center();
         box = (BoundingBox) wheel4.getModelBound();
-        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -back_wheel_h, 0),
+        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         vehicleNode.attachChild(node1);

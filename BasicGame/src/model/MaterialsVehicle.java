@@ -34,13 +34,13 @@ public class MaterialsVehicle {
     public void initMaterials(){
         matChasis.setBoolean("UseMaterialColors", true);
         matWheels.setBoolean("UseMaterialColors", true);
-        matChasis.setColor("Ambient", getRGBA().mult(0.2f));
-        matChasis.setColor("Specular",ColorRGBA.White.mult(0.8f));
-        matChasis.setColor("Diffuse",getRGBA().mult(0.8f));
+        matChasis.setColor("Ambient", getRGBA().mult(0.3f));
+        matChasis.setColor("Specular",ColorRGBA.White.mult(0.6f));
+        matChasis.setColor("Diffuse",getRGBA().mult(0.4f));
         matChasis.setFloat("Shininess", 40f); // [1,128] 
         
-        matWheels.setColor("Ambient", ColorRGBA.Black.mult(0.2f));
-        matWheels.setColor("Specular",ColorRGBA.Gray.mult(0.2f));
+        matWheels.setColor("Ambient", ColorRGBA.Black.mult(0.3f));
+        matWheels.setColor("Specular",ColorRGBA.Gray.mult(0.5f));
         matWheels.setColor("Diffuse",ColorRGBA.Black);
         matWheels.setFloat("Shininess", 2f); // [1,128] 
         

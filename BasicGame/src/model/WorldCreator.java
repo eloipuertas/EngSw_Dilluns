@@ -113,7 +113,7 @@ public class WorldCreator {
         
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/StraightRoad/Ciutat/StraightRoad.j3o");
+        Spatial sceneModel = assetManager.loadModel("Models/StraightRoad/StraightRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,20,20);
         //sceneModel.setMaterial(mat_road);

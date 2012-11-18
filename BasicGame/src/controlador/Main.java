@@ -254,7 +254,8 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void addProtagonista(){
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
-        car.buildCar(menu.getCarColorRGBA(),menu.getCarColorRGBA());
+        car.setCocheProtagonista(1, menu.getCarColorName());
+        
         car.getVehicle().setPhysicsLocation(new Vector3f(0.f,-4.f,0.f));
         
         //Añadimos el coche protagonista

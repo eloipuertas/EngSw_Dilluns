@@ -9,6 +9,12 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
+<<<<<<< HEAD
+=======
+import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
+>>>>>>> origin/Grup-A
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
@@ -42,7 +48,15 @@ public class Main extends SimpleApplication implements ActionListener {
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
+<<<<<<< HEAD
     }    
+=======
+    }
+    
+    private RigidBodyControl landscape;
+    private Vector3f initialPos;
+    private Quaternion initialRot;
+>>>>>>> origin/Grup-A
 
     private void setupKeys() {
         inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
@@ -63,6 +77,13 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
+<<<<<<< HEAD
+=======
+        
+        //Cargamos la escena
+        world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort);
+            
+>>>>>>> origin/Grup-A
         /*if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
             bsr.setDirection(new Vector3f(-0.5f, -0.3f, -0.3f).normalizeLocal());
@@ -70,22 +91,49 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         cam.setFrustumFar(150f);
          * 
+<<<<<<< HEAD
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);   
-    }
+=======
+         */
 
-    private void setUpLight() {
-        // We add light so we see the scene
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
-
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White);
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
+        setupKeys();
+        
+        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
+        
+        car.buildCar();
+         //Aqui creem la classe rival i la afegim al rootNode
+        rival = new Rival(getAssetManager(), getPhysicsSpace());
+        rival.buildCar();
+        
+        display = new Display(assetManager,settings,guiNode,this.timer);
+        
+        initialPos = world.getInitialPos();
+        initialRot = world.getInitialRot();
+        //Trasladamos el coche protagonista a su posición de salida
+        car.getVehicle().setPhysicsLocation(initialPos);
+        car.getVehicle().setPhysicsRotation(initialRot);
+        //Añadimos el coche protagonista
+        rootNode.attachChild(car.getSpatial());
+        
+        //Añadimos Rival
+        rootNode.attachChild(rival.getSpatial());
+        
+        //Settejem la camera
+        
+        camNode = new CameraNode("CamNode", cam);
+        camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        camNode.setLocalTranslation(new Vector3f(0, 4, -15));
+        //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
+        //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
+        camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
+        
+        rootNode.attachChild(camNode);
+        
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1);   
+>>>>>>> origin/Grup-A
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -102,9 +150,21 @@ public class Main extends SimpleApplication implements ActionListener {
         } else if (binding.equals("Downs")) {
             car.back(value);
         } else if (binding.equals("Reset")) {
+<<<<<<< HEAD
             car.reset(value);
         }else if (binding.equals("Space")) {
             car.handBrake(value);
+=======
+            if (value) {
+                System.out.println("Reset");
+                car.getVehicle().setPhysicsLocation(initialPos);
+                car.getVehicle().setPhysicsRotation(initialRot);
+                car.getVehicle().setLinearVelocity(Vector3f.ZERO);
+                car.getVehicle().setAngularVelocity(Vector3f.ZERO);
+                car.getVehicle().resetSuspension();
+            } else {
+            }
+>>>>>>> origin/Grup-A
         }
         
     }     

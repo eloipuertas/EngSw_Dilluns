@@ -13,6 +13,7 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
@@ -87,9 +88,12 @@ public class WorldCreator {
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(2));
-        //AmbientLight sun = new AmbientLight();
-        //sun.setColor(ColorRGBA.LightGray);
         rootNode.addLight(sun);
+
+        AmbientLight ambient = new AmbientLight();
+        ambient.setColor(ColorRGBA.LightGray);
+        rootNode.addLight(ambient);
+        
         
         brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
         brick.scaleTextureCoordinates(new Vector2f(1f, .5f));

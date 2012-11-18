@@ -104,7 +104,8 @@ public class WorldCreator {
         // We load the scene
         Spatial sceneModel = assetManager.loadModel("Models/AngularRoad/AngularRoad.j3o");
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(10,0.25f,10);
+       // sceneModel.scale(10,0.25f,10);
+        sceneModel.scale(10,10f,10);
         sceneModel.setMaterial(mat_road);
 
         //We load the limits of the scene
@@ -133,8 +134,8 @@ public class WorldCreator {
         // to make them appear in the game world.
         rootNode.attachChild(sceneModel);
         space.getPhysicsSpace().add(sceneModel);
-        rootNode.attachChild(boundsModel);
-        space.getPhysicsSpace().add(boundsModel);
+        //rootNode.attachChild(boundsModel);
+        //space.getPhysicsSpace().add(boundsModel);
         
         //wall creation
         crearMur(-2,-5,10);

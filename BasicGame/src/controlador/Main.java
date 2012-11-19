@@ -3,12 +3,16 @@ package controlador;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
@@ -28,7 +32,10 @@ public class Main extends SimpleApplication implements ActionListener {
     private CameraNode camNode;    
     private MenuController menu;
     private Display display;
-    private boolean gameStarted = false;    
+    private boolean gameStarted = false; 
+    private RigidBodyControl landscape;
+    private Vector3f initialPos;
+    private Quaternion initialRot;
         
     
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
@@ -37,13 +44,13 @@ public class Main extends SimpleApplication implements ActionListener {
     public Vector3f direccioCar;
     public Vector3f direccioRival;
     public Vector2f r = new Vector2f(1.0f,0.1f);
-    float angle;
+    float angle; 
     
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
-    }    
-
+    }
+    
     private void setupKeys() {
         inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
         inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_RIGHT));
@@ -63,6 +70,7 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleInitApp() {
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
+
         /*if (settings.getRenderer().startsWith("LWJGL")) {
             BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 512);
             bsr.setDirection(new Vector3f(-0.5f, -0.3f, -0.3f).normalizeLocal());
@@ -74,18 +82,6 @@ public class Main extends SimpleApplication implements ActionListener {
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);   
-    }
-
-    private void setUpLight() {
-        // We add light so we see the scene
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
-
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White);
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -102,7 +98,7 @@ public class Main extends SimpleApplication implements ActionListener {
         } else if (binding.equals("Downs")) {
             car.back(value);
         } else if (binding.equals("Reset")) {
-            car.reset(value);
+            car.reset(value, initialPos, initialRot);
         }else if (binding.equals("Space")) {
             car.handBrake(value);
         }
@@ -123,7 +119,6 @@ public class Main extends SimpleApplication implements ActionListener {
         flyCam.setEnabled(false);
         
         if(menu.isMenuFinished() && !gameStarted){            
-            setUpLight();
             addWorld();            
             addProtagonista();
             addRival();
@@ -243,7 +238,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private void addWorld(){
         //Cargamos la escena
         world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort);
-        world.createWorld();
+        initialPos = world.getInitialPos();
+        initialRot = world.getInitialRot();
     }
     
     private void addDisplay(){        
@@ -256,7 +252,8 @@ public class Main extends SimpleApplication implements ActionListener {
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(1, menu.getCarColorName());
         
-        car.getVehicle().setPhysicsLocation(new Vector3f(0.f,-4.f,0.f));
+        car.getVehicle().setPhysicsLocation(initialPos);
+        car.getVehicle().setPhysicsRotation(initialRot);
         
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());

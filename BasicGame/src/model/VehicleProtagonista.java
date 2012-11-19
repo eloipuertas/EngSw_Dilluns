@@ -16,6 +16,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
@@ -280,10 +281,10 @@ public class VehicleProtagonista {
         }
     }
 
-    public void reset(boolean value) {
+    public void reset(boolean value, Vector3f pos, Quaternion rot) {
         if (value) {
-            vehicle.setPhysicsLocation(Vector3f.ZERO);
-            vehicle.setPhysicsRotation(new Matrix3f());
+            vehicle.setPhysicsLocation(pos);
+            vehicle.setPhysicsRotation(rot);
             vehicle.setLinearVelocity(Vector3f.ZERO);
             vehicle.setAngularVelocity(Vector3f.ZERO);
             vehicle.resetSuspension();

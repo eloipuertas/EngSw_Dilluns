@@ -148,6 +148,7 @@ public class Main extends SimpleApplication implements ActionListener {
             addDisplay();
             gameStarted = true;
             setupKeys();
+            audioGameStarted();
         }
         
         if(gameStarted){

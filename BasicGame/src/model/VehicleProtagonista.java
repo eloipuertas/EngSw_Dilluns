@@ -249,6 +249,7 @@ public class VehicleProtagonista {
     }
 
     public void forward(boolean value) {
+        soundForward(value);
         accelerationValue = 0;
         if (value) {
             forwardMode = true;
@@ -265,8 +266,26 @@ public class VehicleProtagonista {
             forwardMode = false;
         }
     }
+    
+    public void soundForward(boolean value) {
+        float speed = getSpeed();
+        if (value && speed > 190) {
+            decelerate_sound.stop();
+            accelerate_sound.play(10.5f);
+            max_velocity_sound.play();
+        }
+        if (value && speed > -5) {
+            decelerate_sound.stop();
+            accelerate_sound.play(speed/20.0f);
+        }
+        else if (!value) {
+            accelerate_sound.stop();
+            decelerate_sound.play(10.0f - speed/20.0f);
+        }
+    }
 
     public void back(boolean value) {
+        brake_sound.play();
         float valueBrake;
         if(!handBrakeMode){
             if (value) {
@@ -297,6 +316,7 @@ public class VehicleProtagonista {
     }
 
     public void reverse() {
+        idling_car_sound.play();
         float valueBrake;
         if (getSpeed() > 5) {
             valueBrake = brakeForce / brakeForceFactor;
@@ -312,6 +332,7 @@ public class VehicleProtagonista {
     }
     
     public void handBrake(boolean value){
+        brake_sound.play();
         float valueBrake;
         if(!reverseMode){
             if(value){

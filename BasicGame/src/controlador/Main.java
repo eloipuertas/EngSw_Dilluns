@@ -17,6 +17,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
+import model.Audio;
 import model.Rival;
 import model.VehicleProtagonista;
 import model.WorldCreator;
@@ -36,6 +37,11 @@ public class Main extends SimpleApplication implements ActionListener {
     private RigidBodyControl landscape;
     private Vector3f initialPos;
     private Quaternion initialRot;
+    
+    private Audio menu_music;
+    private Audio starting_car_sound;
+    private Audio rain_sound;
+    private Audio must_destroy;
         
     
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 

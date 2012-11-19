@@ -276,11 +276,21 @@ public class VehicleProtagonista {
         }
         if (value && speed > -5) {
             decelerate_sound.stop();
-            accelerate_sound.play(speed/20.0f);
+            if (speed < 1) {
+                accelerate_sound.play(0.0f);
+            }
+            else {
+                accelerate_sound.play(speed/20.0f);
+            }
         }
         else if (!value) {
             accelerate_sound.stop();
-            decelerate_sound.play(10.0f - speed/20.0f);
+            if (speed > 190) {
+                decelerate_sound.play(0.0f);
+            }
+            else {
+                decelerate_sound.play(10.5f - speed/20.0f);
+            }
         }
     }
 

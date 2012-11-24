@@ -158,6 +158,9 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         
         if(gameStarted){
+            
+            flyCam.setEnabled(false);
+            
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
@@ -279,6 +282,7 @@ public class Main extends SimpleApplication implements ActionListener {
     }        
     
     private void addProtagonista(){
+        /*DEBUG BOUNDING BOXES*/bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(1, menu.getCarColorName());
         

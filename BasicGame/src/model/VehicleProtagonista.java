@@ -105,14 +105,14 @@ public class VehicleProtagonista {
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
         //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
 
-        Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
+        Node meshNode = (Node) assetManager.loadModel("Models/mazdaCar/Car.scene");
 
         chasis1 = findGeom(meshNode, "Car");
-        chasis1.rotate(0, 3.135f, 0);
+        //chasis1.rotate(0, 3.135f, 0);
         chasis1.setMaterial(materials.getMatChasis());
         
         CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
-        BoundingBox box = (BoundingBox) chasis1.getModelBound();
+        BoundingBox carbox = (BoundingBox) chasis1.getModelBound();
         //BoxCollisionShape box = new BoxCollisionShape(new Vector3f(1.2f, 0.5f, 2.4f));
         //compoundShape.addChildShape(box, new Vector3f(0, 1, 0));
 
@@ -149,43 +149,43 @@ public class VehicleProtagonista {
         float zOff = 2f;
 
 
-        Node node1 = new Node("wheel 1 node");
+        /*Node node1 = new Node("wheel 1 node");
         wheel1 = findGeom(meshNode, "WheelFrontLeft");
         wheel1.setMaterial(materials.getMatWheels());
         node1.attachChild(wheel1);
-        wheel1.center();
-        box = (BoundingBox) wheel1.getModelBound();
+        //wheel1.center();
+        BoundingBox box = (BoundingBox) wheel1.getModelBound();
         wheelRadius = box.getYExtent();
         float back_wheel_h = (wheelRadius * 1.7f) - 1f;
         float front_wheel_h = (wheelRadius * 1.9f) - 1f;
-        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
+        vehicle.addWheel(wheel1.getParent(), carbox.getCenter().add(0, 2.715f, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node2 = new Node("wheel 2 node");
         wheel2 = findGeom(meshNode, "WheelFrontRight");
         node2.attachChild(wheel2);
         wheel2.setMaterial(materials.getMatWheels());
-        wheel2.center();
+        //wheel2.center();
         box = (BoundingBox) wheel2.getModelBound();
-        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
+        vehicle.addWheel(wheel2.getParent(), carbox.getCenter().add(0, -2.715f, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node3 = new Node("wheel 3 node");
         wheel3 = findGeom(meshNode, "WheelBackLeft");
         wheel3.setMaterial(materials.getMatWheels());
         node3.attachChild(wheel3);
-        wheel3.center();
+        //wheel3.center();
         box = (BoundingBox) wheel3.getModelBound();
-        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
+        vehicle.addWheel(wheel3.getParent(), carbox.getCenter().add(0, 2.76f, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         Node node4 = new Node("wheel 4 node");
         wheel4 = findGeom(meshNode, "WheelBackRight");
         wheel4.setMaterial(materials.getMatWheels());
         node4.attachChild(wheel4);
-        wheel4.center();
+        //wheel4.center();
         box = (BoundingBox) wheel4.getModelBound();
-        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
+        vehicle.addWheel(wheel4.getParent(), carbox.getCenter().add(0, -2.76f, 0),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         vehicleNode.attachChild(node1);
@@ -194,10 +194,11 @@ public class VehicleProtagonista {
         vehicleNode.attachChild(node4);
 
         vehicle.getWheel(0).setFrictionSlip(9.8f);
-        vehicle.getWheel(1).setFrictionSlip(9.8f);
+        vehicle.getWheel(1).setFrictionSlip(9.8f);*/
 
         //rootNode.attachChild(vehicleNode);
 
+        //vehicle.getPhysicsRotation().set(-2.5f,0,-3.5f, 1);
         physicsSpace.add(vehicle);
         
         initAudio();

@@ -5,6 +5,7 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
+import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
@@ -40,14 +41,17 @@ public class MenuController {
         return controller.getMode();
     }
     
-    public String getCarColorNameENG(){
-        return controller.getCarColorNameENG();
-    }    
-        
-    public int getIdCar(){
-        return controller.getIdCar();
-    }  
+    public String getCarColorName(){
+        return controller.getCarColorName();
+    }
     
+    public ColorRGBA getCarColorRGBA(){
+        return controller.getCarColorRGBA();
+    }
+    
+    public String getCarName(){
+        return controller.getCarName();
+    }
     
     public int getNumLaps(){
         return controller.getNumLaps();
@@ -55,14 +59,17 @@ public class MenuController {
     
     public int getNumEnemies(){
         return controller.getNumEnemies();
-    }   
+    }
+    
+    public int getVolume(){
+        return controller.getVolume();
+    }
     
     public String getWeatherName(){
         return controller.getWeatherName();
     }
     
-    public int getIdCircuit(){
-        return controller.getIdCircuit();
-    }    
-    
+    public String getCircuitName(){
+        return controller.getCircuitName();
+    }
 }

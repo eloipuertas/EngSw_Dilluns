@@ -1,0 +1,90 @@
+<scene exported_by="vito" formatVersion="1.0.1" previous_export_time="1352249741.303459" export_time="1352249788.558062" >
+  <nodes >
+    <node name="WheelFrontRight" >
+      <position y="0.423916" x="3.255793" z="-0.105795" />
+      <rotation qy="0.000000" qx="-0.000000" qz="0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelFrontRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelFrontRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelBackRight" >
+      <position y="0.452226" x="3.255793" z="4.602208" />
+      <rotation qy="0.000000" qx="-0.000000" qz="0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelBackRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelBackRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelBackLeft" >
+      <position y="0.452226" x="-0.013061" z="4.602208" />
+      <rotation qy="0.000000" qx="-0.000000" qz="0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelBackLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelBackLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelFrontLeft" >
+      <position y="0.411191" x="-0.013061" z="-0.135208" />
+      <rotation qy="0.000000" qx="-0.000000" qz="0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelFrontLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelFrontLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="Car" >
+      <position y="1.161627" x="-0.003878" z="-2.289945" />
+      <rotation qy="0.500000" qx="-0.500000" qz="0.500000" qw="0.500000" />
+      <scale y="1.042569" x="1.055203" z="1.033422" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Car.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Car" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelFrontRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskFrontRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelBackRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskBackRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelBackLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskBackLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelFrontLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskFrontLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/Car.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/Faros.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/matricula.material" />
+    </item>
+  </externals>
+  <environment />
+</scene>

@@ -34,6 +34,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.shadow.BasicShadowRenderer;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
+import controlador.MenuController;
 import java.util.ArrayList;
 
 /**
@@ -54,6 +55,7 @@ public class WorldCreator {
     private BulletAppState space;
     private ViewPort viewPort;
     private ArrayList<Geometry> obstacleList;
+    private MenuController menu;
     
     private Material mat_road;
     private Material mat_brick;
@@ -70,11 +72,12 @@ public class WorldCreator {
      * @param space
      */
     
-    public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort) {
+    public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort, MenuController menu) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
         this.space = space;
         this.viewPort = viewPort;
+        this.menu = menu;
         obstacleList = new ArrayList<Geometry>();
         initMaterial();
         createWorld();
@@ -110,6 +113,17 @@ public class WorldCreator {
         Node sky = new Node();
         sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sky);
+        
+        //Mirem quin circuit ha estat seleccionat en el menu
+        /*String circuit = menu.getCircuitName();
+        String path;
+        if(circuit == "Montmelo"){
+            path = "pathToCircuit1";
+        }else if(circuit == "Jerez"){
+            path = "pathToCircuit2";
+        }else{
+            System.out.println("El circuit " + circuit + " es desconegut!");
+        }*/
         
         //Road creation
         // We load the scene
@@ -178,12 +192,24 @@ public class WorldCreator {
         crearCaixa(-50,-2,25);
         crearCaixa(0,-2,50);
 
-        //Creem el efecte de neu
-        //initNeu();
-        
-        
-        //Creem el efecte de pluja
+        //Creem el efecte de clima que s'hagi seleccionat al menu
+        //initClima(menu.getWeatherName());
         initPluja();
+    }
+    
+    
+    private void initClima(String weatherName) {
+        if(weatherName == "Soleado"){
+            
+        }else if(weatherName == "Lluvioso"){
+            initPluja();
+        }else if(weatherName == "Nevado"){
+            initNeu();
+        }else if(weatherName == "Nebuloso"){
+            initBoira();
+        }else{
+            System.out.println("El clima " + weatherName + " es desconegut!");
+        }
     }
     
     private void initNeu() {
@@ -327,4 +353,5 @@ public class WorldCreator {
     public Quaternion getInitialRot(){
         return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
     }
+
 }

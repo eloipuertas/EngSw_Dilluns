@@ -107,9 +107,6 @@ public class WorldCreator {
         brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
         brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
         
-        //Afegim boira
-        //initBoira();
-        
         //Afegim ombres
         BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 256);
         bsr.setDirection(new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f)); // light direction
@@ -121,22 +118,11 @@ public class WorldCreator {
         rootNode.attachChild(sky);
         
         //Mirem quin circuit ha estat seleccionat en el menu
-        /*String circuit = menu.getCircuitName();
-        String path;
-        if(circuit == "Montmelo"){
-            mapaActual = listaMapas.getMapa(0);
-            path = "pathToCircuit1";
-        }else if(circuit == "Jerez"){
-            mapaActual = listaMapas.getMapa(1);
-            path = "pathToCircuit2";
-        }else{
-            System.out.println("El circuit " + circuit + " es desconegut!");
-        }*/
-        mapaActual = listaMapas.getMapa(0);
+        mapaActual = listaMapas.getMapa(menu.getIdCircuit());
         
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/StraightRoad/Ciutat/solo_city.j3o");
+        Spatial sceneModel = assetManager.loadModel(mapaActual.getSceneModel());
         sceneModel.setLocalTranslation(0, -5, 0);
         sceneModel.scale(20,20,20);
         //sceneModel.setMaterial(mat_road);
@@ -195,8 +181,7 @@ public class WorldCreator {
         mostrarCaixes();
 
         //Creem el efecte de clima que s'hagi seleccionat al menu
-        //initClima(menu.getWeatherName());
-        initPluja();
+        initClima(menu.getWeatherName());
     }
     
     
@@ -308,7 +293,7 @@ public class WorldCreator {
         cajas.add(new Vector3f(0,-2,50));
         muros.add(new Vector3f(-2,-5,10));
         muros.add(new Vector3f(-55,-5,-15));
-        Mapa m = new Mapa(new Vector3f(-10,0,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/StraightRoad.j3o",luces,cajas,muros);
+        Mapa m = new Mapa(new Vector3f(-10,0,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",luces,cajas,muros);
         listaMapas.añadirMapa(m);
     }
     

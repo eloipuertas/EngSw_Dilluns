@@ -5,7 +5,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
@@ -54,12 +53,14 @@ public class Menu extends AbstractAppState implements ScreenController {
       private String carName;
       private String carImageFileName;
       private String imageExtension;
+      private int idCar;
       
-      public Car(String carName,String carImageFileName, String imageExtension){
+      public Car(int idCar,String carName,String carImageFileName, String imageExtension){
+          this.idCar = idCar;
           this.carName = carName;
           this.carImageFileName = carImageFileName;
           this.imageExtension = imageExtension;
-      }  
+      } 
   }
   
   private class Weather{
@@ -73,12 +74,12 @@ public class Menu extends AbstractAppState implements ScreenController {
   } 
   
   private class CarColor{
-      private String colorName;
-      private ColorRGBA colorRGBA;      
+      private String colorNameSPA;
+      private String colorNameENG;          
       
-      public CarColor(String colorName,ColorRGBA colorRGBA){
-          this.colorName = colorName;
-          this.colorRGBA = colorRGBA;
+      public CarColor(String colorNameSPA,String colorNameENG){
+          this.colorNameSPA = colorNameSPA;
+          this.colorNameENG = colorNameENG;         
       }  
   }
   
@@ -86,14 +87,15 @@ public class Menu extends AbstractAppState implements ScreenController {
       private String circuitName;
       private String circuitImageFileName;
       private String imageExtension;
+      private int idCircuit;
       
-      public Circuit(String circuitName,String circuitImageFileName,String imageExtension){
+      public Circuit(String circuitName,String circuitImageFileName,int idCircuit,String imageExtension){
           this.circuitName = circuitName;
           this.circuitImageFileName = circuitImageFileName;
           this.imageExtension = imageExtension;
+          this.idCircuit = idCircuit;
       }              
-  }
-  
+  }  
 
   public Menu(AppSettings settings,AssetManager manager, Node rootNode, SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume,int initCar, int initCarColor,int initWeather,int initCircuit) {
       this.imagesPath = "Interface/Menu/"; 
@@ -122,18 +124,28 @@ public class Menu extends AbstractAppState implements ScreenController {
       this.main.setDisplayFps(this.debugInfo); // to hide the FPS
       this.main.setDisplayStatView(this.debugInfo); // to hide the statistics 
   
-      cars.add(new Car("coche1","coche1",".jpg"));
-      cars.add(new Car("coche2","coche2",".jpeg"));
+      cars.add(new Car(1,"coche1","coche1",".png"));
+      cars.add(new Car(2,"coche2","coche2",".jpeg"));
      
-      colors.add(new CarColor("Rojo",new ColorRGBA(255,0,0,128)));
-      colors.add(new CarColor("Verde",new ColorRGBA(0,255,0,128)));
-      colors.add(new CarColor("Azul",new ColorRGBA(0,0,255,128)));      
+      colors.add(new CarColor("Rojo","Red"));
+      colors.add(new CarColor("Blanco","White"));
+      colors.add(new CarColor("Rosa","Pink"));
+      colors.add(new CarColor("Naranja","Orange"));
+      colors.add(new CarColor("Marron","Brown"));
+      colors.add(new CarColor("Amarillo","Yellow"));
+      colors.add(new CarColor("Gris","Gray"));
+      colors.add(new CarColor("Verde","Green"));
+      colors.add(new CarColor("Turquesa","Cyan"));
+      colors.add(new CarColor("Azul","Blue"));
+      colors.add(new CarColor("Lila","Violet"));         
       
       weathers.add(new Weather("Soleado","sol"));
       weathers.add(new Weather("Lluvioso","lluvia"));
-      
-      circuits.add(new Circuit("Montmelo","circuito1",".jpg"));
-      circuits.add(new Circuit("Jerez","circuito2",".jpg"));
+      weathers.add(new Weather("Nevado","nieve"));
+      weathers.add(new Weather("Nebuloso","niebla"));
+              
+      circuits.add(new Circuit("Montmelo","circuito1",0,".jpg"));
+      circuits.add(new Circuit("Jerez","circuito2",1,".jpg"));
       
       actualCar = initCar;
       actualColor = initCarColor;
@@ -221,7 +233,8 @@ public class Menu extends AbstractAppState implements ScreenController {
             numVolume = numVolume - 1;
             volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
           }
-      }      
+      }
+      
   }
   
   public void setDebugInfo(){
@@ -238,7 +251,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
   
   public String getCarImagePath(){
-      return imagesPath+cars.get(actualCar).carImageFileName+colors.get(actualColor).colorName+cars.get(actualCar).imageExtension;       
+      return imagesPath+cars.get(actualCar).carImageFileName+colors.get(actualColor).colorNameSPA+cars.get(actualCar).imageExtension;       
   }
   
   public String getCarName(){
@@ -287,7 +300,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       }
       
       Element colorText = nifty.getCurrentScreen().findElementByName("colorText");
-      colorText.getRenderer(TextRenderer.class).setText(colors.get(actualColor).colorName);
+      colorText.getRenderer(TextRenderer.class).setText(this.getCarColorNameSPA());
       
       // first load the new image
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCarImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
@@ -300,12 +313,16 @@ public class Menu extends AbstractAppState implements ScreenController {
       
   }
   
-  public String getCarColorName(){      
-      return colors.get(actualColor).colorName;
+  public String getCarColorNameSPA(){      
+      return colors.get(actualColor).colorNameSPA;
   }
   
-  public ColorRGBA getCarColorRGBA(){
-      return colors.get(actualColor).colorRGBA;
+  public String getCarColorNameENG(){
+      return colors.get(actualColor).colorNameENG;
+  }
+  
+  public int getIdCar(){
+      return cars.get(actualCar).idCar;              
   }
   
   public String getWeatherName(){
@@ -371,6 +388,10 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public String getCircuitName(){
       return circuits.get(actualCircuit).circuitName;
+  }
+  
+  public int getIdCircuit(){
+      return circuits.get(actualCircuit).idCircuit;
   }
   
   public int getNumLaps(){

@@ -7,11 +7,6 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -280,7 +275,7 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void addProtagonista(){
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
-        car.setCocheProtagonista(1, menu.getCarColorName());
+        car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
         
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);

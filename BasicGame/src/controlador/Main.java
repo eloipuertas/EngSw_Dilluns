@@ -97,6 +97,8 @@ public class Main extends SimpleApplication implements ActionListener {
             car.turnRight(value);
         } else if (binding.equals("Ups")) {
             car.forward(value);
+            //Aqui hauriem de comprovar que s'activen tots els rivals. Per ara en creem un, amb una IA 1 o IA 2, quan implementem numRivals anirÃ  aqui la activacio
+            rival.setPartidaComensada(true);/*quan comencem amb el prota comenÃ§arem la partida amb els rivals*/
         } else if (binding.equals("Downs")) {
             car.back(value);
         } else if (binding.equals("Reset")) {
@@ -158,99 +160,10 @@ public class Main extends SimpleApplication implements ActionListener {
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
-            switch (estado) {
-                case 1:
-                    if(comprovaMoviment()==true) {
-                        estado = 2;
-                    }
-                    break;
-                case 2:
-
-                    if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
-                        estado = 3;
-                    }
-                    if (rival.velocitat == 0) {
-                        rival.moureEndavant();
-                    }
-                    break;
-
-                case 3:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    if (r.getX()<-0.9f && r.getY()<-0.2f) {
-                        rival.getVehicle().steer(0);
-                        estado = 4;
-
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 4:
-                    if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
-                         estado = 5;
-                    }                
-                    rival.moureEndavant();
-                    break;
-                case 5:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-
-
-                    if (r.getX()>+.2f && r.getY()<-.9f) {
-                        System.out.println(r);
-                        System.out.println("recta 3");
-                        estado = 6;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 6:
-                    if (rival.getVehicle().getPhysicsLocation().getZ()<=-54.f) {
-                        estado = 7;
-                        System.out.println("curva 3");
-                    }
-                    rival.moureEndavant();
-                    break;
-                case 7:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    /*System.out.println("eeee");
-                    System.out.println(r);*/
-                    if (r.getX()>+.9f && r.getY()>+0.f) {
-                        estado = 8;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 8:
-                    if (rival.getVehicle().getPhysicsLocation().getX()>=0.f) {
-                        estado = 9;
-                        System.out.println("curva 4");
-                    }
-                    rival.moureEndavant();
-                    break;
-                case 9:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    /*System.out.println("eeee");
-                    System.out.println(r);*/
-                    if (r.getX()<-.2f && r.getY()>+.9f) {
-
-                        estado = 2;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;    
-                default:
+            if(rival.comprovaPartidaComensada()==true) {      /*depen de la tecla up del prota*/
+                rival.moureRival();
             }
-            
+
             display.updateDisplay(car.getSpeed(),1);      
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
         }
@@ -296,11 +209,13 @@ public class Main extends SimpleApplication implements ActionListener {
     
     
     private void addRival(){
-        //Aqui creem la classe rival i la afegim al rootNode
-        rival = new Rival(getAssetManager(), getPhysicsSpace());
-        rival.buildCar();
-        rival.getVehicle().setPhysicsLocation(new Vector3f(5.f,-4.f,0.f));
-        //Añadimos Rival
+         //Aqui creem la classe rival i la afegim al rootNode
+        Vector3f initialPosRival = world.getInitialPos();
+        Quaternion initialRotRival = world.getInitialRot();
+        
+        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
         rootNode.attachChild(rival.getSpatial());
+    
+
     }
 }

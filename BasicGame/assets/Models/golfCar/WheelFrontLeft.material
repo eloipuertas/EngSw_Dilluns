@@ -1,15 +1,15 @@
-// golf genrated by blender2ogre 0.5.8
+// WheelFrontLeft genrated by blender2ogre 0.5.8
 
-material golf 
+material WheelFrontLeft 
 {
     receive_shadows on 
 
     technique
     {
-        pass golf
+        pass WheelFrontLeft
         {
-            ambient 0.3185318410396576 0.28249403834342957 0.309522420167923 1.0
-            diffuse 0.2548254766289215 0.225995234042335 0.24761793982413316 1.0
+            ambient 0.800000011920929 0.800000011920929 0.800000011920929 1.0
+            diffuse 0.6400000190734865 0.6400000190734865 0.6400000190734865 1.0
             specular 0.5 0.5 0.5 1.0 12.5
             emissive 0.0 0.0 0.0 1.0
 

@@ -19,6 +19,7 @@ import com.jme3.input.controls.InputListener;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -112,14 +113,14 @@ public class VehicleProtagonista{
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
         //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
 
-        Node meshNode = (Node) assetManager.loadModel("Models/golfCar/Golf.scene");
+        Node meshNode = (Node) assetManager.loadModel("Models/golfCar/Car.scene");
 
-        chasis1 = findGeom(meshNode, "golf");
+        chasis1 = findGeom(meshNode, "Car");
         chasis1.setLocalScale(chasis1.getWorldScale().mult(0.3f));
         
         //Esta puesto para que vaya hacia adelante, sino, va hacia atras.
         //Hay que quitarlo pero antes, arreglar la camara
-        chasis1.rotate(0, 3.135f, 0);
+        //chasis1.rotate(0, 3.135f, 0);
         
         chasis1.setMaterial(materials.getMatChasis());
         
@@ -162,50 +163,50 @@ public class VehicleProtagonista{
 
 
         Node node1 = new Node("wheel 1 node");
-        wheel1 = findGeom(meshNode, "_missing_material_");
+        wheel1 = findGeom(meshNode, "WheelFrontLeft");
         wheel1.setMaterial(materials.getMatWheels());
         node1.attachChild(wheel1);
         wheel1.setLocalScale(wheel1.getWorldScale().mult(0.3f));
-        wheel1.setLocalTranslation(wheel1.getWorldTranslation());
-        wheel1.rotate(0, 1.35f, 0);
+        //wheel1.setLocalTranslation(wheel1.getWorldTranslation());
+        //wheel1.rotate(0, 1.5675f, 0);
         BoundingBox box = (BoundingBox) wheel1.getModelBound();
         wheelRadius = box.getYExtent();
         float back_wheel_h = (wheelRadius * 1.7f) - 1f;
         float front_wheel_h = (wheelRadius * 1.9f) - 1f;
-        vehicle.addWheel(wheel1.getParent(), carbox.getCenter(),
+        vehicle.addWheel(wheel1.getParent(), carbox.getCenter().add(new Vector3f(0.83f,0,1)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node2 = new Node("wheel 2 node");
-        wheel2 = findGeom(meshNode, "_missing_material_");
+        wheel2 = findGeom(meshNode, "WheelFrontRight");
         node2.attachChild(wheel2);
         wheel2.setMaterial(materials.getMatWheels());
         wheel2.setLocalScale(wheel2.getWorldScale().mult(0.3f));
         wheel2.setLocalTranslation(wheel2.getWorldTranslation());
         wheel2.setLocalRotation(wheel2.getWorldRotation());
         box = (BoundingBox) wheel2.getModelBound();
-        vehicle.addWheel(wheel2.getParent(), carbox.getCenter(),
+        vehicle.addWheel(wheel2.getParent(), carbox.getCenter().add(new Vector3f(-0.83f,0,1)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
         Node node3 = new Node("wheel 3 node");
-        wheel3 = findGeom(meshNode, "_missing_material_");
+        wheel3 = findGeom(meshNode, "WheelBackLeft");
         wheel3.setMaterial(materials.getMatWheels());
         node3.attachChild(wheel3);
         wheel3.setLocalScale(wheel3.getWorldScale().mult(0.3f));
         wheel3.setLocalTranslation(wheel3.getWorldTranslation());
         wheel3.setLocalRotation(wheel3.getWorldRotation());
         box = (BoundingBox) wheel3.getModelBound();
-        vehicle.addWheel(wheel3.getParent(), carbox.getCenter()/*.add(0, front_wheel_h, 0)*/,
+        vehicle.addWheel(wheel3.getParent(), carbox.getCenter().add(new Vector3f(-0.4f,0,-1))/*.add(0, front_wheel_h, 0)*/,
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         Node node4 = new Node("wheel 4 node");
-        wheel4 = findGeom(meshNode, "_missing_material_");
+        wheel4 = findGeom(meshNode, "WheelBackRight");
         wheel4.setMaterial(materials.getMatWheels());
         node4.attachChild(wheel4);
         wheel4.setLocalScale(wheel4.getWorldScale().mult(0.3f));
         wheel4.setLocalTranslation(wheel4.getWorldTranslation());
         wheel4.setLocalRotation(wheel4.getWorldRotation());
         box = (BoundingBox) wheel4.getModelBound();
-        vehicle.addWheel(wheel4.getParent(), carbox.getCenter()/*.add(0, front_wheel_h, 0)*/,
+        vehicle.addWheel(wheel4.getParent(), carbox.getCenter().add(new Vector3f(0.4f,0,-1))/*.add(0, front_wheel_h, 0)*/,
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
         vehicleNode.attachChild(node1);

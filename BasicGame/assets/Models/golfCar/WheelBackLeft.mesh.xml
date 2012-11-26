@@ -845,7 +845,7 @@
         </vertexbuffer>
     </sharedgeometry>
     <submeshes>
-        <submesh usesharedvertices="true" material="_missing_material_" use32bitindexes="False" operationtype="triangle_list">
+        <submesh usesharedvertices="true" material="WheelBackLeft" use32bitindexes="False" operationtype="triangle_list">
             <faces count="124">
                 <face v1="0" v2="1" v3="2"/>
                 <face v1="0" v2="2" v3="3"/>
@@ -975,7 +975,7 @@
         </submesh>
     </submeshes>
     <submeshnames>
-        <submesh index="0" name="_missing_material_">
+        <submesh index="0" name="WheelBackLeft">
         </submesh>
     </submeshnames>
 </mesh>

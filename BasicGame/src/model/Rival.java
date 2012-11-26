@@ -38,7 +38,7 @@ public class Rival {
     public float velocitat;   //Variable de control de la velocitat mínima
     public float gir;
     
-    //Constructor
+    //Constructor 
     public Rival(AssetManager asset, PhysicsSpace phy){
         assetManager = asset;
         physicsSpace = phy;

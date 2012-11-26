@@ -284,7 +284,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*/bulletAppState.getPhysicsSpace().enableDebug(assetManager);
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
-        car.setCocheProtagonista(1, menu.getCarColorName());
+        car.setCocheProtagonista(1, "Red");
         
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);

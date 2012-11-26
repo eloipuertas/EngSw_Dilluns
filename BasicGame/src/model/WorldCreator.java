@@ -15,9 +15,11 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -64,6 +66,8 @@ public class WorldCreator {
     private Material mat_rain;
     private Material mat_bounds;
     private Spatial roadModel;
+    private ListaMapas listaMapas;
+    private Mapa mapaActual;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -79,6 +83,8 @@ public class WorldCreator {
         this.viewPort = viewPort;
         this.menu = menu;
         obstacleList = new ArrayList<Geometry>();
+        listaMapas = new ListaMapas();
+        initMapas();
         initMaterial();
         createWorld();
         
@@ -118,12 +124,15 @@ public class WorldCreator {
         /*String circuit = menu.getCircuitName();
         String path;
         if(circuit == "Montmelo"){
+            mapaActual = listaMapas.getMapa(0);
             path = "pathToCircuit1";
         }else if(circuit == "Jerez"){
+            mapaActual = listaMapas.getMapa(1);
             path = "pathToCircuit2";
         }else{
             System.out.println("El circuit " + circuit + " es desconegut!");
         }*/
+        mapaActual = listaMapas.getMapa(0);
         
         //Road creation
         // We load the scene
@@ -176,21 +185,14 @@ public class WorldCreator {
         rootNode.attachChild(roadModel);
         space.getPhysicsSpace().add(roadModel);
         
+        //streetlamps creation
+        mostrarLlums();
         
         //wall creation
-        crearMur(-2,-5,10);
-        crearMur(-55,-5,-15);
+        mostrarMurs();
 
         //Obstacle creation
-        crearCaixa(2,-2,-10);
-        crearCaixa(2,-2,-50);
-        crearCaixa(-25,-2,-50);
-        crearCaixa(-50,-2,-50);
-        crearCaixa(-25,-2,-25);
-        crearCaixa(-50,-2,0);
-        crearCaixa(-50,-2,50);
-        crearCaixa(-50,-2,25);
-        crearCaixa(0,-2,50);
+        mostrarCaixes();
 
         //Creem el efecte de clima que s'hagi seleccionat al menu
         //initClima(menu.getWeatherName());
@@ -291,6 +293,61 @@ public class WorldCreator {
         obstacleList.add(obstacleModel);
     }
     
+    private void initMapas() {
+        ArrayList<Vector3f> luces = new ArrayList<Vector3f>();
+        ArrayList<Vector3f> cajas = new ArrayList<Vector3f>();
+        ArrayList<Vector3f> muros = new ArrayList<Vector3f>();
+        cajas.add(new Vector3f(2,-2,-10));
+        cajas.add(new Vector3f(2,-2,-50));
+        cajas.add(new Vector3f(-25,-2,-50));
+        cajas.add(new Vector3f(-50,-2,-50));
+        cajas.add(new Vector3f(-25,-2,-25));
+        cajas.add(new Vector3f(-50,-2,0));
+        cajas.add(new Vector3f(-50,-2,50));
+        //cajas.add(new Vector3f(-50,-2,25));
+        cajas.add(new Vector3f(0,-2,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        Mapa m = new Mapa(new Vector3f(-10,0,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/StraightRoad.j3o",luces,cajas,muros);
+        listaMapas.añadirMapa(m);
+    }
+    
+    private void afegirLlum(float x, float y, float z){
+        SpotLight spot = new SpotLight();
+        spot.setSpotRange(100f);                           // distance
+        spot.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
+        spot.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
+        spot.setColor(ColorRGBA.White.mult(1.3f));         // light color
+        spot.setPosition(new Vector3f(x,y,z));               // shine from camera loc
+        spot.setDirection(new Vector3f(0,-1,0));             // shine forward from camera loc
+        rootNode.addLight(spot);   
+    }
+
+    
+    public void mostrarCaixes() {
+        ArrayList<Vector3f> cajas = mapaActual.getListaCajas();
+        for(int i = 0; i < cajas.size();i++) {
+            Vector3f v = cajas.get(i);
+            crearCaixa((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+    
+    public void mostrarMurs() {
+        ArrayList<Vector3f> murs = mapaActual.getListaMuros();
+        for(int i = 0; i < murs.size();i++) {
+            Vector3f v = murs.get(i);
+            crearMur((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+    
+    public void mostrarLlums() {
+        ArrayList<Vector3f> llums = mapaActual.getListaLuces();
+        for(int i = 0; i < llums.size();i++) {
+            Vector3f v = llums.get(i);
+            afegirLlum((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+
     private void initMaterial() {
         
         mat_road = new Material( 

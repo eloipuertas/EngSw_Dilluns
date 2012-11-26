@@ -12,6 +12,10 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.InputListener;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -28,7 +32,7 @@ import com.jme3.scene.control.CameraControl;
 *
 * @author Sergi
 */
-public class VehicleProtagonista {
+public class VehicleProtagonista{
 
     private float mass;
     private VehicleControl vehicle;
@@ -66,11 +70,15 @@ public class VehicleProtagonista {
     
     private int maxAccelerateVelocity = 120;
     private int maxReverseVelocity = -50;
+    
+    //Initial position and initial rotation of the car
+    public Vector3f initialPos = new Vector3f(0f,0f,0f);
+    public Quaternion initialRot = new Quaternion();
 
     public VehicleProtagonista(AssetManager asset, PhysicsSpace phy, Camera cam) {
         assetManager = asset;
         physicsSpace = phy;
-    }
+    }  
 
     private Geometry findGeom(Spatial spatial, String name) {
         if (spatial instanceof Node) {
@@ -404,6 +412,22 @@ public class VehicleProtagonista {
         //System.out.println("Speed "+vehicle.getCurrentVehicleSpeedKmHours());
         return vehicle.getCurrentVehicleSpeedKmHour();
         //return (float)Math.sqrt((Math.pow(vehicle.getLinearVelocity().x,2)+Math.pow(vehicle.getLinearVelocity().z,2)+Math.pow(vehicle.getLinearVelocity().y,2)));
+    }
+
+    public Vector3f getInitialPos() {
+        return initialPos;
+    }
+
+    public void setInitialPos(Vector3f initialPos) {
+        this.initialPos = initialPos;
+    }
+
+    public Quaternion getInitialRot() {
+        return initialRot;
+    }
+
+    public void setInitialRot(Quaternion initialRot) {
+        this.initialRot = initialRot;
     }
     
     public void upDateMaxSpeed(){

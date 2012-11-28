@@ -3,19 +3,23 @@ package vista;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.ui.Picture;
 
 public class Display {
     
-    private Node displayNode;    
+    private Node displayNode;
+    private Node minimapNode;
     private BitmapText pos;
     private BitmapText chronograph;
     private BitmapText posText;
@@ -26,7 +30,12 @@ public class Display {
     private AppSettings settings;
     private Node guiNode;
     private Timer timer;
-    private Camera camTrasera;    
+    private Camera camTrasera;
+    private float totalSecondsPause;    
+    private float offsetChronograph;
+    private Geometry marcaVermella;
+    
+   
     
     public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
         
@@ -34,8 +43,12 @@ public class Display {
         this.settings = settings;
         this.guiNode = guiNode;        
         this.displayNode = new Node("Display");
+        this.minimapNode = new Node("Minimap");
         this.timer = timer;
+        this.totalSecondsPause = 0f;      
+        this.offsetChronograph = 0f;
     }
+       
     
     public void addDisplay(int xDisplay,int yDisplay,float scaleValueDisplay,int xPosText, int yPosText, float scaleValuePosText,int xPos, int yPos,float scaleValuePos, int xChronograph, int yChronograph, float scaleValueChronograph){
         
@@ -79,8 +92,21 @@ public class Display {
         display.move(xDisplay,yDisplay, -1); //-1 para estar debajo de la aguja        
         guiNode.attachChild(display);
         
+        //Agregar minimap
+        Picture minimap = new Picture("minimap");
+        minimap.setImage(assetManager, "Textures/Display/minimapa.png", true);
+        //Dibujamos el minimapa a razon de altura = 2*anchura
+        minimap.setWidth((settings.getWidth()/(6.75f)));
+        minimap.setHeight((settings.getWidth()/(6.75f))*2); 
+        minimap.setPosition(0,0);
+        minimap.center();
+        //Situamos el minimapa en el extremo izquierdo inferior de la pantalla, sea cual sea la resolucion
+        minimap.move((settings.getWidth()/6.75f)/2,((settings.getWidth()/(6.75f))*2)/2,-1);
+        minimapNode.attachChild(minimap);
+        guiNode.attachChild(minimapNode);
+        
         //Agregar aguja
-        Picture arrow = new Picture("arrow");
+        Picture arrow = new Picture("arrow");        
         arrow.setImage(assetManager, "Textures/Display/arrow.png", true);        
         arrow.setWidth(minDimension/scaleValueDisplay);
         arrow.setHeight(minDimension/scaleValueDisplay);
@@ -91,7 +117,15 @@ public class Display {
         displayNode.attachChild(arrow);        
               
         guiNode.attachChild(displayNode);
-        this.displayNode.move(xDisplay,yDisplay,0);      
+        this.displayNode.move(xDisplay,yDisplay,0);
+        
+        //Añadimos punto del coche    
+        Sphere sphere = new Sphere(30, 30, 3f);
+        marcaVermella = new Geometry("cotxe", sphere);
+        Material marcaVermella_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        marcaVermella_mat.setColor("Color", ColorRGBA.Red);
+        marcaVermella.setMaterial(marcaVermella_mat);
+        guiNode.attachChild(marcaVermella);
         
         this.startChronograph();
         this.updatePosition(0);
@@ -119,15 +153,26 @@ public class Display {
         ViewPort view2 = renderManager.createMainView("Camara trasera", camTrasera);
         view2.setClearFlags(true, true, true);        
         view2.attachScene(rootNode);        
-    }           
+    }    
     
     private void startChronograph(){
         this.chronograph.setText("00:00");
         this.timer.reset();        
     }
     
+    public void resumeChronograph(){
+        float totalSeconds = this.timer.getTimeInSeconds();       
+        float offsetChronographAux = totalSeconds - totalSecondsPause;            
+        offsetChronograph = offsetChronograph + offsetChronographAux;
+    }
+    
+    public void pauseChronograph(){
+       totalSecondsPause = this.timer.getTimeInSeconds();       
+    } 
+    
     private void updateChronograph(){
-        float totalSeconds = this.timer.getTimeInSeconds();
+        float totalSeconds = this.timer.getTimeInSeconds();        
+        totalSeconds = totalSeconds - offsetChronograph;        
         int seconds = (int)totalSeconds%60;
         int minutes = (int)totalSeconds/60;
         if (seconds < 10 && minutes < 10){
@@ -186,5 +231,22 @@ public class Display {
          //Actualizamos camara        
         camTrasera.lookAt(lookAtRear, Vector3f.UNIT_Y);
         camTrasera.setLocation(cameraPos);
+    }
+    
+    //Funcion para actualizar la posicion del coche en el minimapa
+    //Pasamos como parametro las coordenadas de mundo del coche
+    public void updateMinimap(Vector3f posicion){
+        float x_map;
+        float z_map;
+        //Calculamos las coordenadas de minimapa
+        //Restamos un offset a la posicion del coche porque el mundo comienza en 36 en el eje x y -116 en el eje z
+        //Multiplicamos esa coordenada por el factor de escala, entre el tamaño del minimapa y el tamaño del mapa real
+        //Width del mapa = 105 Width del minimapa = Depende de la anchura de la pantalla
+        //Height del mapa = 210 Height del minimapa = Depende de la altura de la pantalla
+        //Heigth = 2*Width
+        x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/105);
+        z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210); 
+        //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
+        marcaVermella.setLocalTranslation(x_map,z_map,1);
     }
 }

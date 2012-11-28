@@ -18,7 +18,8 @@ import de.lessvoid.nifty.screen.ScreenController;
 import java.util.ArrayList;
 
 public class Menu extends AbstractAppState implements ScreenController {
-
+    
+  private boolean paused = false;  
   private Nifty nifty;
   private Application app;
   private Screen screen;
@@ -154,8 +155,9 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
 
   public void startGame() {      
-    isMenuFinished = true;      
-    nifty.exit();      
+    isMenuFinished = true;
+    gotoScreen("null");
+    //nifty.exit();      
   }
   
   public void gotoScreenCarSelect(String mode){
@@ -312,6 +314,19 @@ public class Menu extends AbstractAppState implements ScreenController {
       element.getRenderer(ImageRenderer.class).setImage(newImage); 
       
   }
+  
+  public boolean readyToUnPause(){
+      return paused;
+  }
+  
+  public void unPauseDone(){
+      paused = false;
+  }
+  
+  public void unPause(){
+      paused = true;
+  }
+ 
   
   public String getCarColorNameSPA(){      
       return colors.get(actualColor).colorNameSPA;

@@ -337,6 +337,45 @@
   
   
   
+  <screen id="null">    
+  </screen>
+  
+  
+  
+  
+  <screen id="pause" controller="vista.Menu">
+       
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/select_background.png" height="40%" width="40%"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">      
+            
+      <panel id="panel_mid" height="45%" width="75%" align="center" childLayout="center">       
+             
+      </panel>
+        
+      <panel id="panel_mid" height="5%" width="75%" align="center" childLayout="center">       
+        <control name="button" label="Salir" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="quitGame()" />
+        </control>
+                 
+      </panel>
+      
+      <panel id="panel_mid2" height="5%" width="75%" align="center" childLayout="center">       
+       <control name="button" label="Volver" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+            <interact onClick="unPause()" />
+        </control>          
+      </panel>
+     
+      
+    
+      
+    </layer>
+           
+  </screen>
+  
+  
   
   
   

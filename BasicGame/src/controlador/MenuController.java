@@ -63,6 +63,18 @@ public class MenuController {
     
     public int getIdCircuit(){
         return controller.getIdCircuit();
-    }    
+    }
+    
+    public void gotoScreen(String screen){
+        controller.gotoScreen(screen);
+    }
+    
+    public boolean readyToUnPause(){
+      return controller.readyToUnPause();
+    }
+  
+    public void unPauseDone(){
+        controller.unPauseDone();
+    }
     
 }

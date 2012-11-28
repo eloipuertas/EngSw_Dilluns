@@ -27,8 +27,9 @@ public class Main extends SimpleApplication implements ActionListener {
     private WorldCreator world;
     private CameraNode camNode;    
     private MenuController menu;
+    private boolean initScene = false;
     private Display display;
-    private boolean gameStarted = false; 
+    private boolean gamePaused = true; 
     private RigidBodyControl landscape;
     private Vector3f initialPos;
     private Quaternion initialRot;
@@ -37,6 +38,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Audio starting_car_sound;
     private Audio rain_sound;
     private Audio must_destroy;
+    
         
     
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
@@ -65,6 +67,9 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addListener(this, "Downs");
         inputManager.addListener(this, "Space");
         inputManager.addListener(this, "Reset");
+        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+        inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_ESCAPE));
+        inputManager.addListener(this, "Pause");
     }
 
     @Override
@@ -91,21 +96,44 @@ public class Main extends SimpleApplication implements ActionListener {
     }
 
     public void onAction(String binding, boolean value, float tpf) {
-        if (binding.equals("Lefts")) {
-            car.turnLeft(value);
-        } else if (binding.equals("Rights")) {
-            car.turnRight(value);
-        } else if (binding.equals("Ups")) {
-            car.forward(value);
-        } else if (binding.equals("Downs")) {
-            car.back(value);
-        } else if (binding.equals("Reset")) {
-            car.reset(value, initialPos, initialRot);
-        }else if (binding.equals("Space")) {
-            car.handBrake(value);
+        if (!gamePaused){
+            if (binding.equals("Lefts")) {
+                car.turnLeft(value);
+            } else if (binding.equals("Rights")) {
+                car.turnRight(value);
+            } else if (binding.equals("Ups")) {
+                car.forward(value);
+            } else if (binding.equals("Downs")) {
+                car.back(value);
+            } else if (binding.equals("Reset")) {
+                car.reset(value, initialPos, initialRot);
+            }else if (binding.equals("Space")) {
+                car.handBrake(value);            
+            }            
         }
-        
-    }     
+        if (binding.equals("Pause") && value){              
+            if (gamePaused){                
+                this.unPause();
+            }
+            else{                
+                this.pause();
+            }
+        }
+    }
+    
+    private void pause(){        
+        gamePaused = true;
+        display.pauseChronograph();
+        bulletAppState.setSpeed(0); //paro el coche           
+        menu.gotoScreen("pause");      
+    }
+    
+    private void unPause(){
+        display.resumeChronograph();
+        menu.gotoScreen("null");
+        bulletAppState.setSpeed(1.0f); //vuelvo a dejar mover el coche        
+        gamePaused = false;
+    }   
     
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
@@ -142,17 +170,18 @@ public class Main extends SimpleApplication implements ActionListener {
         
         flyCam.setEnabled(false);
         
-        if(menu.isMenuFinished() && !gameStarted){            
+        if(menu.isMenuFinished() && !initScene){            
             addWorld();            
             addProtagonista();
             addRival();
-            addDisplay();
-            gameStarted = true;
+            addDisplay();            
             setupKeys();
             audioGameStarted();
+            initScene = true;
+            gamePaused=false;
         }
         
-        if(gameStarted){
+        if(!gamePaused){
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
@@ -253,8 +282,14 @@ public class Main extends SimpleApplication implements ActionListener {
             
             display.updateDisplay(car.getSpeed(),1);      
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
+            display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
         }
-
+        else{
+            if (menu.readyToUnPause()){
+                this.unPause();
+                menu.unPauseDone();
+            }
+        }
     }
     
     // Añadir aqui los gets necesarios que cada uno necesite para su constructor

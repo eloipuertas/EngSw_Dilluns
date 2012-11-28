@@ -134,38 +134,39 @@
           </panel>
           
           <panel id="panel_bottom_right" height="50%" width="25%" valign="center" childLayout="center">  
-            <control name="button" label="OFF" id="debug" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+            <control name="button" label="${CALL.getDebugInfo()}" id="debug" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
                 <interact onClick="setDebugInfo()" />
             </control>           
         </panel>
                
       </panel>
       
-      <panel id="panel_volume" height="7%" width="75%" align="center" childLayout="horizontal">       
+      <panel id="panel_music" height="7%" width="75%" align="center" childLayout="horizontal" >       
        
           <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
-            <text text="Volume" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+            <text text="Música" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
           </panel>
           
-          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
-         
-            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
-                <control name="button" label="-" id="volumeLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                    <interact onClick="setVolume(-)" />
-                </control>
-            </panel>
-              
-            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getVolume()}" id="volumeText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            </panel> 
-                                    
-            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
-                <control name="button" label="+" id="volumeMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                    <interact onClick="setVolume(+)" />
-                </control>
-            </panel>    
-            
-        </panel>       
+          <panel id="panel_bottom_right" height="50%" width="25%" valign="center" childLayout="center">  
+            <control name="button" label="${CALL.getMusic()}" id="music" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                <interact onClick="setMusic()" />
+            </control>           
+        </panel>
+               
+      </panel>
+      
+     <panel id="panel_effects" height="7%" width="75%" align="center" childLayout="horizontal" >       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Efectos" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
+          
+          <panel id="panel_bottom_right" height="50%" width="25%" valign="center" childLayout="center">  
+            <control name="button" label="${CALL.getEffects()}" id="effects" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+                <interact onClick="setEffects()" />
+            </control>           
+        </panel>
+               
       </panel>             
       
       <panel id="panel_bottom" height="30%" width="75%" align="center" childLayout="center">       

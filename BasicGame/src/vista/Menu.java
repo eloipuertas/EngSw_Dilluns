@@ -34,11 +34,9 @@ public class Menu extends AbstractAppState implements ScreenController {
   private int maxNumLaps;
   private SimpleApplication main;
   private boolean debugInfo;
-  private String mode;
-  private int initNumVolume;
-  private int minNumVolume;
-  private int maxNumVolume;
-  private int numVolume;
+  private boolean music;
+  private boolean effects;
+  private String mode;  
   private AppSettings settings;
   private ArrayList<Car> cars = new ArrayList<Car>();  
   private int actualCar;
@@ -98,7 +96,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       }              
   }  
 
-  public Menu(AppSettings settings,AssetManager manager, Node rootNode, SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,int initNumVolume, int minNumVolume, int maxNumVolume,int initCar, int initCarColor,int initWeather,int initCircuit) {
+  public Menu(AppSettings settings,AssetManager manager, Node rootNode, SimpleApplication main,boolean debugInfo,int initNumEnemies,int minNumEnemies, int maxNumEnemies,int initNumLaps, int minNumLaps, int maxNumLaps,boolean music,boolean effects,int initCar, int initCarColor,int initWeather,int initCircuit) {
       this.imagesPath = "Interface/Menu/"; 
       isMenuFinished = false;
       
@@ -111,11 +109,9 @@ public class Menu extends AbstractAppState implements ScreenController {
       this.initNumEnemies = initNumEnemies;
       this.minNumEnemies = minNumEnemies;
       this.maxNumEnemies = maxNumEnemies;
-      this.numEnemies = this.initNumEnemies;
-      this.initNumVolume = initNumVolume;
-      this.minNumVolume = minNumVolume;
-      this.maxNumVolume = maxNumVolume;
-      this.numVolume=this.initNumVolume;
+      this.numEnemies = this.initNumEnemies;      
+      this.music = music;
+      this.effects = effects;
       
       mode = null;
       this.main = main;
@@ -217,28 +213,8 @@ public class Menu extends AbstractAppState implements ScreenController {
             laps.getRenderer(TextRenderer.class).setText(String.valueOf(numLaps));
           }
       }      
-  }
-  
-  public void setVolume(String value){
-      
-      Element volume = nifty.getCurrentScreen().findElementByName("volumeText");      
-      if (value.equals("+")){
-          numVolume = Integer.parseInt(volume.getRenderer(TextRenderer.class).getOriginalText()); 
-          if (numVolume < this.maxNumVolume){
-            numVolume = numVolume + 1;
-            volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
-          }
-      }
-      else if (value.equals("-")){
-          numVolume = Integer.parseInt(volume.getRenderer(TextRenderer.class).getOriginalText()); 
-          if (numVolume > this.minNumVolume){
-            numVolume = numVolume - 1;
-            volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
-          }
-      }
-      
-  }
-  
+  }  
+    
   public void setDebugInfo(){
     this.debugInfo = !this.debugInfo;        
     
@@ -250,6 +226,55 @@ public class Menu extends AbstractAppState implements ScreenController {
     }  
     this.main.setDisplayFps(this.debugInfo); 
     this.main.setDisplayStatView(this.debugInfo); 
+  }
+  
+  public String getDebugInfo(){
+      if(this.debugInfo){
+          return "ON";
+      }
+      else{
+          return "OFF";
+      }
+  }
+  
+  public void setMusic(){
+    this.music = !this.music;        
+    
+    if (music){
+        nifty.getCurrentScreen().findControl("music",  ButtonControl.class).setText("ON");
+    }
+    else{
+        nifty.getCurrentScreen().findControl("music",  ButtonControl.class).setText("OFF");
+    }    
+  }
+  
+  public String getMusic(){
+      if(this.music){
+          return "ON";
+      }
+      else{
+          return "OFF";
+      }
+  }
+  
+  public void setEffects(){
+    this.effects = !this.effects;        
+    
+    if (effects){
+        nifty.getCurrentScreen().findControl("effects",  ButtonControl.class).setText("ON");
+    }
+    else{
+        nifty.getCurrentScreen().findControl("effects",  ButtonControl.class).setText("OFF");
+    }   
+  }
+  
+  public String getEffects(){
+      if(this.effects){
+          return "ON";
+      }
+      else{
+          return "OFF";
+      }
   }
   
   public String getCarImagePath(){
@@ -325,8 +350,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public void unPause(){
       paused = true;
-  }
- 
+  } 
   
   public String getCarColorNameSPA(){      
       return colors.get(actualColor).colorNameSPA;
@@ -415,10 +439,6 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public int getNumEnemies(){
       return numEnemies;
-  } 
-  
-  public int getVolume(){
-      return numVolume;
   }
   
   public String getMode(){

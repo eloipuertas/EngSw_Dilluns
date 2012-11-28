@@ -87,7 +87,7 @@ public class Main extends SimpleApplication implements ActionListener {
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);   
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0);   
         initAudio();
     }
     

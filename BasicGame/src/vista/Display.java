@@ -245,7 +245,20 @@ public class Display {
         //Height del mapa = 210 Height del minimapa = Depende de la altura de la pantalla
         //Heigth = 2*Width
         x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/105);
-        z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210); 
+        z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+        if(x_map > (settings.getWidth()/(6.75f))){
+            x_map = (settings.getWidth()/(6.75f));
+        }
+        if (posicion.x > 35){
+            x_map = 0;
+        }
+        if(z_map > ((settings.getWidth()/(6.75f))*2)){
+            z_map = ((settings.getWidth()/(6.75f))*2);
+        }
+        if (posicion.z < -108){
+            z_map = 0;
+        }
+        
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
         marcaVermella.setLocalTranslation(x_map,z_map,1);
     }

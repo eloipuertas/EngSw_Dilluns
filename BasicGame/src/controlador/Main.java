@@ -76,7 +76,7 @@ public class Main extends SimpleApplication{
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);   
-        //initAudio();
+        initAudio();
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -96,12 +96,12 @@ public class Main extends SimpleApplication{
     }
     
     public void audioGameStarted() {
-     // menu_music.stop();
-      //starting_car_sound.play();
+      menu_music.stop();
+      starting_car_sound.play();
       if (menu.getWeatherName().equals("Lluvioso")) {
-          //rain_sound.play();
+          rain_sound.play();
       }
-      //must_destroy.play();
+      must_destroy.play();
     }
 
     

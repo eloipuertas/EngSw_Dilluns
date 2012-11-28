@@ -35,7 +35,6 @@ import com.jme3.scene.control.CameraControl;
 */
 public class VehicleProtagonista{
 
-    private float mass;
     private VehicleControl vehicle;
     private MaterialsVehicle materials;
     private Geometry chasis1;
@@ -49,16 +48,7 @@ public class VehicleProtagonista{
     private Node vehicleNode;
     private PhysicsSpace physicsSpace;
     private Camera cam;
-    //Propiedades del coche
-    private float steeringValue = 0;
-    private float accelerationValue = 0;
-    private final float accelerationForce = 1000.0f;
-    private final float brakeForce = 100.0f;
-    //Factores para disminuir y aumentar la acceleracion y la frenadas
-    private int accelerationFactor = 2; //Factor multiplicativo
-    private int brakeForceFactor = 1;   //Factor de division
-    private double reverseFactor = 1.5;    //Factor de multiplicacio
-    //Variable per saber si estas en mode normal o marcha atras.
+
     private boolean reverseMode = false;
     private boolean handBrakeMode  = false;
     private boolean forwardMode = false;
@@ -69,19 +59,19 @@ public class VehicleProtagonista{
     private Audio brake_sound;
     private Audio idling_car_sound;
     
-    private int maxAccelerateVelocity = 120;
-    private int maxReverseVelocity = -50;
+    //Objeto que encapsula la configuracion del coche
+    private CarSettings carSettings;
     
     //Initial position and initial rotation of the car
     public Vector3f initialPos = new Vector3f(0f,0f,0f);
     public Quaternion initialRot = new Quaternion();
+            float accelerationValue = 0;
+        float accelerationForce = 1000;
+        float accelerationFactor = 2;
 
     public VehicleProtagonista(AssetManager asset, PhysicsSpace phy, Camera cam) {
         assetManager = asset;
         physicsSpace = phy;
-        CarSettings settings = new CarSettings();
-        settings.readXml();
-        settings.readAtributes();
     }  
 
     private Geometry findGeom(Spatial spatial, String name) {
@@ -105,18 +95,24 @@ public class VehicleProtagonista{
     public void setCocheProtagonista(int idModel, String idColor){
         materials = new MaterialsVehicle(assetManager, idColor);
         materials.initMaterials();
-        
-        buildCar();
+        carSettings = new CarSettings();
+        carSettings.readXml();
+        carSettings.loadAtributes(idModel);
+        System.out.println("ID MODEL "+idModel);
+        idModel++;
+        if(idModel==1){
+            buildGolf();
+        }else if(idModel == 2){
+            buildFerrari();
+        }
     }
 
-    public void buildCar() {
-        mass = 400;
-        
+    private void buildGolf(){
         //create a compound shape and attach the BoxCollisionShape for the car body at 0,1,0
         //this shifts the effective center of mass of the BoxCollisionShape to 0,-1,0
         //CompoundCollisionShape compoundShape = new CompoundCollisionShape();
 
-        Node meshNode = (Node) assetManager.loadModel("Models/golfCar/Car.scene");
+        Node meshNode = (Node) assetManager.loadModel(carSettings.getPatch());
 
         chasis1 = findGeom(meshNode, "Car");
         chasis1.setLocalScale(chasis1.getWorldScale().mult(0.3f));
@@ -134,7 +130,7 @@ public class VehicleProtagonista{
 
         //create vehicle node
         vehicleNode = new Node("vehicleNode");
-        vehicle = new VehicleControl(carHull, mass);
+        vehicle = new VehicleControl(carHull, carSettings.getMass());
         vehicleNode.addControl(vehicle);
 
 
@@ -144,15 +140,9 @@ public class VehicleProtagonista{
         vehicleNode.attachChild(chasis1);
         //vehicleNode.attachChild(glass);
 
-
-        //setting suspension values for wheels, this can be a bit tricky
-        //see also https://docs.google.com/Doc?docid=0AXVUZ5xw6XpKZGNuZG56a3FfMzU0Z2NyZnF4Zmo&hl=en
-        float stiffness = 200.0f;//200=f1 car
-        float compValue = .2f; //(should be lower than damp)
-        float dampValue = .3f;
-        vehicle.setSuspensionCompression(compValue * 2.0f * FastMath.sqrt(stiffness));
-        vehicle.setSuspensionDamping(dampValue * 2.0f * FastMath.sqrt(stiffness));
-        vehicle.setSuspensionStiffness(stiffness);
+        vehicle.setSuspensionCompression(carSettings.getCompValue() * 2.0f * FastMath.sqrt(carSettings.getSteeringValue()));
+        vehicle.setSuspensionDamping(carSettings.getDampValue() * 2.0f * FastMath.sqrt(carSettings.getSteeringValue()));
+        vehicle.setSuspensionStiffness(carSettings.getSteeringValue());
         vehicle.setMaxSuspensionForce(10000.0f);
 
         //Create four wheels and add them at their locations
@@ -234,11 +224,97 @@ public class VehicleProtagonista{
         //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
         //camNode.lookAt(vehicleNode.getLocalTranslation(), Vector3f.UNIT_Y);
         //vehicleNode.attachChild(camNode);
-
-
-
     }
-     public void initAudio() {
+    
+    private void buildFerrari() {
+        Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
+
+        chasis1 = findGeom(meshNode, "Car");
+        chasis1.rotate(0, 3.135f, 0);
+        chasis1.setMaterial(materials.getMatChasis());
+        
+        CollisionShape carHull = CollisionShapeFactory.createDynamicMeshShape(chasis1);
+        BoundingBox box = (BoundingBox) chasis1.getModelBound();
+
+        //create vehicle node
+        vehicleNode = new Node("vehicleNode");
+        vehicle = new VehicleControl(carHull, 400);
+        vehicleNode.addControl(vehicle);
+        vehicleNode.attachChild(chasis1);
+
+        //setting suspension values for wheels, this can be a bit tricky
+        //see also https://docs.google.com/Doc?docid=0AXVUZ5xw6XpKZGNuZG56a3FfMzU0Z2NyZnF4Zmo&hl=en
+        float stiffness = 200.0f;//200=f1 car
+        float compValue = .2f; //(should be lower than damp)
+        float dampValue = .3f;
+        vehicle.setSuspensionCompression(compValue * 2.0f * FastMath.sqrt(stiffness));
+        vehicle.setSuspensionDamping(dampValue * 2.0f * FastMath.sqrt(stiffness));
+        vehicle.setSuspensionStiffness(stiffness);
+        vehicle.setMaxSuspensionForce(10000.0f);
+
+        //Create four wheels and add them at their locations
+        Vector3f wheelDirection = new Vector3f(0, -1, 0); // was 0, -1, 0
+        Vector3f wheelAxle = new Vector3f(-1, 0, 0); // was -1, 0, 0
+        float radius = 0.5f;
+        float restLength = 0.3f;
+        float yOff = 0.5f;
+        float xOff = 1f;
+        float zOff = 2f;
+
+
+        Node node1 = new Node("wheel 1 node");
+        wheel1 = findGeom(meshNode, "WheelFrontLeft");
+        wheel1.setMaterial(materials.getMatWheels());
+        node1.attachChild(wheel1);
+        wheel1.center();
+        box = (BoundingBox) wheel1.getModelBound();
+        wheelRadius = box.getYExtent();
+        float back_wheel_h = (wheelRadius * 1.7f) - 1f;
+        float front_wheel_h = (wheelRadius * 1.9f) - 1f;
+        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
+
+        Node node2 = new Node("wheel 2 node");
+        wheel2 = findGeom(meshNode, "WheelFrontRight");
+        node2.attachChild(wheel2);
+        wheel2.setMaterial(materials.getMatWheels());
+        wheel2.center();
+        box = (BoundingBox) wheel2.getModelBound();
+        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(0, -back_wheel_h, -0.5f),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
+
+        Node node3 = new Node("wheel 3 node");
+        wheel3 = findGeom(meshNode, "WheelBackLeft");
+        wheel3.setMaterial(materials.getMatWheels());
+        node3.attachChild(wheel3);
+        wheel3.center();
+        box = (BoundingBox) wheel3.getModelBound();
+        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
+
+        Node node4 = new Node("wheel 4 node");
+        wheel4 = findGeom(meshNode, "WheelBackRight");
+        wheel4.setMaterial(materials.getMatWheels());
+        node4.attachChild(wheel4);
+        wheel4.center();
+        box = (BoundingBox) wheel4.getModelBound();
+        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(0, -front_wheel_h, -0.4f),
+                wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
+
+        vehicleNode.attachChild(node1);
+        vehicleNode.attachChild(node2);
+        vehicleNode.attachChild(node3);
+        vehicleNode.attachChild(node4);
+
+        vehicle.getWheel(0).setFrictionSlip(9.8f);
+        vehicle.getWheel(1).setFrictionSlip(9.8f);
+        physicsSpace.add(vehicle);
+        
+        initAudio();
+    }
+        
+        
+    public void initAudio() {
         accelerate_sound = new Audio(vehicleNode, assetManager, "accelerate_sound.wav");
         decelerate_sound = new Audio(vehicleNode, assetManager, "decelerate_sound.wav");
         max_velocity_sound = new Audio(vehicleNode, assetManager, "max_velocity_sound.wav", true);
@@ -257,42 +333,45 @@ public class VehicleProtagonista{
 
     public void turnLeft(boolean value) {
         if (value) {
-            steeringValue += .5f;
+            carSettings.setSteeringValue(carSettings.getSteeringValue() + .5f);
         } else {
-            steeringValue += -.5f;
+            carSettings.setSteeringValue(carSettings.getSteeringValue() - .5f);
         }
-        vehicle.steer(steeringValue);
+        vehicle.steer(carSettings.getSteeringValue());
     }
 
     public void turnRight(boolean value) {
         if (value) {
-            steeringValue += -.5f;
+            carSettings.setSteeringValue(carSettings.getSteeringValue() - .5f);
         } else {
-            steeringValue += .5f;
+            carSettings.setSteeringValue(carSettings.getSteeringValue() + .5f);
         }
-        vehicle.steer(steeringValue);
+        vehicle.steer(carSettings.getSteeringValue());
     }
 
     public void forward(boolean value) {
         soundForward(value);
-        accelerationValue = 0;
+        carSettings.setAccelerationValue(0);
         if (value) {
             forwardMode = true;
             if(!handBrakeMode){
                 reverseMode = false;
-                accelerationValue += (accelerationForce * accelerationFactor);                
+                carSettings.setAccelerationValue(carSettings.getAccelerationValue()+
+                        (carSettings.getAccelerationForce() * carSettings.getAccelerationFactor()));
             }
-            vehicle.accelerate(accelerationValue);
+            vehicle.accelerate(carSettings.getAccelerationValue());
         } else {
-            if(!handBrakeMode && accelerationValue!=0){
-                accelerationValue -= (accelerationForce * accelerationFactor);
+            if(!handBrakeMode && carSettings.getAccelerationValue()!=0){
+                carSettings.setAccelerationValue(carSettings.getAccelerationValue()-
+                        (carSettings.getAccelerationForce() * carSettings.getAccelerationFactor()));
             } 
-            vehicle.accelerate(accelerationValue);
+            vehicle.accelerate(carSettings.getAccelerationValue());
             forwardMode = false;
         }
     }
     
-    public void soundForward(boolean value) {
+    
+    private void soundForward(boolean value) {
         float speed = getSpeed();
         if (value && speed > 190) {
             decelerate_sound.stop();
@@ -340,8 +419,8 @@ public class VehicleProtagonista{
             vehicle.setLinearVelocity(Vector3f.ZERO);
             vehicle.setAngularVelocity(Vector3f.ZERO);
             vehicle.resetSuspension();
-            accelerationValue = 0;
-            steeringValue = 0;
+            carSettings.setAccelerationValue(0);
+            carSettings.setSteeringValue(0);
             reverseMode = false;
             handBrakeMode = false;
             forwardMode = false;
@@ -354,12 +433,13 @@ public class VehicleProtagonista{
         idling_car_sound.play();
         float valueBrake;
         if (getSpeed() > 5) {
-            valueBrake = brakeForce / brakeForceFactor;
+            valueBrake = carSettings.getBrakeForce() / carSettings.getBrakeForceFactor();
             brake(valueBrake);
         }
         reverseMode = true;
-        accelerationValue -= (accelerationForce * reverseFactor);
-        vehicle.accelerate(accelerationValue);
+        carSettings.setAccelerationValue((float)(carSettings.getAccelerationValue()-
+                        (carSettings.getAccelerationForce() * carSettings.getReverseFactor())));
+        vehicle.accelerate(carSettings.getAccelerationValue());
     }
 
     public void brake(float valueBrake) {
@@ -372,15 +452,16 @@ public class VehicleProtagonista{
         if(!reverseMode){
             if(value){
                 handBrakeMode = true;
-                if(forwardMode && accelerationValue!=0){
-                    accelerationValue -= (accelerationForce * accelerationFactor);
-                    vehicle.accelerate(accelerationValue); 
+                if(forwardMode && carSettings.getAccelerationValue()!=0){
+                    carSettings.setAccelerationValue(carSettings.getAccelerationValue()-
+                        (carSettings.getAccelerationForce() * carSettings.getAccelerationFactor()));
+                    vehicle.accelerate(carSettings.getAccelerationValue()); 
                 }
                 //valueBrake = brakeForce;
                 //brake(valueBrake);
                 //vehicle.brake(vehicle.getWheel(0)., brakeForce*100);
-                vehicle.brake(0, brakeForce*5);
-                vehicle.brake(1, brakeForce*5);
+                vehicle.brake(0, carSettings.getBrakeForce()*5);
+                vehicle.brake(1, carSettings.getBrakeForce()*5);
             } else {;
                 handBrakeMode = false; 
                 //brake(0f); 
@@ -392,9 +473,10 @@ public class VehicleProtagonista{
             }
         }else{
             if(value){
-                accelerationValue += (accelerationForce * reverseFactor);
-                vehicle.accelerate(accelerationValue);
-                valueBrake = brakeForce;
+                carSettings.setAccelerationValue((float)(carSettings.getAccelerationValue()+
+                        (carSettings.getAccelerationForce() * carSettings.getReverseFactor())));
+                vehicle.accelerate(carSettings.getAccelerationValue());
+                valueBrake = carSettings.getBrakeForce();
                 brake(valueBrake);
             } else {
                 brake(0f);
@@ -402,20 +484,9 @@ public class VehicleProtagonista{
             }
         } 
     }
-
-    public void setReverseMode(boolean value) {
-        reverseMode = value;
-    }
-
-    public boolean getReverseMode() {
-        return reverseMode;
-    }
-
+    
     public float getSpeed(){
-        //return vehicle.getLinearVelocity().length();
-        //System.out.println("Speed "+vehicle.getCurrentVehicleSpeedKmHours());
         return vehicle.getCurrentVehicleSpeedKmHour();
-        //return (float)Math.sqrt((Math.pow(vehicle.getLinearVelocity().x,2)+Math.pow(vehicle.getLinearVelocity().z,2)+Math.pow(vehicle.getLinearVelocity().y,2)));
     }
 
     public Vector3f getInitialPos() {
@@ -437,11 +508,11 @@ public class VehicleProtagonista{
     public void upDateMaxSpeed(){
         float speed;
         speed = getSpeed();
-        if((reverseMode) && (speed < maxReverseVelocity)){
+        if((reverseMode) && (speed < carSettings.getMaxReverseVelocity())){
             Vector3f vec = vehicle.getLinearVelocity();
             //vec.x = vec.x - 1;
             vehicle.setLinearVelocity(vec);
-        }else if((!reverseMode) && (speed > maxAccelerateVelocity) && (forwardMode)){
+        }else if((!reverseMode) && (speed > carSettings.getMaxAccelerateVelocity()) && (forwardMode)){
             Vector3f vec = vehicle.getLinearVelocity();
             //vec.x = vec.x - 1;
             vehicle.setLinearVelocity(vec);

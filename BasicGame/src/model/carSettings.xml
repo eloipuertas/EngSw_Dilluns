@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<cars>
+        <!-- Car 1-->
+	<car>
+		<maxAccelerateVelocity>120</maxAccelerateVelocity>
+		<mass>1000</mass>
+		<steeringValue>0</steeringValue>
+		<accelerationValue>0</accelerationValue>
+		<accelerationForce>1000</accelerationForce>
+		<brakeForce>100</brakeForce>
+		<accelerationFactor>2</accelerationFactor>
+		<brakeForceFactor>1</brakeForceFactor>
+		<reverseFactor>1.5</reverseFactor>
+		<maxReverseVelocity>-20</maxReverseVelocity>
+	</car>
+        
+        <!-- Car 2--> 
+        <car>
+		<maxAccelerateVelocity>130</maxAccelerateVelocity>
+		<mass>1000</mass>
+		<steeringValue>0</steeringValue>
+		<accelerationValue>0</accelerationValue>
+		<accelerationForce>1000</accelerationForce>
+		<brakeForce>100</brakeForce>
+		<accelerationFactor>2</accelerationFactor>
+		<brakeForceFactor>1</brakeForceFactor>
+		<reverseFactor>1.5</reverseFactor>
+		<maxReverseVelocity>-20</maxReverseVelocity>
+	</car>
+</cars>

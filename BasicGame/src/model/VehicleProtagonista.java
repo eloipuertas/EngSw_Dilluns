@@ -79,6 +79,9 @@ public class VehicleProtagonista{
     public VehicleProtagonista(AssetManager asset, PhysicsSpace phy, Camera cam) {
         assetManager = asset;
         physicsSpace = phy;
+        CarSettings settings = new CarSettings();
+        settings.readXml();
+        settings.readAtributes();
     }  
 
     private Geometry findGeom(Spatial spatial, String name) {

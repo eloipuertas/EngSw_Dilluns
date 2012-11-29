@@ -16,7 +16,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.ui.Picture;
 
-public class Display {
+public class Display{
     
     private Node displayNode;
     private Node minimapNode;
@@ -33,9 +33,7 @@ public class Display {
     private Camera camTrasera;
     private float totalSecondsPause;    
     private float offsetChronograph;
-    private Geometry marcaVermella;
-    
-   
+    private Geometry marcaVermella;  
     
     public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
         
@@ -46,9 +44,8 @@ public class Display {
         this.minimapNode = new Node("Minimap");
         this.timer = timer;
         this.totalSecondsPause = 0f;      
-        this.offsetChronograph = 0f;
-    }
-       
+        this.offsetChronograph = 0f;        
+    }       
     
     public void addDisplay(int xDisplay,int yDisplay,float scaleValueDisplay,int xPosText, int yPosText, float scaleValuePosText,int xPos, int yPos,float scaleValuePos, int xChronograph, int yChronograph, float scaleValueChronograph){
         
@@ -262,4 +259,5 @@ public class Display {
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
         marcaVermella.setLocalTranslation(x_map,z_map,1);
     }
+    
 }

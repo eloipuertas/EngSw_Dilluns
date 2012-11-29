@@ -37,9 +37,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private Audio menu_music;
     private Audio starting_car_sound;
     private Audio rain_sound;
-    private Audio must_destroy;
-    
-        
+    private Audio must_destroy;        
     
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
@@ -66,10 +64,7 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addListener(this, "Ups");
         inputManager.addListener(this, "Downs");
         inputManager.addListener(this, "Space");
-        inputManager.addListener(this, "Reset");
-        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-        inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_ESCAPE));
-        inputManager.addListener(this, "Pause");
+        inputManager.addListener(this, "Reset");        
     }
 
     @Override
@@ -87,7 +82,7 @@ public class Main extends SimpleApplication implements ActionListener {
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0);   
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
         initAudio();
     }
     
@@ -110,30 +105,26 @@ public class Main extends SimpleApplication implements ActionListener {
             }else if (binding.equals("Space")) {
                 car.handBrake(value);            
             }            
-        }
-        if (binding.equals("Pause") && value){              
-            if (gamePaused){                
-                this.unPause();
-            }
-            else{                
-                this.pause();
-            }
-        }
+        }        
     }
     
-    private void pause(){        
+    public void pause(){        
         gamePaused = true;
         display.pauseChronograph();
         bulletAppState.setSpeed(0); //paro el coche           
         menu.gotoScreen("pause");      
     }
     
-    private void unPause(){
+    public void unPause(){
         display.resumeChronograph();
         menu.gotoScreen("null");
         bulletAppState.setSpeed(1.0f); //vuelvo a dejar mover el coche        
         gamePaused = false;
-    }   
+    }
+    
+    public boolean isGamePaused(){
+        return this.gamePaused;
+    }       
     
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
@@ -155,7 +146,6 @@ public class Main extends SimpleApplication implements ActionListener {
       }
       must_destroy.play();
     }
-
     
     /*Metode per comprovar que el cotxe protagonista esta en moviment*/
     public boolean comprovaMoviment (){

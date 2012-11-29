@@ -133,7 +133,7 @@ public class Main extends SimpleApplication{
             
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
-            camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+            camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 15, 4, 0), null));
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
             switch (estado) {

@@ -98,8 +98,8 @@ public class VehicleProtagonista{
         carSettings = new CarSettings();
         carSettings.readXml();
         carSettings.loadAtributes(idModel);
-        System.out.println("ID MODEL "+idModel);
-        idModel++;
+        //System.out.println("ID MODEL "+idModel);
+        //idModel++;
         if(idModel==1){
             buildGolf();
         }else if(idModel == 2){
@@ -157,51 +157,85 @@ public class VehicleProtagonista{
 
         Node node1 = new Node("wheel 1 node");
         wheel1 = findGeom(meshNode, "WheelFrontLeft");
+        Vector3f wheelPos = wheel1.getWorldTranslation();
+        Vector3f wheelScale = wheel1.getWorldScale();
+        Quaternion wheelRotation = wheel1.getWorldRotation();
         wheel1.setMaterial(materials.getMatWheels());
         node1.attachChild(wheel1);
-        wheel1.setLocalScale(wheel1.getWorldScale().mult(0.3f));
         //wheel1.setLocalTranslation(wheel1.getWorldTranslation());
         //wheel1.rotate(0, 1.5675f, 0);
         BoundingBox box = (BoundingBox) wheel1.getModelBound();
         wheelRadius = box.getYExtent();
         float back_wheel_h = (wheelRadius * 1.7f) - 1f;
         float front_wheel_h = (wheelRadius * 1.9f) - 1f;
-        vehicle.addWheel(wheel1.getParent(), carbox.getCenter().add(new Vector3f(0.83f,0,1)),
+        vehicle.addWheel(wheel1.getParent(), box.getCenter().add(new Vector3f(wheelPos.x*0.3f,
+                                                                                 -back_wheel_h,
+                                                                                 wheelPos.z*0.3f)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
+        wheel1.scale(0.45f);
+        wheel1.rotate(wheelRotation);
+        //wheel1.setLocalScale(chasis1.getWorldScale().mult(0.3f));
+        
+        
+        
+        
         Node node2 = new Node("wheel 2 node");
         wheel2 = findGeom(meshNode, "WheelFrontRight");
+        wheelPos = wheel2.getWorldTranslation();
+        wheelScale = wheel2.getWorldScale();
+        wheelRotation = wheel2.getWorldRotation();
         node2.attachChild(wheel2);
         wheel2.setMaterial(materials.getMatWheels());
-        wheel2.setLocalScale(wheel2.getWorldScale().mult(0.3f));
-        wheel2.setLocalTranslation(wheel2.getWorldTranslation());
-        wheel2.setLocalRotation(wheel2.getWorldRotation());
         box = (BoundingBox) wheel2.getModelBound();
-        vehicle.addWheel(wheel2.getParent(), carbox.getCenter().add(new Vector3f(-0.83f,0,1)),
+        vehicle.addWheel(wheel2.getParent(), box.getCenter().add(new Vector3f(wheelPos.x*0.3f,
+                                                                                 -back_wheel_h,
+                                                                                 wheelPos.z*0.3f)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, false);
 
+        wheel2.scale(0.45f);
+        wheel2.rotate(wheelRotation);
+        //wheel2.setLocalScale(chasis1.getWorldScale().mult(0.3f));
+        
+        
+        
         Node node3 = new Node("wheel 3 node");
         wheel3 = findGeom(meshNode, "WheelBackLeft");
+        wheelPos = wheel3.getWorldTranslation();
+        wheelScale = wheel3.getWorldScale();
+        wheelRotation = wheel3.getWorldRotation();
         wheel3.setMaterial(materials.getMatWheels());
         node3.attachChild(wheel3);
-        wheel3.setLocalScale(wheel3.getWorldScale().mult(0.3f));
-        wheel3.setLocalTranslation(wheel3.getWorldTranslation());
-        wheel3.setLocalRotation(wheel3.getWorldRotation());
         box = (BoundingBox) wheel3.getModelBound();
-        vehicle.addWheel(wheel3.getParent(), carbox.getCenter().add(new Vector3f(-0.4f,0,-1))/*.add(0, front_wheel_h, 0)*/,
+        vehicle.addWheel(wheel3.getParent(), box.getCenter().add(new Vector3f(wheelPos.x*0.3f,
+                                                                                 -front_wheel_h,
+                                                                                 wheelPos.z*0.3f)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
+        wheel3.scale(0.45f);
+        wheel3.rotate(wheelRotation);
+        //wheel3.setLocalScale(chasis1.getWorldScale().mult(0.3f));
+        
+        
+        
         Node node4 = new Node("wheel 4 node");
         wheel4 = findGeom(meshNode, "WheelBackRight");
+        wheelPos = wheel4.getWorldTranslation();
+        wheelScale = wheel4.getWorldScale();
+        wheelRotation = wheel4.getWorldRotation();
         wheel4.setMaterial(materials.getMatWheels());
         node4.attachChild(wheel4);
-        wheel4.setLocalScale(wheel4.getWorldScale().mult(0.3f));
-        wheel4.setLocalTranslation(wheel4.getWorldTranslation());
-        wheel4.setLocalRotation(wheel4.getWorldRotation());
         box = (BoundingBox) wheel4.getModelBound();
-        vehicle.addWheel(wheel4.getParent(), carbox.getCenter().add(new Vector3f(0.4f,0,-1))/*.add(0, front_wheel_h, 0)*/,
+        vehicle.addWheel(wheel4.getParent(), box.getCenter().add(new Vector3f(wheelPos.x*0.3f,
+                                                                                 -front_wheel_h,
+                                                                                 wheelPos.z*0.3f)),
                 wheelDirection, wheelAxle, 0.2f, wheelRadius, true);
 
+        wheel4.scale(0.45f);
+        wheel4.rotate(wheelRotation);
+        //wheel4.setLocalScale(chasis1.getWorldScale().mult(0.3f));
+        
+        
         vehicleNode.attachChild(node1);
         vehicleNode.attachChild(node2);
         vehicleNode.attachChild(node3);

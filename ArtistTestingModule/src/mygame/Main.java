@@ -85,8 +85,8 @@ public class Main extends SimpleApplication implements ActionListener{
         addScene("Models/StraightRoad/StraightRoad.j3o");
 
         //ILLUMINATION
-        addSun();
-        //addAmbientLight();
+        //addSun();
+        addAmbientLight();
         addShadows();
         
         //SKY
@@ -120,7 +120,7 @@ public class Main extends SimpleApplication implements ActionListener{
     
     public void addAmbientLight(){
         AmbientLight sun = new AmbientLight();
-        sun.setColor(ColorRGBA.LightGray);
+        sun.setColor(ColorRGBA.DarkGray);
         rootNode.addLight(sun);
     }
     
@@ -132,7 +132,8 @@ public class Main extends SimpleApplication implements ActionListener{
     
     public void addSky(){
         Node sky = new Node();
-        sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        //sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
         rootNode.attachChild(sky);
     }
     

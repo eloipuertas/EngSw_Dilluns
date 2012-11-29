@@ -93,6 +93,25 @@ public class WorldCreator {
     
     private void createWorld() {        
         //Afegim la llum
+        /*boolean sky = menu.getModoNoche();
+        if(sky){
+            //Mode nit
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.DarkGray);
+            rootNode.addLight(ambient);
+        }else{
+            //Mode dia
+            DirectionalLight sun = new DirectionalLight();
+            Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
+            sun.setDirection(lightDir);
+            sun.setColor(ColorRGBA.White.clone().multLocal(2));
+            rootNode.addLight(sun);
+
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.LightGray);
+            rootNode.addLight(ambient);
+        }*/
+        
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
         sun.setDirection(lightDir);
@@ -113,6 +132,16 @@ public class WorldCreator {
         viewPort.addProcessor(bsr); 
         
         //Afegim el cel
+        /*
+        Node sky = new Node();
+        if(sky){
+            //Mode nit
+            sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
+        }else{
+            //Mode dia
+            sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        }
+        rootNode.attachChild(sky);*/
         Node sky = new Node();
         sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sky);

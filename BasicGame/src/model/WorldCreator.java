@@ -180,6 +180,7 @@ public class WorldCreator {
         //Obstacle creation
         mostrarCaixes();
 
+
         //Creem el efecte de clima que s'hagi seleccionat al menu
         initClima(menu.getWeatherName());
     }
@@ -278,22 +279,59 @@ public class WorldCreator {
         obstacleList.add(obstacleModel);
     }
     
+    private void crearCaixaFracturada(int x, int y, int z) {
+        Spatial caja_parte1 = assetManager.loadModel("Models/caixa_fracturada/superior.j3o");
+        caja_parte1.setLocalTranslation(x,y,z);
+        caja_parte1.addControl(new RigidBodyControl(5));
+        caja_parte1.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte1);
+        space.getPhysicsSpace().add(caja_parte1);
+        Spatial caja_parte2 = assetManager.loadModel("Models/caixa_fracturada/medio.j3o");
+        caja_parte2.setLocalTranslation(x,y,z);
+        caja_parte2.addControl(new RigidBodyControl(5));
+        caja_parte2.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte2);
+        space.getPhysicsSpace().add(caja_parte2);
+        Spatial caja_parte3 = assetManager.loadModel("Models/caixa_fracturada/inferior.j3o");
+        caja_parte3.setLocalTranslation(x,y,z);
+        caja_parte3.addControl(new RigidBodyControl(5));
+        caja_parte3.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte3);
+        space.getPhysicsSpace().add(caja_parte3);
+    }
+    
     private void initMapas() {
         ArrayList<Vector3f> luces = new ArrayList<Vector3f>();
         ArrayList<Vector3f> cajas = new ArrayList<Vector3f>();
         ArrayList<Vector3f> muros = new ArrayList<Vector3f>();
-        cajas.add(new Vector3f(2,-2,-10));
-        cajas.add(new Vector3f(2,-2,-50));
-        cajas.add(new Vector3f(-25,-2,-50));
-        cajas.add(new Vector3f(-50,-2,-50));
-        cajas.add(new Vector3f(-25,-2,-25));
-        cajas.add(new Vector3f(-50,-2,0));
-        cajas.add(new Vector3f(-50,-2,50));
-        //cajas.add(new Vector3f(-50,-2,25));
-        cajas.add(new Vector3f(0,-2,50));
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
         muros.add(new Vector3f(-2,-5,10));
         muros.add(new Vector3f(-55,-5,-15));
-        Mapa m = new Mapa(new Vector3f(-10,0,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",luces,cajas,muros);
+        Mapa m = new Mapa(new Vector3f(-10,-2,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",luces,cajas,muros);
+        listaMapas.añadirMapa(m);
+        luces.clear();
+        cajas.clear();
+        muros.clear();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        m = new Mapa(new Vector3f(0,0,0),new Quaternion().fromAngles(0, (float)Math.toRadians(0), 0),"Models/AngularRoad/AngularRoad.j3o",luces,cajas,muros);
         listaMapas.añadirMapa(m);
     }
     
@@ -313,7 +351,8 @@ public class WorldCreator {
         ArrayList<Vector3f> cajas = mapaActual.getListaCajas();
         for(int i = 0; i < cajas.size();i++) {
             Vector3f v = cajas.get(i);
-            crearCaixa((int)v.x,(int)v.y,(int)v.z);
+            //crearCaixa((int)v.x,(int)v.y,(int)v.z);
+            crearCaixaFracturada((int)v.x,(int)v.y,(int)v.z);
         }
     }
     
@@ -389,11 +428,13 @@ public class WorldCreator {
     }
 
     public Vector3f getInitialPos(){
-        return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
+        //return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
+        return mapaActual.getOrigen();
     }
     
     public Quaternion getInitialRot(){
-        return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
+        //return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
+        return mapaActual.getRotacionInicial();
     }
 
 }

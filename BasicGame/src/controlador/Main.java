@@ -25,7 +25,8 @@ public class Main extends SimpleApplication implements ActionListener {
     private VehicleProtagonista car;
     private Rival rival;
     private WorldCreator world;
-    private CameraNode camNode;    
+    private CameraNode camNode;  
+    private CameraNode camNodeR; //Node de la càmara per al rival
     private MenuController menu;
     private Display display;
     private boolean gameStarted = false; 
@@ -59,12 +60,14 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addMapping("Downs", new KeyTrigger(KeyInput.KEY_DOWN));
         inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("Reset", new KeyTrigger(KeyInput.KEY_RETURN));
+        inputManager.addMapping("num1", new KeyTrigger(KeyInput.KEY_1));
         inputManager.addListener(this, "Lefts");
         inputManager.addListener(this, "Rights");
         inputManager.addListener(this, "Ups");
         inputManager.addListener(this, "Downs");
         inputManager.addListener(this, "Space");
         inputManager.addListener(this, "Reset");
+        inputManager.addListener(this, "num1");
     }
 
     @Override
@@ -105,7 +108,15 @@ public class Main extends SimpleApplication implements ActionListener {
             car.reset(value, initialPos, initialRot);
         }else if (binding.equals("Space")) {
             car.handBrake(value);
+            //Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.
+        }else if (binding.equals("num1") && value) {
+            camNode.getControl(CameraControl.class).setEnabled(false);
+            camNodeR.getControl(CameraControl.class).setEnabled(true);
+        }else{
+            camNodeR.getControl(CameraControl.class).setEnabled(false);
+            camNode.getControl(CameraControl.class).setEnabled(true);
         }
+        
         
     }     
     
@@ -162,6 +173,8 @@ public class Main extends SimpleApplication implements ActionListener {
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
             if(rival.comprovaPartidaComensada()==true) {      /*depen de la tecla up del prota*/
                 rival.moureRival();
+                camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
+                camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             }
 
             display.updateDisplay(car.getSpeed(),1);      
@@ -205,7 +218,7 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
         rootNode.attachChild(camNode);
-    }
+       }
     
     
     private void addRival(){
@@ -215,7 +228,13 @@ public class Main extends SimpleApplication implements ActionListener {
         
         rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
         rootNode.attachChild(rival.getSpatial());
-    
+         //Creem un nou node de la camara per a enfocar al rival
+        camNodeR = new CameraNode("camNodeR", cam);
+        camNodeR.getControl(CameraControl.class).setEnabled(false);
+        camNodeR.setLocalTranslation(new Vector3f(0, 4, -15));
+        camNodeR.lookAt(rival.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
+        
+        rootNode.attachChild(camNodeR);
 
     }
 }

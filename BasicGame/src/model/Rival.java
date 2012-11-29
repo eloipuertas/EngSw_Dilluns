@@ -87,7 +87,7 @@ public class Rival {
         puntSeguent=buscaPunt(2);
         puntFinal=buscaPunt(1);
     }
-      
+  
 //Metode per llegir els punts d'un fitxer i guardar-los en la llista corresponent
     private int llegirPunts(String IAdata) {
     

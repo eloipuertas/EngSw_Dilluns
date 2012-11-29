@@ -21,7 +21,7 @@
     <!-- Car 2 Ferrari--> 
     <car id="ferarri">
         <maxAccelerateVelocity>130</maxAccelerateVelocity>
-        <mass>1000</mass>
+        <mass>400</mass>
         <steeringValue>0</steeringValue>
         <accelerationValue>0</accelerationValue>
         <accelerationForce>1000</accelerationForce>

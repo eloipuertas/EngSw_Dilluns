@@ -194,6 +194,7 @@ public class Display{
     
     private void updateGauge(float speed){
         
+        speed=Math.abs(speed);
         if(isDisplayAdded()){ //comprobamos si el display se ha creado, en caso contratio no hacemos nada            
                      
             if (speed > 200){

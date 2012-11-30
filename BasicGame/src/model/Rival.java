@@ -61,6 +61,7 @@ public class Rival {
     private int nivellIA;
     private Vector3f puntFinal;
     private Vector3f puntSeguent;
+    private Vector3f puntAnterior;
     private boolean partidaComensada=false;
     private String IAdata;
     private int idEscenari;
@@ -84,8 +85,9 @@ public class Rival {
         if (nivellIA==1){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata1.txt";}
         if (nivellIA==2){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata2.txt";}
         numWaitPoints = llegirPunts(IAdata);              //Llegim els punts dels escenaris i els carreguem
-        puntSeguent=buscaPunt(2);
         puntFinal=buscaPunt(1);
+        puntSeguent=buscaPunt(2);
+        puntAnterior=buscaPunt(0);
     }
   
 //Metode per llegir els punts d'un fitxer i guardar-los en la llista corresponent
@@ -278,17 +280,20 @@ public class Rival {
     
     //Mètodes de moviment bàsic, endavant, endarrere, esquerra i dreta :
     
-    private void moureEndavant(){           /* si no te cap desviacio a la direccio utilitzarem aquesta funcio*/
+    private void moureEndavant(float velocitat){           /* si no te cap desviacio a la direccio utilitzarem aquesta funcio*/
         vehicle.brake(0f);
-        if (getVelocitat()<15 && getVelocitat()>2) {      /*si el cotxe va mes lent de 15 accelerem*/
+        if (getVelocitat()<velocitat && getVelocitat()>2) {      /*si el cotxe va mes lent de 15 accelerem*/
             vehicle.accelerate(800.0f);
             enMoviment=true;
         } else if (getVelocitat()<2){
             vehicle.accelerate(800.0f);
+        } else if (getVelocitat()+5>velocitat) {
+            vehicle.accelerate(0);
+            vehicle.brake(50.f);
         } else {
             //System.out.println(vehicle.getLinearVelocity().length());
             vehicle.accelerate(0);
-        }   
+        }
     }
     
 
@@ -341,15 +346,14 @@ public class Rival {
                 rectificarRectaADreta=false;
                 if (seguent==true) {    /*si es tracta d'una curva anem al estat seguent*/
                     pasPuntFinal= false;    /*aquesta variable controla si hem pogut arribar al punt de desti*/
-                   // System.out.println("error ULTIIIIIM");
+                    //System.out.println("error ULTIIIIIM");
                    canviaEstat(estatAnterior+1);
                     
                  
                 }
                 vehicle.steer(0.f);
                 errorEsquerra=false;
-            }
-            //System.out.println("rectificant error de rodeeees");        
+            } 
         }  
     }
     
@@ -359,10 +363,13 @@ public class Rival {
        
         Vector3f p=new Vector3f();
         if(numPunt == llistaWaitPoints.size()+1){
-            numPunt=1;
+            numPunt = 1;
         }
         if (numPunt == llistaWaitPoints.size()+2){
-            numPunt=2;
+            numPunt = 2;
+        }
+        if (numPunt == 0) {
+            numPunt = llistaWaitPoints.size();
         }
         while(it.hasNext() && e!=numPunt){
             p=(Vector3f)it.next();
@@ -372,10 +379,11 @@ public class Rival {
     }
     //Mètode per canviar l'estat i recalcular els punts del mateix
     private void canviaEstat(int estatFutur){
-            estat = estatFutur;
-            puntFinal = buscaPunt(estat);
-            puntSeguent = buscaPunt(estat+1);
-            if(estat ==9){estat =1;}          
+        estat = estatFutur;
+        puntAnterior = buscaPunt(estat-1);
+        puntFinal = buscaPunt(estat);
+        puntSeguent = buscaPunt(estat+1);
+        if(estat ==9){estat =1;}          
         
     }
     public void rectificarDesviacioDreta (int estatAnterior,Vector3f pto,boolean seguent) {
@@ -442,8 +450,8 @@ public class Rival {
     }
     
     private void rutina() {  /* cada cas representa una recta*/
-         if(getVelocitat()>30f) {
-            reset_rival();
+         if(getVelocitat()>50f) {
+            //reset_rival();
         }
         angle = calcular_angle_direccions(puntFinal);
         //System.out.println(puntFinal);
@@ -473,11 +481,11 @@ public class Rival {
             //System.out.println("Rectifiquem a la recta del punt "+estat+"  girant a la esquerra");
             rectificarDesviacioDreta(estat,puntFinal,false);
         } else {            /*sino hem arribat al pto de control i anem amb la direccio correcta ens movem endavant*/
-            moureEndavant();
-        }
-        
+            if (getDistancia(puntAnterior)<getDistancia(puntFinal)){
+                moureEndavant(30);
+            } else {
+                moureEndavant(15);
+            }
+        }     
     }
-    
-
-
 }

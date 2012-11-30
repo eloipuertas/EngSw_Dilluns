@@ -242,7 +242,7 @@ public class Display{
         //Width del mapa = 105 Width del minimapa = Depende de la anchura de la pantalla
         //Height del mapa = 210 Height del minimapa = Depende de la altura de la pantalla
         //Heigth = 2*Width
-        x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/105);
+        x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
         z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
         if(x_map > (settings.getWidth()/(6.75f))){
             x_map = (settings.getWidth()/(6.75f));

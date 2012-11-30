@@ -225,8 +225,8 @@ public class Main extends SimpleApplication implements ActionListener {
          //Aqui creem la classe rival i la afegim al rootNode
         Vector3f initialPosRival = world.getInitialPos();
         Quaternion initialRotRival = world.getInitialRot();
-        
-        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,1); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
+        System.out.println(menu.getIdCircuit());
+        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
         rootNode.attachChild(rival.getSpatial());
          //Creem un nou node de la camara per a enfocar al rival
         camNodeR = new CameraNode("camNodeR", cam);

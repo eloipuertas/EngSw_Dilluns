@@ -97,7 +97,7 @@ public class WorldCreator {
         String musicNames[] = new String[3];
         musicNames[0] = "must_destroy.ogg";
         musicNames[1] = "3_point_1.ogg";
-        musicNames[2] = "hot_ride.wav";
+        musicNames[2] = "hot_ride.ogg";
         game_music = new LlistaReproduccio(true, rootNode, assetManager, musicNames);
         float volumes[] = new float[3];
         volumes[0] = 0.3f;

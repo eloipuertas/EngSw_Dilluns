@@ -33,12 +33,6 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f initialPos;
     private Quaternion initialRot;
     
-    private Audio menu_music;
-    private Audio starting_car_sound;
-    private Audio rain_sound;
-    private Audio must_destroy;
-        
-    
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
     int estado=1;
@@ -82,8 +76,7 @@ public class Main extends SimpleApplication implements ActionListener {
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);   
-        initAudio();
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,1,0,1,0,0,0,0);
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -105,29 +98,8 @@ public class Main extends SimpleApplication implements ActionListener {
             car.handBrake(value);
         }
         
-    }     
-    
-    public void initAudio() {
-      menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
-      menu_music.play();
-      
-      starting_car_sound = new Audio(rootNode, assetManager, "starting_car.wav");
-      
-      rain_sound = new Audio(rootNode, assetManager, "rain_sound.wav", true);
-      
-      must_destroy = new Audio(rootNode, assetManager, "must_destroy.ogg", true);
-      must_destroy.setVolume(0.4f);
     }
     
-    public void audioGameStarted() {
-      menu_music.stop();
-      starting_car_sound.play();
-      if (menu.getWeatherName().equals("Lluvioso")) {
-          rain_sound.play();
-      }
-      must_destroy.play();
-    }
-
     
     /*Metode per comprovar que el cotxe protagonista esta en moviment*/
     public boolean comprovaMoviment (){
@@ -250,7 +222,7 @@ public class Main extends SimpleApplication implements ActionListener {
                     break;    
                 default:
             }
-            
+            world.updateMusic();
             display.updateDisplay(car.getSpeed(),1);      
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
         }

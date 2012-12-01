@@ -68,6 +68,8 @@ public class WorldCreator {
     private Spatial roadModel;
     private ListaMapas listaMapas;
     private Mapa mapaActual;
+    private Audio rain_sound;
+    private LlistaReproduccio game_music;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -82,6 +84,7 @@ public class WorldCreator {
         this.space = space;
         this.viewPort = viewPort;
         this.menu = menu;
+        initAudio();
         obstacleList = new ArrayList<Geometry>();
         listaMapas = new ListaMapas();
         initMapas();
@@ -90,8 +93,32 @@ public class WorldCreator {
         
     }
     
+    private void initAudio() {
+        String musicNames[] = new String[3];
+        musicNames[0] = "must_destroy.ogg";
+        musicNames[1] = "3_point_1.ogg";
+        musicNames[2] = "hot_ride.wav";
+        game_music = new LlistaReproduccio(true, rootNode, assetManager, musicNames);
+        float volumes[] = new float[3];
+        volumes[0] = 0.3f;
+        volumes[1] = 0.5f;
+        volumes[2] = 0.4f;
+        game_music.setVolumes(volumes);
+    }
     
-    private void createWorld() {        
+    private void initAudioPluja() {
+        rain_sound = new Audio(rootNode, assetManager, "rain_sound.wav", true);
+        rain_sound.play();
+    }
+    
+    public void updateMusic() {
+        if (game_music.isStopped()) {
+            game_music.playNext();
+        }
+    }
+    
+    private void createWorld() {
+        game_music.playNext();
         //Afegim la llum
         /*boolean sky = menu.getModoNoche();
         if(sky){
@@ -248,6 +275,7 @@ public class WorldCreator {
     }
     
     private void initPluja() {
+        initAudioPluja();
         rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100000);
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);

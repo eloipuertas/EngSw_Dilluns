@@ -13,41 +13,77 @@
       <panel id="panel_top" height="30%" width="75%" align="center" childLayout="center">  
 	<image filename="Interface/Menu/titulo.png" height="50%" width="70%"></image>
       </panel>
-      
-      <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Carrera" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+     
+      <panel id="panel_mid" height="10%" width="75%" align="center" childLayout="center">     
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/carrera.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="gotoScreenCarSelect(carrera)" />
-        </control>         
+        </image>
       </panel>
-      
-      <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Contrareloj" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+    
+      <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="center">     
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/contrareloj.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="gotoScreenCarSelect(contrareloj)" />
-        </control>         
+        </image>       
       </panel>
-      
-      <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Persecución" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+    
+      <panel id="panel_mid3" height="10%" width="75%" align="center" childLayout="center">     
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/persecucion.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="gotoScreenCarSelect(persecucion)" />
-        </control>         
+        </image>      
       </panel>
-      
-      <panel id="panel_mid4" height="10%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Opciones" id="StartButton" align="center" valign="center" visibleToMouse="true"> 
+    
+      <panel id="panel_mid4" height="10%" width="75%" align="center" childLayout="center">     
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/opciones.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="gotoScreen(options)" />
-        </control>         
+        </image>       
       </panel>
-      
-      <panel id="panel_mid5" height="10%" width="75%" align="center" childLayout="center">       
-        <control name="button" label="Controles" id="ControlesButton" align="center" valign="center" visibleToMouse="true"> 
+    
+      <panel id="panel_mid5" height="10%" width="75%" align="center" childLayout="center">     
+        <image visibleToMouse="true" id="ControlesButton" filename="Interface/Menu/controles.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="gotoScreen(controls)" />
-        </control>         
+        </image>       
       </panel>
-      
-      <panel id="panel_bottom" height="15%" width="75%" align="center" childLayout="center">  
-        <control name="button" label="Salir" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
+    
+      <panel id="panel_bottom" height="10%" width="75%" align="center" childLayout="center">
+        <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/salir.png" width="16%" height="50%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+              <onHover name="imageSize" maxSize="10%">
+                <hover hoverFalloffType="linear" hoverWidth="100%" hoverHeight="100%" hoverFalloffConstraint="vertical" />
+              </onHover>
+            </effect>
             <interact onClick="quitGame()"/>
-        </control>       
+        </image>     
       </panel>
       
     </layer>
@@ -78,26 +114,32 @@
           <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
             <text text="Num. de rivales" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
           </panel>
-          
-          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
-            
-            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
-                <control name="button" label="-" id="enemyLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+         
+          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal"> 
+           
+            <panel id="panel_botonmenos" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="enemyLess" filename="Interface/Menu/menos.png" width="20%" height="100%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
                     <interact onClick="setEnemies(-)" />
-                </control>
+                </image>
             </panel>
-              
-            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getNumEnemies()}" id="enemyText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            </panel> 
-                                    
-            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
-                <control name="button" label="+" id="enemyMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+             
+            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">      
+                <text text="${CALL.getNumEnemies()}" id="enemyText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" valign="center"/>
+            </panel>
+                                   
+            <panel id="panel_botonmas" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="enemyMore" filename="Interface/Menu/mas.png" width="20%" height="100%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
                     <interact onClick="setEnemies(+)" />
-                </control>
-            </panel>    
-            
-          </panel>       
+                </image>
+            </panel>  
+           
+          </panel>      
       </panel>
       
       <panel id="panel_laps" height="7%" width="75%" align="center" childLayout="horizontal">       
@@ -105,23 +147,29 @@
           <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
             <text text="Num. de vueltas" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
           </panel>
-          
-          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
          
-            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
-                <control name="button" label="-" id="lapsLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal"> 
+        
+            <panel id="panel_botonmenos" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsLess" filename="Interface/Menu/menos.png" width="20%" height="100%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
                     <interact onClick="setLaps(-)" />
-                </control>
+                </image>
             </panel>
               
             <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
                 <text text="${CALL.getNumLaps()}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            </panel> 
-                                    
-            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
-                <control name="button" label="+" id="lapsMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+            </panel>
+                                   
+            <panel id="panel_botonmas" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsMore" filename="Interface/Menu/mas.png" width="20%" height="100%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
                     <interact onClick="setLaps(+)" />
-                </control>
+                </image>
             </panel>    
             
         </panel>       
@@ -132,46 +180,59 @@
           <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
             <text text="Debug INFO" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
           </panel>
+         
+          <panel id="panel_bottom_right" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="debug" filename="${CALL.getDebugInfoImagePath()}" width="30%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setDebugInfo()" />
+                </image>
+          </panel>
+              
+      </panel>
+      
+      <panel id="panel_music" height="7%" width="75%" align="center" childLayout="horizontal" >       
+       
+          <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
+            <text text="Música" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+          </panel>
           
-          <panel id="panel_bottom_right" height="50%" width="25%" valign="center" childLayout="center">  
-            <control name="button" label="OFF" id="debug" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                <interact onClick="setDebugInfo()" />
-            </control>           
-        </panel>
+          <panel id="panel_bottom_right" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="music" filename="${CALL.getMusicImagePath()}" width="30%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setMusic()" />
+                </image>
+          </panel>
                
       </panel>
       
-      <panel id="panel_volume" height="7%" width="75%" align="center" childLayout="horizontal">       
+     <panel id="panel_effects" height="7%" width="75%" align="center" childLayout="horizontal" >       
        
           <panel id="panel_bottom_left" height="50%" width="50%" valign="center" childLayout="horizontal">  
-            <text text="Volume" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
+            <text text="Efectos" font="Interface/Fonts/Default.fnt" width="150%" height="50%"/>
           </panel>
           
-          <panel id="panel_bottom_right" height="50%" width="50%" valign="center" childLayout="horizontal">  
-         
-            <panel id="panel_botonmenos" height="100%" width="20%" align="center" childLayout="center" >       
-                <control name="button" label="-" id="volumeLess" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                    <interact onClick="setVolume(-)" />
-                </control>
-            </panel>
-              
-            <panel id="panel_texto" height="50%" width="7%" align="center" childLayout="center">       
-                <text text="${CALL.getVolume()}" id="volumeText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            </panel> 
-                                    
-            <panel id="panel_botonmas" height="100%" width="20%" align="center" childLayout="center">       
-                <control name="button" label="+" id="volumeMore" height="100%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                    <interact onClick="setVolume(+)" />
-                </control>
-            </panel>    
-            
-        </panel>       
+          <panel id="panel_bottom_right" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="effects" filename="${CALL.getEffectsImagePath()}" width="30%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setEffects()" />
+                </image>
+          </panel>
+               
       </panel>             
       
-      <panel id="panel_bottom" height="30%" width="75%" align="center" childLayout="center">       
-          <control name="button" label="Volver" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
-            <interact onClick="gotoScreen(start)"/>
-        </control>              
+      <panel id="panel_bottom" align="center" childLayout="center">      
+            <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/volver.png" width="15%" height="15%">
+                <effect>
+                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                </effect>
+                <interact onClick="gotoScreen(start)" />
+            </image>
       </panel>
       
     </layer>
@@ -187,10 +248,13 @@
         <image filename="Interface/Menu/controls.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
     </layer>
     <layer id="foreground" childLayout="vertical">
-         <panel id="panel_bottom" height="194%" width="75%" align="center" childLayout="center">  
-        <control name="button" label="Volver" id="startButton" align="center" valign="center" visibleToMouse="true" > 
-            <interact onClick="gotoScreen(start)"/>
-        </control>       
+      <panel id="panel_bottom" height="194%" width="75%" align="center" childLayout="center">      
+            <image visibleToMouse="true" filename="Interface/Menu/volver.png" width="15%" height="2%">
+                <effect>
+                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                </effect>
+                <interact onClick="gotoScreen(start)" />
+            </image>
       </panel>
     </layer>     
   </screen>
@@ -204,63 +268,76 @@
     </layer>
     
     <layer id="foreground" childLayout="vertical">
-        
-        <panel id="margen_superior" height="5%" width="100%" align="center">                   
-        </panel>       
-                      
-        <panel id="panel_coche" height="60%" width="100%" childLayout="horizontal">              
-                
-                <panel id="panel_izq" height="100%" width="10%" align="center" childLayout="center">       
-                    <control name="button" label="-" id="volumeLess" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
+       
+        <panel id="margen_superior" height="15%" align="center">                  
+        </panel>
+                     
+        <panel id="panel_coche" height="60%" childLayout="horizontal" align="center">             
+               
+                <panel id="panel_izq" align="left" childLayout="center">      
+                    <image visibleToMouse="true" id="volumeLess" filename="Interface/Menu/izquierda.png" width="40%" height="10%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
                         <interact onClick="setCar(-)" />
-                    </control>
+                    </image>
                 </panel>
-              
-                <panel id="panel_imagen" height="100%" width="80%" align="center" childLayout="center">       
+             
+                <panel id="panel_imagen" height="70%" width="40%" valign="center" childLayout="center">      
                     <image id="carImage" name="carImage" filename="${CALL.getCarImagePath()}" height="100%" width="100%"></image>
-                </panel> 
-
-                <panel id="panel_dch" height="100%" width="10%" align="center" childLayout="center">       
-                    <control name="button" label="-" id="volumeMore" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setCar(+)" />
-                    </control>
-                </panel>         
-                   
-        </panel>
-            
-        <panel id="panel_color" height="10%" width="100%" childLayout="horizontal">  
-                
-                <panel id="panel_botonmenos" height="50%" width="40%" align="center" valign="center" childLayout="center" >       
-                    <control name="button" label="-" id="lapsLess" height="100%" width="20%" align="right" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setCarColor(-)" />
-                    </control>
                 </panel>
-              
-                <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
-                    <text text="${CALL.getCarColorName()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-                </panel> 
-                                    
-                <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
-                    <control name="button" label="-" id="lapsMore" height="100%" width="20%" align="left" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setCarColor(+)"/>
-                    </control>
-                </panel>    
                 
-                    
-         </panel>   
-        
-        
-        
-        <panel id="panel_empezar" height="25%" width="100%" align="center" childLayout="center">       
-            <control name="button" label="Selec. circuito" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
-                <interact onClick="gotoScreen(circuit)"/>
-            </control>              
+                <panel id="panel_dch" align="left" childLayout="center">      
+                    <image visibleToMouse="true" id="volumeMore" filename="Interface/Menu/derecha.png" width="40%" height="10%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
+                        <interact onClick="setCar(+)" />
+                    </image>
+                </panel>        
+                  
         </panel>
-        
-        
-
-              
-    </layer>     
+       
+        <panel id="margen_superior" height="8%" align="center">                  
+        </panel>  
+       
+        <panel id="panel_color" height="10%" width="50%" align="center" childLayout="horizontal"> 
+               
+                <panel id="panel_botonmenos" align="left" childLayout="center">      
+                    <image visibleToMouse="true" id="lapsLess" filename="Interface/Menu/izquierda2.png" width="10%" height="30%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
+                        <interact onClick="setCarColor(-)" />
+                    </image>
+                </panel> 
+             
+                <panel id="panel_texto" height="50%" align="center" valign="center" childLayout="center">      
+                    <text text="${CALL.getCarColorNameSPA()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+                </panel>
+                                   
+                <panel id="panel_botonmas" align="left" childLayout="center">      
+                    <image visibleToMouse="true" id="lapsMore" filename="Interface/Menu/derecha2.png" width="10%" height="30%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
+                        <interact onClick="setCarColor(+)" />
+                    </image>
+                </panel>   
+               
+                   
+         </panel>  
+       
+        <panel id="panel_empezar" align="center" childLayout="center">      
+            <image visibleToMouse="true" filename="Interface/Menu/siguiente.png" width="10%" height="70%">
+                <effect>
+                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                </effect>
+                <interact onClick="gotoScreen(circuit)" />
+            </image>
+        </panel> 
+         
+    </layer>    
   </screen>
   
   
@@ -273,60 +350,76 @@
     </layer>
     
     <layer id="foreground" childLayout="vertical">
-        
-        <panel id="margen_superior" height="5%" width="100%" align="center">                   
-        </panel>       
-                      
-        <panel id="panel_coche" height="60%" width="100%" childLayout="horizontal">              
-                
-                <panel id="panel_izq" height="100%" width="10%" align="center" childLayout="center">       
-                    <control name="button" label="-" id="volumeLess" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setCircuit(-)" />
-                    </control>
-                </panel>
               
-                <panel id="panel_imagen" height="100%" width="80%" align="center" childLayout="center">       
-                    <image id="circuitImage" name="circuitImage" filename="${CALL.getCircuitImagePath()}" height="100%" width="100%"></image>
-                </panel> 
-
-                <panel id="panel_dch" height="100%" width="10%" align="center" childLayout="center">       
-                    <control name="button" label="-" id="volumeMore" height="40%" width="40%" align="center" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setCircuit(+)" />
-                    </control>
-                </panel>         
-                   
+        <panel id="margen_superior" height="15%" align="center">                  
         </panel>
-            
+                     
+        <panel id="panel_coche" height="60%" childLayout="horizontal" align="center">             
+               
+                <panel id="panel_izq" align="left" childLayout="center">      
+                    <image visibleToMouse="true" id="volumeLess" filename="Interface/Menu/izquierda.png" width="40%" height="10%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
+                        <interact onClick="setCircuit(-)" />
+                    </image>
+                </panel>
+             
+                <panel id="panel_imagen" height="70%" width="40%" valign="center" childLayout="center">      
+                    <image id="circuitImage" name="circuitImage" filename="${CALL.getCircuitImagePath()}" height="100%" width="100%"></image>
+                </panel>
+
+                <panel id="panel_dch" align="right" childLayout="center">      
+                    <image visibleToMouse="true" id="volumeMore" filename="Interface/Menu/derecha.png" width="40%" height="10%">
+                        <effect>
+                            <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                        </effect>
+                        <interact onClick="setCircuit(+)" />
+                    </image>
+                </panel>        
+                  
+        </panel>
+       
+        <panel id="margen_superior" height="8%" align="center">                  
+        </panel>
         
-         
-        <panel id="panel_clima" height="10%" width="100%" childLayout="horizontal">
-            
-            <panel id="panel_botonmenos" height="50%" width="40%" align="center" valign="center" childLayout="center" >       
-                    <control name="button" label="-" id="lapsLess" height="100%" width="20%" align="right" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setWeather(-)" />
-                    </control>
-            </panel>
-              
-            <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
+        <panel id="panel_clima" height="10%" width="50%" align="center" childLayout="horizontal">
+           
+            <panel id="panel_botonmenos" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsLess" filename="Interface/Menu/izquierda2.png" width="10%" height="30%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setWeather(-)" />
+                </image>
+            </panel> 
+             
+            <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">      
                     <text text="${CALL.getWeatherName()}" id="weatherText" name="weatherText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel>
+                                   
+            <panel id="panel_botonmas" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsMore" filename="Interface/Menu/derecha2.png" width="10%" height="30%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setWeather(+)" />
+                </image>
             </panel> 
-                                    
-            <panel id="panel_botonmas" height="50%" width="40%" align="center" valign="center" childLayout="center">       
-                <control name="button" label="-" id="lapsMore" height="100%" width="20%" align="left" valign="center" visibleToMouse="true"> 
-                        <interact onClick="setWeather(+)"/>
-                </control>
-            </panel> 
-            
+           
         </panel>
     
                 
 
 
-        <panel id="panel_empezar" height="25%" width="100%" align="center" childLayout="center">       
-            <control name="button" label="Empezar" id="QuitButton" align="center" valign="center" visibleToMouse="true" > 
-                <interact onClick="startGame()"/>
-            </control>              
-        </panel>
+        <panel id="panel_empezar" align="center" childLayout="center">      
+            <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/empezar.png" width="10%" height="70%">
+                <effect>
+                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                </effect>
+                <interact onClick="startGame()" />
+            </image>
+        </panel> 
         
         
 
@@ -335,6 +428,52 @@
   </screen>
   
   
+  
+  
+  <screen id="null">    
+  </screen>
+  
+  
+  
+  
+  <screen id="pause" controller="vista.Menu">
+       
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/pausa_background2.png" height="40%" width="40%"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">      
+            
+      <panel id="margen_superior" height="25%" align="center">                  
+      </panel>
+          
+      <panel id="panel_mid" height="40%" width="75%" align="center" childLayout="center">           
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/salir.png" width="10%" height="10%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+            </effect>
+            <interact onClick="quitGame()" />
+        </image>
+      </panel>
+      
+      <panel id="margen_superior" height="-30%" align="center">                  
+      </panel>
+      
+      <panel id="panel_mid2" height="40%" width="75%" align="center" childLayout="center">       
+        <image visibleToMouse="true" id="StartButton" filename="Interface/Menu/empezar.png" width="10%" height="10%">
+            <effect>
+                <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+            </effect>
+            <interact onClick="unPause()" />
+        </image>        
+      </panel>
+     
+      
+    
+      
+    </layer>
+           
+  </screen>
   
   
   

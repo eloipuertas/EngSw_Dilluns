@@ -16,6 +16,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.util.ArrayList;
+import model.Audio;
 
 public class Menu extends AbstractAppState implements ScreenController {
 
@@ -48,6 +49,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   private int actualWeather;
   private ArrayList<Weather> weathers = new ArrayList<Weather>();
   private String imagesPath;
+  private Audio menu_music;
   
   private class Car{
       private String carName;
@@ -151,9 +153,17 @@ public class Menu extends AbstractAppState implements ScreenController {
       actualColor = initCarColor;
       actualWeather = initWeather;
       actualCircuit = initCircuit;
+      
+      initAudio(rootNode, manager);
+  }
+  
+  private void initAudio(Node rootNode, AssetManager manager) {
+      menu_music = new Audio(rootNode, manager, "song_menu.wav", true);
+      menu_music.play();
   }
 
-  public void startGame() {      
+  public void startGame() {
+    menu_music.stop();
     isMenuFinished = true;      
     nifty.exit();      
   }

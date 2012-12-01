@@ -84,12 +84,12 @@ public class WorldCreator {
         this.space = space;
         this.viewPort = viewPort;
         this.menu = menu;
-        initAudio();
         obstacleList = new ArrayList<Geometry>();
         listaMapas = new ListaMapas();
         initMapas();
         initMaterial();
         createWorld();
+        initAudio();
         
     }
     
@@ -104,6 +104,7 @@ public class WorldCreator {
         volumes[1] = 0.5f;
         volumes[2] = 0.4f;
         game_music.setVolumes(volumes);
+        game_music.playNext();
     }
     
     private void initAudioPluja() {
@@ -118,7 +119,6 @@ public class WorldCreator {
     }
     
     private void createWorld() {
-        game_music.playNext();
         //Afegim la llum
         /*boolean sky = menu.getModoNoche();
         if(sky){

@@ -314,12 +314,10 @@ public class VehicleProtagonista {
         float valueBrake;
         if(!handBrakeMode){
             if (value) {
-                if (getSpeed() > 5 && getSpeed() < -5) {
-                    brake_sounds.playNext();
-                    accelerate_sound.stop();
-                    decelerate_sound.stop();
-                    idling_car_sound.stop();
-                }
+                brake_sounds.playNext();
+                accelerate_sound.stop();
+                decelerate_sound.stop();
+                idling_car_sound.stop();
                 reverse();
             } else {
                 brake_sounds.stop();

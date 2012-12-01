@@ -99,7 +99,7 @@ public class VehicleProtagonista{
         carSettings.readXml();
         carSettings.loadAtributes(idModel);
         //System.out.println("ID MODEL "+idModel);
-        //idModel++;
+        idModel++;
         if(idModel==1){
             buildGolf();
         }else if(idModel == 2){

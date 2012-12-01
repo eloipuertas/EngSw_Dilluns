@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <cars>
-    <!-- Car 1 Golf-->
-    <car id="golf">
+    <!-- Car 1 Ferrari-->
+    <car id="ferrari">
         <maxAccelerateVelocity>200</maxAccelerateVelocity>
         <mass>400</mass>
         <steeringValue>0</steeringValue>
@@ -18,8 +18,8 @@
         <patch>Models/tempCar/Car.scene</patch>
     </car>
 
-    <!-- Car 2 Ferrari--> 
-    <car id="ferarri">
+    <!-- Car 2 Golf--> 
+    <car id="golf">
         <maxAccelerateVelocity>130</maxAccelerateVelocity>
         <mass>400</mass>
         <steeringValue>0</steeringValue>
@@ -30,9 +30,9 @@
         <brakeForceFactor>1</brakeForceFactor>
         <reverseFactor>1.5</reverseFactor>
         <maxReverseVelocity>-20</maxReverseVelocity>
-        <stiffness>200</stiffness>
-        <compValue>2</compValue>
-        <dampValue>3</dampValue>
+        <stiffness>60</stiffness>
+        <compValue>0.2</compValue>
+        <dampValue>0.3</dampValue>
         <patch>Models/golfCar/Car.scene</patch>
     </car>
 </cars>

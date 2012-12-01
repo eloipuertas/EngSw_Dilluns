@@ -217,63 +217,88 @@ public class Menu extends AbstractAppState implements ScreenController {
     
   public void setDebugInfo(){
     this.debugInfo = !this.debugInfo;        
+    // find the element with it's id
+    Element element = screen.findElementByName("debug");
     
     if (debugInfo){
-        nifty.getCurrentScreen().findControl("debug",  ButtonControl.class).setText("ON");
+        // first load the new image
+        NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"ON.png", false); // false means don't linear filter the image, true would apply linear filtering
+        // change the image with the ImageRenderer
+        element.getRenderer(ImageRenderer.class).setImage(newImage);
+        
     }
     else{
-        nifty.getCurrentScreen().findControl("debug",  ButtonControl.class).setText("OFF");
+       // first load the new image
+       NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"OFF.png", false); // false means don't linear filter the image, true would apply linear filtering
+       // change the image with the ImageRenderer
+       element.getRenderer(ImageRenderer.class).setImage(newImage);
     }  
     this.main.setDisplayFps(this.debugInfo); 
     this.main.setDisplayStatView(this.debugInfo); 
   }
   
-  public String getDebugInfo(){
+  public String getDebugInfoImagePath(){
       if(this.debugInfo){
-          return "ON";
+          return this.imagesPath+"ON.png";
       }
       else{
-          return "OFF";
+          return this.imagesPath+"OFF.png";
       }
   }
   
   public void setMusic(){
     this.music = !this.music;        
+    // find the element with it's id
+    Element element = screen.findElementByName("music");
     
     if (music){
-        nifty.getCurrentScreen().findControl("music",  ButtonControl.class).setText("ON");
+        // first load the new image
+        NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"ON.png", false); // false means don't linear filter the image, true would apply linear filtering
+        // change the image with the ImageRenderer
+        element.getRenderer(ImageRenderer.class).setImage(newImage);
     }
     else{
-        nifty.getCurrentScreen().findControl("music",  ButtonControl.class).setText("OFF");
+        // first load the new image
+        NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"OFF.png", false); // false means don't linear filter the image, true would apply linear filtering
+        // change the image with the ImageRenderer
+        element.getRenderer(ImageRenderer.class).setImage(newImage);
     }    
   }
   
-  public String getMusic(){
+  public String getMusicImagePath(){
       if(this.music){
-          return "ON";
+          return this.imagesPath+"ON.png";
       }
       else{
-          return "OFF";
+          return this.imagesPath+"OFF.png";
       }
   }
   
   public void setEffects(){
-    this.effects = !this.effects;        
+    this.effects = !this.effects;
+    // find the element with it's id
+    Element element = screen.findElementByName("effects");
     
     if (effects){
-        nifty.getCurrentScreen().findControl("effects",  ButtonControl.class).setText("ON");
+        // first load the new image
+        NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"ON.png", false); // false means don't linear filter the image, true would apply linear filtering
+        // change the image with the ImageRenderer
+        element.getRenderer(ImageRenderer.class).setImage(newImage);
     }
     else{
-        nifty.getCurrentScreen().findControl("effects",  ButtonControl.class).setText("OFF");
+        // first load the new image
+        NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"OFF.png", false); // false means don't linear filter the image, true would apply linear filtering
+        // change the image with the ImageRenderer
+        element.getRenderer(ImageRenderer.class).setImage(newImage);
     }   
   }
   
-  public String getEffects(){
+  public String getEffectsImagePath(){
       if(this.effects){
-          return "ON";
+          return this.imagesPath+"ON.png";
       }
       else{
-          return "OFF";
+          return this.imagesPath+"OFF.png";
       }
   }
   

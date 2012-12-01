@@ -90,6 +90,7 @@ public class Rival {
         
         if (nivellIA==1){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata1.txt";}
         if (nivellIA==2){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata2.txt";}
+        if (nivellIA==3){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata3.txt";}
         numWaitPoints = llegirPunts(IAdata);              //Llegim els punts dels escenaris i els carreguem
         //puntFinal=buscaPunt(1);
         //puntSeguent=buscaPunt(2);

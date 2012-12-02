@@ -61,6 +61,7 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("Reset", new KeyTrigger(KeyInput.KEY_RETURN));
         inputManager.addMapping("num1", new KeyTrigger(KeyInput.KEY_1));
+        inputManager.addMapping("ResetRival", new KeyTrigger(KeyInput.KEY_R));
         inputManager.addListener(this, "Lefts");
         inputManager.addListener(this, "Rights");
         inputManager.addListener(this, "Ups");
@@ -68,6 +69,7 @@ public class Main extends SimpleApplication implements ActionListener {
         inputManager.addListener(this, "Space");
         inputManager.addListener(this, "Reset");
         inputManager.addListener(this, "num1");
+        inputManager.addListener(this, "ResetRival");
     }
 
     @Override
@@ -108,8 +110,11 @@ public class Main extends SimpleApplication implements ActionListener {
             car.reset(value, initialPos, initialRot);
         }else if (binding.equals("Space")) {
             car.handBrake(value);
-            //Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.
-        }else if (binding.equals("num1") && value) {
+            
+        }else if (binding.equals("ResetRival")) {
+            rival.reset_rival();
+            
+        }else if (binding.equals("num1") && value) {//Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.
             camNode.getControl(CameraControl.class).setEnabled(false);
             camNodeR.getControl(CameraControl.class).setEnabled(true);
         }else{

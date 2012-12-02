@@ -138,12 +138,12 @@ public class WorldCreator {
             ambient.setColor(ColorRGBA.LightGray);
             rootNode.addLight(ambient);
         }*/
-        
+        /*
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(2));
-        rootNode.addLight(sun);
+        rootNode.addLight(sun);*/
 
         AmbientLight ambient = new AmbientLight();
         ambient.setColor(ColorRGBA.LightGray);
@@ -378,6 +378,9 @@ public class WorldCreator {
         cajas.add(new Vector3f(-50,-3,50));
         cajas.add(new Vector3f(-50,-3,20));
         cajas.add(new Vector3f(0,-3,50));
+        luces.add(new Vector3f(12, 6, 10));
+        luces.add(new Vector3f(-12, 8, 11));
+        luces.add(new Vector3f(-37, 9, 12));
         muros.add(new Vector3f(-2,-5,10));
         muros.add(new Vector3f(-55,-5,-15));
         medidas.add(new Vector3f(36, -5, -116));
@@ -390,19 +393,38 @@ public class WorldCreator {
         cajas = new ArrayList<Vector3f>();
         muros = new ArrayList<Vector3f>();
         medidas = new ArrayList<Vector3f>();
-        cajas.add(new Vector3f(-18, -6, 138));
-        cajas.add(new Vector3f(-53, -6, 116));
-        cajas.add(new Vector3f(-72, -6, 102));
-        cajas.add(new Vector3f(-69, -6, 72));
-        cajas.add(new Vector3f(-56, -6, 67));
-        cajas.add(new Vector3f(-52, -6, 28));
-        cajas.add(new Vector3f(-68, -6, 25));
-        cajas.add(new Vector3f(-75, -6, -24));
-        cajas.add(new Vector3f(-54, -6, -39));
-        cajas.add(new Vector3f(-54, -6, -39));
-        cajas.add(new Vector3f(-54, -6, -39));
-        muros.add(new Vector3f(86, -6, 135));
+        cajas.add(new Vector3f(-18, -3, 138));
+        cajas.add(new Vector3f(-53, -3, 116));
+        cajas.add(new Vector3f(-72, -3, 102));
+        cajas.add(new Vector3f(-69, -3, 72));
+        cajas.add(new Vector3f(-56, -3, 67));
+        cajas.add(new Vector3f(-52, -3, 28));
+        cajas.add(new Vector3f(-68, -3, 25));
+        cajas.add(new Vector3f(-75, -3, -24));
+        cajas.add(new Vector3f(-54, -3, -39));
+        cajas.add(new Vector3f(-54, -3, -39));
+        cajas.add(new Vector3f(-54, -3, -39));
+        muros.add(new Vector3f(86, -5, 135));
         muros.add(new Vector3f(-5, -5, -145));
+        luces.add(new Vector3f((float)20.77127, (float)7.9598684, (float)-5.7752357));
+        luces.add(new Vector3f((float)20.672327, (float)8.051395, (float)-37.470642));
+        luces.add(new Vector3f((float)21.844162, (float)8.54894, (float)-52.538074));
+        luces.add(new Vector3f((float)44.51233, (float)8.111047, (float)-115.19701));
+        luces.add(new Vector3f((float)45.2996, (float)8.091122, (float)-80.16784));
+        luces.add(new Vector3f((float)46.49883, (float)8.101867, (float)-45.55256));
+        luces.add(new Vector3f((float)45.153137, (float)7.5676866, (float)-13.354753));
+        luces.add(new Vector3f((float)41.73249, (float)7.508127, (float)21.711227));
+        luces.add(new Vector3f((float)41.957577, (float)7.5864325, (float)51.709457));
+        luces.add(new Vector3f((float)42.617905, (float)7.606007, (float)94.684235));
+        luces.add(new Vector3f((float)42.749813, (float)7.5224075, (float)121.49106));
+        luces.add(new Vector3f((float)-40.74521, (float)8.480071, (float)-51.351215));
+        luces.add(new Vector3f((float)-4.843434, (float)8.437189, (float)-51.560776));
+        luces.add(new Vector3f((float)-4.9933906, (float)7.8712263, (float)-4.7589498));
+        luces.add(new Vector3f((float)-40.743893, (float)7.9526534, (float)-5.7472534));
+        luces.add(new Vector3f((float)76.69355, (float)2.3765824, (float)-84.52637));
+        luces.add(new Vector3f((float)124.79213, (float)3.1658466, (float)59.367165));
+        
+        
         medidas.add(new Vector3f(138, -7, 183));
         medidas.add(new Vector3f(-107, -7, 183));
         medidas.add(new Vector3f(-107, -5, -176));
@@ -446,7 +468,6 @@ public class WorldCreator {
         for(int i = 0; i < cajas.size();i++) {
             Vector3f v = cajas.get(i);
             //crearCaixa((int)v.x,(int)v.y,(int)v.z);
-            System.out.println("POSICIONES "+(int)v.x+ " "+(int)v.y+" " + (int)v.z);
             crearCaixaFracturada((int)v.x,(int)v.y,(int)v.z);
         }
     }

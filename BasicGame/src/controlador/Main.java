@@ -37,11 +37,13 @@ public class Main extends SimpleApplication{
     private Quaternion initialRot;
     private ComandosCoche comandos;
     
+
     private Audio menu_music;
     private Audio starting_car_sound;
     private Audio rain_sound;
     private Audio must_destroy;        
     
+
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
     int estado=1;
@@ -70,13 +72,17 @@ public class Main extends SimpleApplication{
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
+
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
         initAudio();
+
+
     }
     
     private PhysicsSpace getPhysicsSpace() {
         return bulletAppState.getPhysicsSpace();
     }
+
     public void pause(){        
         gamePaused = true;
         display.pauseChronograph();
@@ -116,6 +122,26 @@ public class Main extends SimpleApplication{
       }
       must_destroy.play();
     }
+
+
+    public void onAction(String binding, boolean value, float tpf) {
+        if (binding.equals("Lefts")) {
+            car.turnLeft(value);
+        } else if (binding.equals("Rights")) {
+            car.turnRight(value);
+        } else if (binding.equals("Ups")) {
+            car.forward(value);
+        } else if (binding.equals("Downs")) {
+            car.back(value);
+        } else if (binding.equals("Reset")) {
+            car.reset(value, initialPos, initialRot);
+        }else if (binding.equals("Space")) {
+            car.handBrake(value);
+        }
+        
+    }
+    
+
     
     /*Metode per comprovar que el cotxe protagonista esta en moviment*/
     public boolean comprovaMoviment (){
@@ -134,10 +160,16 @@ public class Main extends SimpleApplication{
             addWorld();            
             addProtagonista();
             addRival();
+
             addDisplay();            
             audioGameStarted();
             initScene = true;
             gamePaused=false;
+/*
+            addDisplay();
+            gameStarted = true;
+            setupKeys();
+*/
         }
         
         if(!gamePaused){
@@ -238,7 +270,7 @@ public class Main extends SimpleApplication{
                     break;    
                 default:
             }
-            
+            world.updateMusic();
             display.updateDisplay(car.getSpeed(),1);      
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
             display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));

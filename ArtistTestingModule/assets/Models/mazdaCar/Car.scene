@@ -1,0 +1,195 @@
+<scene exported_by="vito" formatVersion="1.0.1" previous_export_time="1351597285.64164" export_time="1351599165.180408" >
+  <nodes >
+    <node name="WheelFrontRight" >
+      <position y="0.423916" x="-3.255793" z="0.105795" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelFrontRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelFrontRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelBackRight" >
+      <position y="0.452226" x="-3.255793" z="-4.602208" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelBackRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelBackRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelBackLeft" >
+      <position y="0.452226" x="0.013061" z="-4.602208" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelBackLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelBackLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="DiskBackLeft" >
+      <position y="-0.886980" x="-1.729947" z="-4.587387" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="DiskBackLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="DiskBackLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="DiskBackRight" >
+      <position y="2.082738" x="1.727569" z="-4.600867" />
+      <rotation qy="0.000000" qx="0.000000" qz="-1.000000" qw="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="DiskBackRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="DiskBackRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="DiskFrontRight" >
+      <position y="2.060225" x="1.730674" z="0.121219" />
+      <rotation qy="0.000000" qx="0.000000" qz="-1.000000" qw="0.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="DiskFrontRight.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="DiskFrontRight" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="WheelFrontLeft" >
+      <position y="0.411191" x="0.013061" z="0.135208" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="WheelFrontLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="WheelFrontLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="Spot.001" >
+      <position y="11.342065" x="-5.246758" z="-6.118249" />
+      <rotation qy="-0.099362" qx="-0.235433" qz="0.222654" qw="0.940810" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <light shadow="true" type="spot" name="Spot.001" powerScale="0.6999998688697815" >
+        <position y="11.342065" x="-5.246758" z="-6.118249" />
+        <lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+        <direction y="-0.79" x="-0.466" z="-0.399" />
+        <spotLightRange outer="0.7853981852531433" inner="0.6675884527838338" falloff="1.0" />
+        <colourDiffuse r="1.0" b="1.0" g="1.0" />
+        <colourSpecular r="1.0" b="1.0" g="1.0" />
+        <colourShadow r="1.0" b="1.0" g="1.0" />
+      </light>
+    </node>
+    <node name="DiskFrontLeft" >
+      <position y="-0.928015" x="-1.694271" z="0.135208" />
+      <rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="DiskFrontLeft.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="DiskFrontLeft" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="Car" >
+      <position y="1.161627" x="0.003878" z="2.289945" />
+      <rotation qy="0.500000" qx="0.500000" qz="-0.500000" qw="0.500000" />
+      <scale y="1.042569" x="1.055203" z="1.033422" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Car.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Car" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="Spot" >
+      <position y="12.901452" x="9.476309" z="-5.136574" />
+      <rotation qy="-0.123731" qx="-0.240895" qz="-0.269132" qw="0.924245" />
+      <scale y="1.000000" x="1.000000" z="1.000000" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <light shadow="true" type="spot" name="Spot" powerScale="0.5600000023841858" >
+        <position y="12.901452" x="9.476309" z="-5.136574" />
+        <lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+        <direction y="-0.739" x="0.438" z="-0.512" />
+        <spotLightRange outer="0.7853981852531433" inner="0.6675884527838338" falloff="1.0" />
+        <colourDiffuse r="1.0" b="1.0" g="1.0" />
+        <colourSpecular r="1.0" b="1.0" g="1.0" />
+        <colourShadow r="1.0" b="1.0" g="1.0" />
+      </light>
+    </node>
+    <node name="Text" >
+      <position y="0.979704" x="0.278594" z="-3.773264" />
+      <rotation qy="0.707107" qx="0.000000" qz="-0.707107" qw="-0.000000" />
+      <scale y="0.231438" x="0.231438" z="0.231438" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+    </node>
+    <node name="Aleron" >
+      <position y="1.402176" x="0.003878" z="2.289945" />
+      <rotation qy="0.500000" qx="0.500000" qz="-0.500000" qw="0.500000" />
+      <scale y="1.042569" x="1.055203" z="1.033422" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Aleron.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Aleron" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+    <node name="Faros" >
+      <position y="1.161627" x="0.003878" z="2.289945" />
+      <rotation qy="0.500000" qx="0.500000" qz="-0.500000" qw="0.500000" />
+      <scale y="1.042569" x="1.055203" z="1.033422" />
+      <game >
+        <sensors />
+        <actuators />
+      </game>
+      <entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.02539999969303608" damping_rot="0.18000000715255737" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Faros.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Faros" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+    </node>
+  </nodes>
+  <externals >
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelFrontRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelBackRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelBackLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskBackLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskBackRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskFrontRight.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/WheelFrontLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/DiskFrontLeft.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/Car.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/Faros.material" />
+    </item>
+    <item type="material" >
+      <file name="/Users/vito/Dropbox/4-DEGREE/Eng.Software/Documents practiques/Blender/Mazda/nude/ogre/matricula.material" />
+    </item>
+  </externals>
+  <environment />
+</scene>

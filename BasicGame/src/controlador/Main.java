@@ -12,14 +12,16 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
+import java.util.ArrayList;
 import model.Audio;
+import model.ComandosCoche;
 import model.Rival;
 import model.VehicleProtagonista;
 import model.WorldCreator;
 import vista.Display;
 
 
-public class Main extends SimpleApplication implements ActionListener {
+public class Main extends SimpleApplication{
 
     private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
@@ -33,6 +35,7 @@ public class Main extends SimpleApplication implements ActionListener {
     private RigidBodyControl landscape;
     private Vector3f initialPos;
     private Quaternion initialRot;
+    private ComandosCoche comandos;
     
     private Audio menu_music;
     private Audio starting_car_sound;
@@ -50,21 +53,6 @@ public class Main extends SimpleApplication implements ActionListener {
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
-    }
-    
-    private void setupKeys() {
-        inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("Ups", new KeyTrigger(KeyInput.KEY_UP));
-        inputManager.addMapping("Downs", new KeyTrigger(KeyInput.KEY_DOWN));
-        inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Reset", new KeyTrigger(KeyInput.KEY_RETURN));
-        inputManager.addListener(this, "Lefts");
-        inputManager.addListener(this, "Rights");
-        inputManager.addListener(this, "Ups");
-        inputManager.addListener(this, "Downs");
-        inputManager.addListener(this, "Space");
-        inputManager.addListener(this, "Reset");        
     }
 
     @Override
@@ -89,25 +77,6 @@ public class Main extends SimpleApplication implements ActionListener {
     private PhysicsSpace getPhysicsSpace() {
         return bulletAppState.getPhysicsSpace();
     }
-
-    public void onAction(String binding, boolean value, float tpf) {
-        if (!gamePaused){
-            if (binding.equals("Lefts")) {
-                car.turnLeft(value);
-            } else if (binding.equals("Rights")) {
-                car.turnRight(value);
-            } else if (binding.equals("Ups")) {
-                car.forward(value);
-            } else if (binding.equals("Downs")) {
-                car.back(value);
-            } else if (binding.equals("Reset")) {
-                car.reset(value, initialPos, initialRot);
-            }else if (binding.equals("Space")) {
-                car.handBrake(value);            
-            }            
-        }        
-    }
-    
     public void pause(){        
         gamePaused = true;
         display.pauseChronograph();
@@ -124,8 +93,9 @@ public class Main extends SimpleApplication implements ActionListener {
     
     public boolean isGamePaused(){
         return this.gamePaused;
-    }       
+    }  
     
+
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
       menu_music.play();
@@ -165,7 +135,6 @@ public class Main extends SimpleApplication implements ActionListener {
             addProtagonista();
             addRival();
             addDisplay();            
-            setupKeys();
             audioGameStarted();
             initScene = true;
             gamePaused=false;
@@ -299,11 +268,18 @@ public class Main extends SimpleApplication implements ActionListener {
     }        
     
     private void addProtagonista(){
+        /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
         
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
+        //Guardamos la posicion inicial y la rotacion del coche
+        car.setInitialPos(initialPos);
+        car.setInitialRot(initialRot);
+        
+        //Ponemos los controles para el protagonista para que se mueva
+        addControlesToProtagonist();
         
         //Añadimos el coche protagonista
         rootNode.attachChild(car.getSpatial());
@@ -319,6 +295,34 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(camNode);
     }
     
+    /*
+     * Metodo para poner controles al protagonista
+     */
+    private void addControlesToProtagonist(){
+        this.comandos = new ComandosCoche(car);
+        ArrayList<Integer> controles = new ArrayList<Integer>();
+        controles.add(KeyInput.KEY_LEFT);
+        controles.add(KeyInput.KEY_RIGHT);
+        controles.add(KeyInput.KEY_UP);
+        controles.add(KeyInput.KEY_DOWN);
+        controles.add(KeyInput.KEY_SPACE);
+        controles.add(KeyInput.KEY_RETURN);
+        setControlesToProgatonist(controles);
+    }
+    
+    /*
+     * Metodo para cambiar los controles del protagonista
+     */
+    private void setControlesToProgatonist(ArrayList<Integer> controles){
+        int left, right, up, down, space, returN;
+        left = controles.get(0);
+        right = controles.get(1);
+        up = controles.get(2);
+        down = controles.get(3);
+        space = controles.get(4);
+        returN = controles.get(5);
+        comandos.setupKeys(left, right, up, down, space, returN, inputManager);
+    }
     
     private void addRival(){
         //Aqui creem la classe rival i la afegim al rootNode

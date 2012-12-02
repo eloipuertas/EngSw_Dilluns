@@ -71,7 +71,7 @@ public class Rival {
     private float tipusRecta; /* 1 accelerar-frenar 2 manten velocitat*/
     private float velocitatRecta; /* depen de la velocitat anterior i el itpus de recta variara a vel. de curva i vel. de recta*/
     
-    //Constructor
+    //Constructor 
     public Rival(AssetManager asset, PhysicsSpace phy,int idCircuit,Vector3f punt, Quaternion rot,int nivell){          /*la idea es passar el world on contingi a la llarga les coordenades del mon*/
         llistaWaitPoints = new ArrayList<Vector3f>();
         llistaAccioWaitPoints = new ArrayList<Float>();

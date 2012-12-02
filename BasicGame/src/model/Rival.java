@@ -527,8 +527,8 @@ private void rectificarDesviacioRectaEsquerra (int estatAnterior,Vector3f pto,bo
     }
     
     private void rutina() {  /* cada cas representa una recta*/
-         if(getVelocitat()>50f) {
-            //reset_rival();
+         if(getVelocitat()>60f) {
+            reset_rival();
         }
         angle = calcular_angle_direccions(puntFinal);
         //System.out.println("puntFinal num= "+puntFinal);

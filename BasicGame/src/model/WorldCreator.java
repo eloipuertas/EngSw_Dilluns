@@ -15,9 +15,11 @@ import com.jme3.effect.ParticleMesh;
 import com.jme3.effect.shapes.EmitterBoxShape;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -34,6 +36,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.shadow.BasicShadowRenderer;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
+import controlador.MenuController;
 import java.util.ArrayList;
 
 /**
@@ -54,6 +57,7 @@ public class WorldCreator {
     private BulletAppState space;
     private ViewPort viewPort;
     private ArrayList<Geometry> obstacleList;
+    private MenuController menu;
     
     private Material mat_road;
     private Material mat_brick;
@@ -62,6 +66,10 @@ public class WorldCreator {
     private Material mat_rain;
     private Material mat_bounds;
     private Spatial roadModel;
+    private ListaMapas listaMapas;
+    private Mapa mapaActual;
+    private Audio rain_sound;
+    private LlistaReproduccio game_music;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -70,20 +78,67 @@ public class WorldCreator {
      * @param space
      */
     
-    public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort) {
+    public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort, MenuController menu) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
         this.space = space;
         this.viewPort = viewPort;
+        this.menu = menu;
         obstacleList = new ArrayList<Geometry>();
+        listaMapas = new ListaMapas();
+        initMapas();
         initMaterial();
         createWorld();
+        initAudio();
         
     }
     
+    private void initAudio() {
+        String musicNames[] = new String[3];
+        musicNames[0] = "must_destroy.ogg";
+        musicNames[1] = "3_point_1.ogg";
+        musicNames[2] = "hot_ride.ogg";
+        game_music = new LlistaReproduccio(true, rootNode, assetManager, musicNames);
+        float volumes[] = new float[3];
+        volumes[0] = 0.3f;
+        volumes[1] = 0.5f;
+        volumes[2] = 0.4f;
+        game_music.setVolumes(volumes);
+        game_music.playNext();
+    }
     
-    private void createWorld() {        
+    private void initAudioPluja() {
+        rain_sound = new Audio(rootNode, assetManager, "rain_sound.wav", true);
+        rain_sound.play();
+    }
+    
+    public void updateMusic() {
+        if (game_music.isStopped()) {
+            game_music.playNext();
+        }
+    }
+    
+    private void createWorld() {
         //Afegim la llum
+        /*boolean sky = menu.getModoNoche();
+        if(sky){
+            //Mode nit
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.DarkGray);
+            rootNode.addLight(ambient);
+        }else{
+            //Mode dia
+            DirectionalLight sun = new DirectionalLight();
+            Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
+            sun.setDirection(lightDir);
+            sun.setColor(ColorRGBA.White.clone().multLocal(2));
+            rootNode.addLight(sun);
+
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.LightGray);
+            rootNode.addLight(ambient);
+        }*/
+        
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
         sun.setDirection(lightDir);
@@ -98,24 +153,38 @@ public class WorldCreator {
         brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
         brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
         
-        //Afegim boira
-        //initBoira();
-        
         //Afegim ombres
         BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 256);
         bsr.setDirection(new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f)); // light direction
         viewPort.addProcessor(bsr); 
         
         //Afegim el cel
+        /*
+        Node sky = new Node();
+        if(sky){
+            //Mode nit
+            sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
+        }else{
+            //Mode dia
+            sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        }
+        rootNode.attachChild(sky);*/
         Node sky = new Node();
         sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sky);
         
+        //Mirem quin circuit ha estat seleccionat en el menu
+        mapaActual = listaMapas.getMapa(menu.getIdCircuit());
+        
         //Road creation
         // We load the scene
-        Spatial sceneModel = assetManager.loadModel("Models/StraightRoad/Ciutat/solo_city.j3o");
+        Spatial sceneModel = assetManager.loadModel(mapaActual.getSceneModel());
         sceneModel.setLocalTranslation(0, -5, 0);
-        sceneModel.scale(20,20,20);
+        if(menu.getIdCircuit() == 0) {
+            sceneModel.scale(20,20,20);
+        } else {
+            sceneModel.scale(3,3,3);
+        }
         //sceneModel.setMaterial(mat_road);
         
         // We set up collision detection for the scene by creating a
@@ -132,58 +201,66 @@ public class WorldCreator {
         space.getPhysicsSpace().add(sceneModel);
         
         //We load the limits of the scene
-        /*Spatial boundsModel = assetManager.loadModel("Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene");
-        boundsModel.setLocalTranslation(0, -5, 0);
-        boundsModel.scale(10,10,10);
-        boundsModel.setMaterial(mat_bounds);
-         
-        // We set up collision detection for the walls.
-        CollisionShape boundsShape =
-                CollisionShapeFactory.createMeshShape((Node) boundsModel);
-        RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
-        boundsModel.addControl(limits);
-        boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);*/
-        
-        //rootNode.attachChild(boundsModel);
-        //space.getPhysicsSpace().add(boundsModel);
-        
+        if(mapaActual.getparets() != null) {
+            Spatial boundsModel = assetManager.loadModel(mapaActual.getparets());
+            boundsModel.setLocalTranslation(0, -5, 0);
+            boundsModel.scale(3,3,3);
+            boundsModel.setMaterial(mat_bounds);
+
+            // We set up collision detection for the walls.
+            CollisionShape boundsShape =
+                    CollisionShapeFactory.createMeshShape((Node) boundsModel);
+            RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
+            boundsModel.addControl(limits);
+            boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);
+
+            rootNode.attachChild(boundsModel);
+            space.getPhysicsSpace().add(boundsModel);
+        }
         //We load the limits of the scene
-        roadModel = assetManager.loadModel("Models/StraightRoad/Carretera/StraightRoad.j3o");
-        roadModel.setLocalTranslation(0, -5, 0);
-        roadModel.scale(20,0.25f,20);
-        roadModel.setMaterial(mat_road);
-         
-        // We set up collision detection for the walls.
-        CollisionShape roadShape =
-                CollisionShapeFactory.createMeshShape((Node) roadModel);
-        RigidBodyControl limits = new RigidBodyControl(roadShape, 0);
-        roadModel.addControl(limits);
+        if(mapaActual.getCarretera() != null) {
+            roadModel = assetManager.loadModel(mapaActual.getCarretera());
+            roadModel.setLocalTranslation(0, -5, 0);
+            roadModel.scale(20,0.25f,20);
+            roadModel.setMaterial(mat_road);
+
+            // We set up collision detection for the walls.
+            CollisionShape roadShape =
+                    CollisionShapeFactory.createMeshShape((Node) roadModel);
+            RigidBodyControl limits = new RigidBodyControl(roadShape, 0);
+            roadModel.addControl(limits);
+
+            rootNode.attachChild(roadModel);
+            space.getPhysicsSpace().add(roadModel);
+        }
         
-        rootNode.attachChild(roadModel);
-        space.getPhysicsSpace().add(roadModel);
-        
+        //streetlamps creation
+        mostrarLlums();
         
         //wall creation
-        crearMur(-2,-5,10);
-        crearMur(-55,-5,-15);
+        mostrarMurs();
 
         //Obstacle creation
-        crearCaixa(2,-2,-10);
-        crearCaixa(2,-2,-50);
-        crearCaixa(-25,-2,-50);
-        crearCaixa(-50,-2,-50);
-        crearCaixa(-25,-2,-25);
-        crearCaixa(-50,-2,0);
-        crearCaixa(-50,-2,50);
-        crearCaixa(-50,-2,25);
-        crearCaixa(0,-2,50);
+        mostrarCaixes();
 
-        //Creem el efecte de neu
-        //initNeu();
-        
-        
-        //Creem el efecte de pluja
-        initPluja();
+
+        //Creem el efecte de clima que s'hagi seleccionat al menu
+        initClima(menu.getWeatherName());
+    }
+    
+    
+    private void initClima(String weatherName) {
+        if(weatherName == "Soleado"){
+            
+        }else if(weatherName == "Lluvioso"){
+            initPluja();
+        }else if(weatherName == "Nevado"){
+            initNeu();
+        }else if(weatherName == "Nebuloso"){
+            initBoira();
+        }else{
+            System.out.println("El clima " + weatherName + " es desconegut!");
+        }
     }
     
     private void initNeu() {
@@ -205,6 +282,7 @@ public class WorldCreator {
     }
     
     private void initPluja() {
+        initAudioPluja();
         rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100000);
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);
@@ -265,6 +343,130 @@ public class WorldCreator {
         obstacleList.add(obstacleModel);
     }
     
+    private void crearCaixaFracturada(int x, int y, int z) {
+        Spatial caja_parte1 = assetManager.loadModel("Models/caixa_fracturada/superior.j3o");
+        caja_parte1.setLocalTranslation(x,y,z);
+        caja_parte1.addControl(new RigidBodyControl(5));
+        caja_parte1.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte1);
+        space.getPhysicsSpace().add(caja_parte1);
+        Spatial caja_parte2 = assetManager.loadModel("Models/caixa_fracturada/medio.j3o");
+        caja_parte2.setLocalTranslation(x,y,z);
+        caja_parte2.addControl(new RigidBodyControl(5));
+        caja_parte2.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte2);
+        space.getPhysicsSpace().add(caja_parte2);
+        Spatial caja_parte3 = assetManager.loadModel("Models/caixa_fracturada/inferior.j3o");
+        caja_parte3.setLocalTranslation(x,y,z);
+        caja_parte3.addControl(new RigidBodyControl(5));
+        caja_parte3.getControl(RigidBodyControl.class).setFriction(2f);
+        rootNode.attachChild(caja_parte3);
+        space.getPhysicsSpace().add(caja_parte3);
+    }
+    
+    private void initMapas() {
+        ArrayList<Vector3f> luces = new ArrayList<Vector3f>();
+        ArrayList<Vector3f> cajas = new ArrayList<Vector3f>();
+        ArrayList<Vector3f> muros = new ArrayList<Vector3f>();
+        ArrayList<Vector3f> medidas = new ArrayList<Vector3f>();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        medidas.add(new Vector3f(36, -5, -116));
+        medidas.add(new Vector3f(36, -5, 103));
+        medidas.add(new Vector3f(-62, -5, 103));
+        medidas.add(new Vector3f(-62, -5, -116));
+        Mapa m = new Mapa(new Vector3f(-10,-2,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",null,"Models/StraightRoad/Carretera/StraightRoad.j3o",luces,cajas,muros,medidas);
+        listaMapas.añadirMapa(m);
+        luces = new ArrayList<Vector3f>();
+        cajas = new ArrayList<Vector3f>();
+        muros = new ArrayList<Vector3f>();
+        medidas = new ArrayList<Vector3f>();
+        cajas.add(new Vector3f(-18, -6, 138));
+        cajas.add(new Vector3f(-53, -6, 116));
+        cajas.add(new Vector3f(-72, -6, 102));
+        cajas.add(new Vector3f(-69, -6, 72));
+        cajas.add(new Vector3f(-56, -6, 67));
+        cajas.add(new Vector3f(-52, -6, 28));
+        cajas.add(new Vector3f(-68, -6, 25));
+        cajas.add(new Vector3f(-75, -6, -24));
+        cajas.add(new Vector3f(-54, -6, -39));
+        cajas.add(new Vector3f(-54, -6, -39));
+        cajas.add(new Vector3f(-54, -6, -39));
+        muros.add(new Vector3f(86, -6, 135));
+        muros.add(new Vector3f(-5, -5, -145));
+        medidas.add(new Vector3f(138, -7, 183));
+        medidas.add(new Vector3f(-107, -7, 183));
+        medidas.add(new Vector3f(-107, -5, -176));
+        medidas.add(new Vector3f(138, -5, -176));
+        m = new Mapa(new Vector3f(11, -6, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World2.j3o","Models/World3/InvisibleWall.j3o",luces,cajas,muros,medidas);
+        listaMapas.añadirMapa(m);
+        /*
+        luces.clear();
+        cajas.clear();
+        muros.clear();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        m = new Mapa(new Vector3f(0,0,0),new Quaternion().fromAngles(0, (float)Math.toRadians(0), 0),"Models/AngularRoad/AngularRoad.j3o","Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene",luces,cajas,muros);
+        listaMapas.añadirMapa(m);
+         */
+    }
+    
+    private void afegirLlum(float x, float y, float z){
+        SpotLight spot = new SpotLight();
+        spot.setSpotRange(100f);                           // distance
+        spot.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
+        spot.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
+        spot.setColor(ColorRGBA.White.mult(1.3f));         // light color
+        spot.setPosition(new Vector3f(x,y,z));               // shine from camera loc
+        spot.setDirection(new Vector3f(0,-1,0));             // shine forward from camera loc
+        rootNode.addLight(spot);   
+    }
+
+    
+    public void mostrarCaixes() {
+        ArrayList<Vector3f> cajas = mapaActual.getListaCajas();
+        for(int i = 0; i < cajas.size();i++) {
+            Vector3f v = cajas.get(i);
+            //crearCaixa((int)v.x,(int)v.y,(int)v.z);
+            System.out.println("POSICIONES "+(int)v.x+ " "+(int)v.y+" " + (int)v.z);
+            crearCaixaFracturada((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+    
+    public void mostrarMurs() {
+        ArrayList<Vector3f> murs = mapaActual.getListaMuros();
+        for(int i = 0; i < murs.size();i++) {
+            Vector3f v = murs.get(i);
+            crearMur((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+    
+    public void mostrarLlums() {
+        ArrayList<Vector3f> llums = mapaActual.getListaLuces();
+        for(int i = 0; i < llums.size();i++) {
+            Vector3f v = llums.get(i);
+            afegirLlum((int)v.x,(int)v.y,(int)v.z);
+        }
+    }
+
     private void initMaterial() {
         
         mat_road = new Material( 
@@ -321,10 +523,13 @@ public class WorldCreator {
     }
 
     public Vector3f getInitialPos(){
-        return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
+        //return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
+        return mapaActual.getOrigen();
     }
     
     public Quaternion getInitialRot(){
-        return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
+        //return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
+        return mapaActual.getRotacionInicial();
     }
+
 }

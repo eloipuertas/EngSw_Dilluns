@@ -256,7 +256,7 @@ public class Main extends SimpleApplication{
     
     private void addWorld(){
         //Cargamos la escena
-        world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort);
+        world = new WorldCreator(rootNode, assetManager, bulletAppState, this.viewPort, menu);
         initialPos = world.getInitialPos();
         initialRot = world.getInitialRot();
     }

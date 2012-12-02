@@ -19,6 +19,15 @@ public class Audio {
         rootNode.attachChild(sound);
     }
     
+    public Audio(boolean streamed, Node rootNode, AssetManager assetManager, String audioName) {
+        this.rootNode = rootNode;
+        this.assetManager = assetManager;
+        this.audioName = audioName;
+        this.sound = new AudioNode(assetManager, "Sounds/" + audioName, streamed);
+        
+        rootNode.attachChild(sound);
+    }
+    
     public Audio(Node rootNode, AssetManager assetManager, String audioName, boolean isLooping) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
@@ -67,18 +76,36 @@ public class Audio {
     
     public void play(float timeOffset) {
         sound.setTimeOffset(timeOffset);
-        sound.play(); // play continuously!
+        sound.play();
     }
     
     public void play() {
-        sound.play(); // play continuously!
+        if (!isPlaying()) {
+            sound.play();
+        }
     }
     
     public void pause() {
-        sound.pause();
+        if (!isPaused()) {
+            sound.pause();
+        }
     }
     
     public void stop() {
-        sound.stop();
+        if (!isStopped()) {
+            sound.stop();
+        }
+    }
+    
+    public boolean isPlaying() {
+        return sound.getStatus().toString().equals("Playing");
+    }
+    
+    public boolean isPaused() {
+        return sound.getStatus().toString().equals("Paused");
+    }
+    
+    public boolean isStopped() {
+        return sound.getStatus().toString().equals("Stopped");
     }
 }

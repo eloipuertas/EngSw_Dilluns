@@ -54,20 +54,9 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private void setupKeys() {
-        inputManager.addMapping("Lefts", new KeyTrigger(KeyInput.KEY_LEFT));
-        inputManager.addMapping("Rights", new KeyTrigger(KeyInput.KEY_RIGHT));
-        inputManager.addMapping("Ups", new KeyTrigger(KeyInput.KEY_UP));
-        inputManager.addMapping("Downs", new KeyTrigger(KeyInput.KEY_DOWN));
-        inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Reset", new KeyTrigger(KeyInput.KEY_RETURN));
+        
         inputManager.addMapping("num1", new KeyTrigger(KeyInput.KEY_1));
         inputManager.addMapping("ResetRival", new KeyTrigger(KeyInput.KEY_R));
-        inputManager.addListener(this, "Lefts");
-        inputManager.addListener(this, "Rights");
-        inputManager.addListener(this, "Ups");
-        inputManager.addListener(this, "Downs");
-        inputManager.addListener(this, "Space");
-        inputManager.addListener(this, "Reset");
         inputManager.addListener(this, "num1");
         inputManager.addListener(this, "ResetRival");
     }
@@ -96,22 +85,7 @@ public class Main extends SimpleApplication implements ActionListener {
     }
 
     public void onAction(String binding, boolean value, float tpf) {
-        if (binding.equals("Lefts")) {
-            car.turnLeft(value);
-        } else if (binding.equals("Rights")) {
-            car.turnRight(value);
-        } else if (binding.equals("Ups")) {
-            car.forward(value);
-            //Aqui hauriem de comprovar que s'activen tots els rivals. Per ara en creem un, amb una IA 1 o IA 2, quan implementem numRivals anirÃ  aqui la activacio
-            rival.setPartidaComensada(true);/*quan comencem amb el prota comenÃ§arem la partida amb els rivals*/
-        } else if (binding.equals("Downs")) {
-            car.back(value);
-        } else if (binding.equals("Reset")) {
-            car.reset(value, initialPos, initialRot);
-        }else if (binding.equals("Space")) {
-            car.handBrake(value);
-            
-        }else if (binding.equals("ResetRival")) {
+        if (binding.equals("ResetRival")) {
             rival.reset_rival();
             
         }else if (binding.equals("num1") && value) {//Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.

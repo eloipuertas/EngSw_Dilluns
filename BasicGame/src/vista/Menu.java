@@ -224,8 +224,33 @@ public class Menu extends AbstractAppState implements ScreenController {
             laps.getRenderer(TextRenderer.class).setText(String.valueOf(numLaps));
           }
       }      
+<<<<<<< HEAD
   }  
     
+=======
+  }
+  
+  public void setVolume(String value){
+      
+      Element volume = nifty.getCurrentScreen().findElementByName("volumeText");      
+      if (value.equals("+")){
+          numVolume = Integer.parseInt(volume.getRenderer(TextRenderer.class).getOriginalText()); 
+          if (numVolume < this.maxNumVolume){
+            numVolume = numVolume + 1;
+            volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
+          }
+      }
+      else if (value.equals("-")){
+          numVolume = Integer.parseInt(volume.getRenderer(TextRenderer.class).getOriginalText()); 
+          if (numVolume > this.minNumVolume){
+            numVolume = numVolume - 1;
+            volume.getRenderer(TextRenderer.class).setText(String.valueOf(numVolume));
+          }
+      }
+      
+  }
+  
+>>>>>>> origin/Grup-D
   public void setDebugInfo(){
     this.debugInfo = !this.debugInfo;        
     // find the element with it's id
@@ -376,6 +401,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       
   }
   
+<<<<<<< HEAD
   public boolean readyToUnPause(){
       return paused;
   }
@@ -396,6 +422,16 @@ public class Menu extends AbstractAppState implements ScreenController {
       return colors.get(actualColor).colorNameENG;
   }
   
+=======
+  public String getCarColorNameSPA(){      
+      return colors.get(actualColor).colorNameSPA;
+  }
+  
+  public String getCarColorNameENG(){
+      return colors.get(actualColor).colorNameENG;
+  }
+  
+>>>>>>> origin/Grup-D
   public int getIdCar(){
       return cars.get(actualCar).idCar;              
   }

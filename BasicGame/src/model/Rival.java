@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Iterator;
+import model.WorldCreator;
 
 public class Rival {
     //Atributs de la classe, s'ha d'anar ampliant

@@ -176,7 +176,8 @@ public class Main extends SimpleApplication implements ActionListener {
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
-            if(rival.comprovaPartidaComensada()==true) {      /*depen de la tecla up del prota*/
+            if(comprovaMoviment()==true || rival.comprovaPartidaComensada()) {      /*depen de la tecla up del prota*/
+                rival.setPartidaComensada(true);
                 rival.moureRival();
                 camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
                 camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
@@ -230,7 +231,7 @@ public class Main extends SimpleApplication implements ActionListener {
          //Aqui creem la classe rival i la afegim al rootNode
         Vector3f initialPosRival = world.getInitialPos();
         Quaternion initialRotRival = world.getInitialRot();
-        System.out.println(menu.getIdCircuit());
+        //System.out.println(menu.getIdCircuit());
         rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
         rootNode.attachChild(rival.getSpatial());
          //Creem un nou node de la camara per a enfocar al rival

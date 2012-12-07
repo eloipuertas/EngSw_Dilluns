@@ -309,15 +309,11 @@
                             <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
                         </effect>
                         <interact onClick="setCarColor(-)" />
-<<<<<<< HEAD
                     </image>
-=======
-                    </control>
                 </panel>
               
                 <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
                     <text text="${CALL.getCarColorNameSPA()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
->>>>>>> origin/Grup-D
                 </panel> 
              
                 <panel id="panel_texto" height="50%" align="center" valign="center" childLayout="center">      

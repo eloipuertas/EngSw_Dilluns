@@ -8,19 +8,19 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
 import model.ComandosCoche;
+import model.Audio;
 import model.Rival;
 import model.VehicleProtagonista;
 import model.WorldCreator;
 import vista.Display;
 
 
-public class Main extends SimpleApplication{
+public class Main extends SimpleApplication implements ActionListener {
 
     private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
@@ -36,21 +36,19 @@ public class Main extends SimpleApplication{
     private Vector3f initialPos;
     private Quaternion initialRot;
     private ComandosCoche comandos;
-
+    
+    private Audio menu_music;
+    private Audio starting_car_sound;
+    private Audio rain_sound;
+    private Audio must_destroy;
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
-    int estado=1;
-    public Vector3f direccioCar;
-    public Vector3f direccioRival;
-    public Vector2f r = new Vector2f(1.0f,0.1f);
-    float angle; 
+    
     
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
     }
-<<<<<<< HEAD
-=======
     
     private void setupKeys() {
         
@@ -59,7 +57,6 @@ public class Main extends SimpleApplication{
         inputManager.addListener(this, "num1");
         inputManager.addListener(this, "ResetRival");
     }
->>>>>>> origin/Grup-D
 
     @Override
     public void simpleInitApp() {
@@ -76,8 +73,8 @@ public class Main extends SimpleApplication{
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
-
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);
+        initAudio();
 
     }
     
@@ -115,10 +112,7 @@ public class Main extends SimpleApplication{
             camNodeR.getControl(CameraControl.class).setEnabled(false);
             camNode.getControl(CameraControl.class).setEnabled(true);
         }
-        
-<<<<<<< HEAD
-=======
-        
+
     }     
     
     public void initAudio() {
@@ -131,7 +125,15 @@ public class Main extends SimpleApplication{
       
       must_destroy = new Audio(rootNode, assetManager, "must_destroy.ogg", true);
       must_destroy.setVolume(0.4f);
->>>>>>> origin/Grup-D
+    }
+    
+    public void audioGameStarted() {
+        menu_music.stop();
+        starting_car_sound.play();
+        if  (menu.getWeatherName().equals("Lluvioso")) {
+            rain_sound.play();
+        }
+        must_destroy.play();
     }
     
 
@@ -148,20 +150,16 @@ public class Main extends SimpleApplication{
     public void simpleUpdate(float tpf) {
         
         flyCam.setEnabled(false);
-        
         if(menu.isMenuFinished() && !initScene){            
             addWorld();            
             addProtagonista();
             addRival();
-
+            setupKeys();
+            
             addDisplay();
+            audioGameStarted();
             initScene = true;
             gamePaused=false;
-/*
-            addDisplay();
-            gameStarted = true;
-            setupKeys();
-*/
         }
         
         if(!gamePaused){
@@ -176,11 +174,7 @@ public class Main extends SimpleApplication{
                 camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
                 camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             }
-<<<<<<< HEAD
             world.updateMusic();
-=======
-
->>>>>>> origin/Grup-D
             display.updateDisplay(car.getSpeed(),1);      
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
             display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
@@ -213,7 +207,6 @@ public class Main extends SimpleApplication{
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
-        
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
         //Guardamos la posicion inicial y la rotacion del coche
@@ -280,6 +273,5 @@ public class Main extends SimpleApplication{
         camNodeR.lookAt(rival.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
         rootNode.attachChild(camNodeR);
-
     }
 }

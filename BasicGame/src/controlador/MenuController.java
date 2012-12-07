@@ -6,12 +6,9 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.input.InputManager;
-<<<<<<< HEAD
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-=======
->>>>>>> origin/Grup-D
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
@@ -75,24 +72,18 @@ public class MenuController implements ActionListener {
     
     public int getNumEnemies(){
         return controller.getNumEnemies();
-    }   
-<<<<<<< HEAD
-    
+    }    
     public String getWeatherName(){
         return controller.getWeatherName();
     }
     
     public int getIdCircuit(){
         return controller.getIdCircuit();
-    }
-=======
->>>>>>> origin/Grup-D
-    
+    }  
     public void gotoScreen(String screen){
         controller.gotoScreen(screen);
     }
-    
-<<<<<<< HEAD
+
     public boolean readyToUnPause(){
       return controller.readyToUnPause();
     }
@@ -111,12 +102,4 @@ public class MenuController implements ActionListener {
             }
         }
     }
-    
-    
-=======
-    public int getIdCircuit(){
-        return controller.getIdCircuit();
-    }    
->>>>>>> origin/Grup-D
-    
 }

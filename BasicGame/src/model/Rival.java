@@ -83,7 +83,7 @@ public class Rival {
         puntInici = new Vector3f();
         puntInici.setZ(punt.getZ()+5f);
         puntInici.setY(-4.8f);
-        puntInici.setX(punt.getX()-5f);
+        puntInici.setX(punt.getX());
         nivellIA=nivell;
         buildCar();
         situar_graella(puntInici,rot);      /* inclueix el build car i situarlo correctament*/

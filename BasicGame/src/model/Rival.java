@@ -80,13 +80,13 @@ public class Rival {
         physicsSpace = phy;
         idEscenari = idCircuit;
         rotInici=rot;
-        Vector3f x = punt;
-        x.setZ(x.getZ()+5f);
-        x.setY(-4.8f);
-        puntInici= x;
+        puntInici = new Vector3f();
+        puntInici.setZ(punt.getZ()+5f);
+        puntInici.setY(-4.8f);
+        puntInici.setX(punt.getX()-5f);
         nivellIA=nivell;
         buildCar();
-        situar_graella(x,rot);      /* inclueix el build car i situarlo correctament*/
+        situar_graella(puntInici,rot);      /* inclueix el build car i situarlo correctament*/
         //Carreguem l'arxiu que toca segons el nivell de dificultat aceptat
         
         if (nivellIA==1){IAdata = "IAWaitPoints/"+String.valueOf(idEscenari)+"/IAdata1.txt";}

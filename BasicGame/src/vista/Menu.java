@@ -1,3 +1,4 @@
+
 package vista;
 
 import com.jme3.app.Application;
@@ -16,7 +17,6 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.util.ArrayList;
-import model.Audio;
 
 public class Menu extends AbstractAppState implements ScreenController {
     
@@ -39,16 +39,15 @@ public class Menu extends AbstractAppState implements ScreenController {
   private boolean effects;
   private String mode;  
   private AppSettings settings;
-  private ArrayList<Menu.Car> cars = new ArrayList<Menu.Car>();  
+  private ArrayList<Car> cars = new ArrayList<Car>();  
   private int actualCar;
-  private ArrayList<Menu.CarColor> colors = new ArrayList<Menu.CarColor>();
+  private ArrayList<CarColor> colors = new ArrayList<CarColor>();
   private int actualColor;
-  private ArrayList<Menu.Circuit> circuits = new ArrayList<Menu.Circuit>();
+  private ArrayList<Circuit> circuits = new ArrayList<Circuit>();
   private int actualCircuit;
   private int actualWeather;
-  private ArrayList<Menu.Weather> weathers = new ArrayList<Menu.Weather>();
+  private ArrayList<Weather> weathers = new ArrayList<Weather>();
   private String imagesPath;
-  private Audio menu_music;
   
   private class Car{
       private String carName;
@@ -123,46 +122,39 @@ public class Menu extends AbstractAppState implements ScreenController {
       this.main.setDisplayFps(this.debugInfo); // to hide the FPS
       this.main.setDisplayStatView(this.debugInfo); // to hide the statistics 
   
-      cars.add(new Menu.Car(1,"coche1","coche1",".png"));
-      cars.add(new Menu.Car(2,"coche2","coche2",".jpeg"));
+      cars.add(new Car(1,"coche1","coche1",".png"));
+      cars.add(new Car(2,"coche2","coche2",".jpeg"));
      
-      colors.add(new Menu.CarColor("Rojo","Red"));
-      colors.add(new Menu.CarColor("Blanco","White"));
-      colors.add(new Menu.CarColor("Rosa","Pink"));
-      colors.add(new Menu.CarColor("Naranja","Orange"));
-      colors.add(new Menu.CarColor("Marron","Brown"));
-      colors.add(new Menu.CarColor("Amarillo","Yellow"));
-      colors.add(new Menu.CarColor("Gris","Gray"));
-      colors.add(new Menu.CarColor("Verde","Green"));
-      colors.add(new Menu.CarColor("Turquesa","Cyan"));
-      colors.add(new Menu.CarColor("Azul","Blue"));
-      colors.add(new Menu.CarColor("Lila","Violet"));         
+      colors.add(new CarColor("Rojo","Red"));
+      colors.add(new CarColor("Blanco","White"));
+      colors.add(new CarColor("Rosa","Pink"));
+      colors.add(new CarColor("Naranja","Orange"));
+      colors.add(new CarColor("Marron","Brown"));
+      colors.add(new CarColor("Amarillo","Yellow"));
+      colors.add(new CarColor("Gris","Gray"));
+      colors.add(new CarColor("Verde","Green"));
+      colors.add(new CarColor("Turquesa","Cyan"));
+      colors.add(new CarColor("Azul","Blue"));
+      colors.add(new CarColor("Lila","Violet"));         
       
-      weathers.add(new Menu.Weather("Soleado","sol"));
-      weathers.add(new Menu.Weather("Lluvioso","lluvia"));
-      weathers.add(new Menu.Weather("Nevado","nieve"));
-      weathers.add(new Menu.Weather("Nebuloso","niebla"));
+      weathers.add(new Weather("Soleado","sol"));
+      weathers.add(new Weather("Lluvioso","lluvia"));
+      weathers.add(new Weather("Nevado","nieve"));
+      weathers.add(new Weather("Nebuloso","niebla"));
               
-      circuits.add(new Menu.Circuit("Montmelo","circuito1",0,".jpg"));
-      circuits.add(new Menu.Circuit("Jerez","circuito2",1,".jpg"));
+      circuits.add(new Circuit("Montmelo","circuito1",0,".jpg"));
+      circuits.add(new Circuit("Jerez","circuito2",1,".jpg"));
       
       actualCar = initCar;
       actualColor = initCarColor;
       actualWeather = initWeather;
       actualCircuit = initCircuit;
-      
-      //initAudio(rootNode, manager);
-  }
-  
-  private void initAudio(Node rootNode, AssetManager manager) {
-      menu_music = new Audio(rootNode, manager, "song_menu.wav", true);
-      menu_music.play();
   }
 
-  public void startGame() {
-      isMenuFinished = true;
-      gotoScreen("null");
-      //nifty.exit();      
+  public void startGame() {      
+    isMenuFinished = true;
+    gotoScreen("null");
+    //nifty.exit();      
   }
   
   public void gotoScreenCarSelect(String mode){
@@ -222,8 +214,8 @@ public class Menu extends AbstractAppState implements ScreenController {
             laps.getRenderer(TextRenderer.class).setText(String.valueOf(numLaps));
           }
       }      
-  }
-  
+  }  
+    
   public void setDebugInfo(){
     this.debugInfo = !this.debugInfo;        
     // find the element with it's id

@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package model;
 
 import com.jme3.asset.AssetManager;
@@ -36,9 +40,9 @@ import controlador.MenuController;
 import java.util.ArrayList;
 
 /**
-*
-* @author normenhansen
-*/
+ *
+ * @author normenhansen
+ */
 public class WorldCreator {
     private static ParticleEmitter rain;
     private static ParticleEmitter snow;
@@ -68,11 +72,11 @@ public class WorldCreator {
     private LlistaReproduccio game_music;
 
     /**
-* creates a simple physics test world with a floor, an obstacle and some test boxes
-* @param rootNode
-* @param assetManager
-* @param space
-*/
+     * creates a simple physics test world with a floor, an obstacle and some test boxes
+     * @param rootNode
+     * @param assetManager
+     * @param space
+     */
     
     public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort, MenuController menu) {
         this.rootNode = rootNode;
@@ -117,23 +121,23 @@ public class WorldCreator {
     private void createWorld() {
         //Afegim la llum
         /*boolean sky = menu.getModoNoche();
-if(sky){
-//Mode nit
-AmbientLight ambient = new AmbientLight();
-ambient.setColor(ColorRGBA.DarkGray);
-rootNode.addLight(ambient);
-}else{
-//Mode dia
-DirectionalLight sun = new DirectionalLight();
-Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
-sun.setDirection(lightDir);
-sun.setColor(ColorRGBA.White.clone().multLocal(2));
-rootNode.addLight(sun);
+        if(sky){
+            //Mode nit
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.DarkGray);
+            rootNode.addLight(ambient);
+        }else{
+            //Mode dia
+            DirectionalLight sun = new DirectionalLight();
+            Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
+            sun.setDirection(lightDir);
+            sun.setColor(ColorRGBA.White.clone().multLocal(2));
+            rootNode.addLight(sun);
 
-AmbientLight ambient = new AmbientLight();
-ambient.setColor(ColorRGBA.LightGray);
-rootNode.addLight(ambient);
-}*/
+            AmbientLight ambient = new AmbientLight();
+            ambient.setColor(ColorRGBA.LightGray);
+            rootNode.addLight(ambient);
+        }*/
         
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
@@ -152,19 +156,19 @@ rootNode.addLight(ambient);
         //Afegim ombres
         BasicShadowRenderer bsr = new BasicShadowRenderer(assetManager, 256);
         bsr.setDirection(new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f)); // light direction
-        viewPort.addProcessor(bsr);
+        viewPort.addProcessor(bsr); 
         
         //Afegim el cel
         /*
-Node sky = new Node();
-if(sky){
-//Mode nit
-sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
-}else{
-//Mode dia
-sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
-}
-rootNode.attachChild(sky);*/
+        Node sky = new Node();
+        if(sky){
+            //Mode nit
+            sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
+        }else{
+            //Mode dia
+            sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
+        }
+        rootNode.attachChild(sky);*/
         Node sky = new Node();
         sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         rootNode.attachChild(sky);
@@ -191,7 +195,7 @@ rootNode.attachChild(sky);*/
         sceneModel.addControl(landscape);
         sceneModel.setShadowMode(ShadowMode.Receive);
 
-        // We attach the scene and its limits to the rootNode and the physics space,
+        // We attach the scene  and its limits to the rootNode and the physics space,
         // to make them appear in the game world.
         rootNode.attachChild(sceneModel);
         space.getPhysicsSpace().add(sceneModel);
@@ -307,11 +311,11 @@ rootNode.attachChild(sky);*/
         viewPort.addProcessor(fpp);
         
         /*FilterPostProcessor fpp=new FilterPostProcessor(assetManager);
-BloomFilter bloom=new BloomFilter();
-//bloom.setBlurScale(0.5f);
-bloom.setBloomIntensity(1.25f);
-fpp.addFilter(bloom);
-viewPort.addProcessor(fpp);*/
+        BloomFilter bloom=new BloomFilter();
+        //bloom.setBlurScale(0.5f);
+        bloom.setBloomIntensity(1.25f);
+        fpp.addFilter(bloom);
+        viewPort.addProcessor(fpp);*/
     }
     
     private void crearMur(int x, int y, int z) {
@@ -406,34 +410,34 @@ viewPort.addProcessor(fpp);*/
         m = new Mapa(new Vector3f(11, -6, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World2.j3o","Models/World3/InvisibleWall.j3o",luces,cajas,muros,medidas);
         listaMapas.añadirMapa(m);
         /*
-luces.clear();
-cajas.clear();
-muros.clear();
-cajas.add(new Vector3f(2,-3,-10));
-cajas.add(new Vector3f(2,-3,-50));
-cajas.add(new Vector3f(-25,-3,-50));
-cajas.add(new Vector3f(-50,-3,-50));
-cajas.add(new Vector3f(-25,-3,-25));
-cajas.add(new Vector3f(-50,-3,0));
-cajas.add(new Vector3f(-50,-3,50));
-cajas.add(new Vector3f(-50,-3,20));
-cajas.add(new Vector3f(0,-3,50));
-muros.add(new Vector3f(-2,-5,10));
-muros.add(new Vector3f(-55,-5,-15));
-m = new Mapa(new Vector3f(0,0,0),new Quaternion().fromAngles(0, (float)Math.toRadians(0), 0),"Models/AngularRoad/AngularRoad.j3o","Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene",luces,cajas,muros);
-listaMapas.añadirMapa(m);
-*/
+        luces.clear();
+        cajas.clear();
+        muros.clear();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        m = new Mapa(new Vector3f(0,0,0),new Quaternion().fromAngles(0, (float)Math.toRadians(0), 0),"Models/AngularRoad/AngularRoad.j3o","Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene",luces,cajas,muros);
+        listaMapas.añadirMapa(m);
+         */
     }
     
     private void afegirLlum(float x, float y, float z){
         SpotLight spot = new SpotLight();
-        spot.setSpotRange(100f); // distance
+        spot.setSpotRange(100f);                           // distance
         spot.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
         spot.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
-        spot.setColor(ColorRGBA.White.mult(1.3f)); // light color
-        spot.setPosition(new Vector3f(x,y,z)); // shine from camera loc
-        spot.setDirection(new Vector3f(0,-1,0)); // shine forward from camera loc
-        rootNode.addLight(spot);
+        spot.setColor(ColorRGBA.White.mult(1.3f));         // light color
+        spot.setPosition(new Vector3f(x,y,z));               // shine from camera loc
+        spot.setDirection(new Vector3f(0,-1,0));             // shine forward from camera loc
+        rootNode.addLight(spot);   
     }
 
     
@@ -465,9 +469,9 @@ listaMapas.añadirMapa(m);
 
     private void initMaterial() {
         
-        mat_road = new Material(
+        mat_road = new Material( 
             assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat_road.setTexture("ColorMap",
+        mat_road.setTexture("ColorMap", 
             assetManager.loadTexture("Textures/RoadTexture.jpg"));
         
         mat_bounds = new Material(
@@ -483,9 +487,9 @@ listaMapas.añadirMapa(m);
         Texture tex2 = assetManager.loadTexture(key2);
         mat_brick.setTexture("ColorMap", tex2);
         
-        mat_box = new Material(
+        mat_box = new Material( 
             assetManager, "Common/MatDefs/Light/Lighting.j3md");
-        mat_box.setTexture("DiffuseMap",
+        mat_box.setTexture("DiffuseMap", 
             assetManager.loadTexture("Textures/BoxTexture.jpg"));
         
         mat_snow = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");

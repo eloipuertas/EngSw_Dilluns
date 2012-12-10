@@ -72,18 +72,20 @@ public class MenuController implements ActionListener {
     
     public int getNumEnemies(){
         return controller.getNumEnemies();
-    }    
+    }   
+    
     public String getWeatherName(){
         return controller.getWeatherName();
     }
     
     public int getIdCircuit(){
         return controller.getIdCircuit();
-    }  
+    }
+    
     public void gotoScreen(String screen){
         controller.gotoScreen(screen);
     }
-
+    
     public boolean readyToUnPause(){
       return controller.readyToUnPause();
     }
@@ -102,4 +104,7 @@ public class MenuController implements ActionListener {
             }
         }
     }
+    
+    
+    
 }

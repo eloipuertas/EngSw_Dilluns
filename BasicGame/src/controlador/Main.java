@@ -8,26 +8,26 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
-import model.ComandosCoche;
 import model.Audio;
+import model.ComandosCoche;
 import model.Rival;
 import model.VehicleProtagonista;
 import model.WorldCreator;
 import vista.Display;
 
 
-public class Main extends SimpleApplication implements ActionListener {
+public class Main extends SimpleApplication{
 
     private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
     private Rival rival;
     private WorldCreator world;
-    private CameraNode camNode;  
-    private CameraNode camNodeR; //Node de la càmara per al rival
+    private CameraNode camNode;    
     private MenuController menu;
     private boolean initScene = false;
     private Display display;
@@ -37,25 +37,24 @@ public class Main extends SimpleApplication implements ActionListener {
     private Quaternion initialRot;
     private ComandosCoche comandos;
     
+
     private Audio menu_music;
     private Audio starting_car_sound;
     private Audio rain_sound;
-    private Audio must_destroy;
+    private Audio must_destroy;        
+    
+
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
-    
+    int estado=1;
+    public Vector3f direccioCar;
+    public Vector3f direccioRival;
+    public Vector2f r = new Vector2f(1.0f,0.1f);
+    float angle; 
     
     public static void main(String[] args) {
         Main app = new Main();
         app.start();
-    }
-    
-    private void setupKeys() {
-        
-        inputManager.addMapping("num1", new KeyTrigger(KeyInput.KEY_1));
-        inputManager.addMapping("ResetRival", new KeyTrigger(KeyInput.KEY_R));
-        inputManager.addListener(this, "num1");
-        inputManager.addListener(this, "ResetRival");
     }
 
     @Override
@@ -73,8 +72,10 @@ public class Main extends SimpleApplication implements ActionListener {
          */             
         
         display = new Display(assetManager,settings,guiNode,this.timer);        
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);
+
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
         initAudio();
+
 
     }
     
@@ -98,23 +99,9 @@ public class Main extends SimpleApplication implements ActionListener {
     
     public boolean isGamePaused(){
         return this.gamePaused;
-    }
-
-
-    public void onAction(String binding, boolean value, float tpf) {
-        if (binding.equals("ResetRival")) {
-            rival.reset_rival();
-            
-        }else if (binding.equals("num1") && value) {//Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.
-            camNode.getControl(CameraControl.class).setEnabled(false);
-            camNodeR.getControl(CameraControl.class).setEnabled(true);
-        }else{
-            camNodeR.getControl(CameraControl.class).setEnabled(false);
-            camNode.getControl(CameraControl.class).setEnabled(true);
-        }
-
-    }     
+    }  
     
+
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
       menu_music.play();
@@ -128,12 +115,30 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     public void audioGameStarted() {
-        menu_music.stop();
-        starting_car_sound.play();
-        if  (menu.getWeatherName().equals("Lluvioso")) {
-            rain_sound.play();
+      menu_music.stop();
+      starting_car_sound.play();
+      if (menu.getWeatherName().equals("Lluvioso")) {
+          rain_sound.play();
+      }
+      must_destroy.play();
+    }
+
+
+    public void onAction(String binding, boolean value, float tpf) {
+        if (binding.equals("Lefts")) {
+            car.turnLeft(value);
+        } else if (binding.equals("Rights")) {
+            car.turnRight(value);
+        } else if (binding.equals("Ups")) {
+            car.forward(value);
+        } else if (binding.equals("Downs")) {
+            car.back(value);
+        } else if (binding.equals("Reset")) {
+            car.reset(value, initialPos, initialRot);
+        }else if (binding.equals("Space")) {
+            car.handBrake(value);
         }
-        must_destroy.play();
+        
     }
     
 
@@ -150,16 +155,21 @@ public class Main extends SimpleApplication implements ActionListener {
     public void simpleUpdate(float tpf) {
         
         flyCam.setEnabled(false);
+        
         if(menu.isMenuFinished() && !initScene){            
             addWorld();            
             addProtagonista();
             addRival();
-            setupKeys();
-            
-            addDisplay();
+
+            addDisplay();            
             audioGameStarted();
             initScene = true;
             gamePaused=false;
+/*
+            addDisplay();
+            gameStarted = true;
+            setupKeys();
+*/
         }
         
         if(!gamePaused){
@@ -168,11 +178,97 @@ public class Main extends SimpleApplication implements ActionListener {
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
-            if(comprovaMoviment()==true || rival.comprovaPartidaComensada()) {      /*depen de la tecla up del prota*/
-                rival.setPartidaComensada(true);
-                rival.moureRival();
-                camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
-                camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+            switch (estado) {
+                case 1:
+                    if(comprovaMoviment()==true) {
+                        estado = 2;
+                    }
+                    break;
+                case 2:
+
+                    if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
+                        estado = 3;
+                    }
+                    if (rival.velocitat == 0) {
+                        rival.moureEndavant();
+                    }
+                    break;
+
+                case 3:
+                    r.setX(rival.getVehicle().getLinearVelocity().getX());
+                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                    r = r.normalize();
+                    if (r.getX()<-0.9f && r.getY()<-0.2f) {
+                        rival.getVehicle().steer(0);
+                        estado = 4;
+
+                    } else {
+                        rival.girarCurva1();
+                    }
+                    break;
+                case 4:
+                    if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
+                         estado = 5;
+                    }                
+                    rival.moureEndavant();
+                    break;
+                case 5:
+                    r.setX(rival.getVehicle().getLinearVelocity().getX());
+                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                    r = r.normalize();
+
+
+                    if (r.getX()>+.2f && r.getY()<-.9f) {
+                        System.out.println(r);
+                        System.out.println("recta 3");
+                        estado = 6;
+                        rival.getVehicle().steer(0);
+                    } else {
+                        rival.girarCurva1();
+                    }
+                    break;
+                case 6:
+                    if (rival.getVehicle().getPhysicsLocation().getZ()<=-54.f) {
+                        estado = 7;
+                        System.out.println("curva 3");
+                    }
+                    rival.moureEndavant();
+                    break;
+                case 7:
+                    r.setX(rival.getVehicle().getLinearVelocity().getX());
+                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                    r = r.normalize();
+                    /*System.out.println("eeee");
+                    System.out.println(r);*/
+                    if (r.getX()>+.9f && r.getY()>+0.f) {
+                        estado = 8;
+                        rival.getVehicle().steer(0);
+                    } else {
+                        rival.girarCurva1();
+                    }
+                    break;
+                case 8:
+                    if (rival.getVehicle().getPhysicsLocation().getX()>=0.f) {
+                        estado = 9;
+                        System.out.println("curva 4");
+                    }
+                    rival.moureEndavant();
+                    break;
+                case 9:
+                    r.setX(rival.getVehicle().getLinearVelocity().getX());
+                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
+                    r = r.normalize();
+                    /*System.out.println("eeee");
+                    System.out.println(r);*/
+                    if (r.getX()<-.2f && r.getY()>+.9f) {
+
+                        estado = 2;
+                        rival.getVehicle().steer(0);
+                    } else {
+                        rival.girarCurva1();
+                    }
+                    break;    
+                default:
             }
             world.updateMusic();
             display.updateDisplay(car.getSpeed(),1);      
@@ -207,6 +303,7 @@ public class Main extends SimpleApplication implements ActionListener {
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
+        
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
         //Guardamos la posicion inicial y la rotacion del coche
@@ -228,7 +325,7 @@ public class Main extends SimpleApplication implements ActionListener {
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
         rootNode.attachChild(camNode);
-       }
+    }
     
     /*
      * Metodo para poner controles al protagonista
@@ -260,18 +357,11 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     private void addRival(){
-         //Aqui creem la classe rival i la afegim al rootNode
-        Vector3f initialPosRival = world.getInitialPos();
-        Quaternion initialRotRival = world.getInitialRot();
-        //System.out.println(menu.getIdCircuit());
-        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit() ,initialPosRival,initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
+        //Aqui creem la classe rival i la afegim al rootNode
+        rival = new Rival(getAssetManager(), getPhysicsSpace());
+        rival.buildCar();
+        rival.getVehicle().setPhysicsLocation(new Vector3f(5.f,-4.f,0.f));
+        //Añadimos Rival
         rootNode.attachChild(rival.getSpatial());
-         //Creem un nou node de la camara per a enfocar al rival
-        camNodeR = new CameraNode("camNodeR", cam);
-        camNodeR.getControl(CameraControl.class).setEnabled(false);
-        camNodeR.setLocalTranslation(new Vector3f(0, 4, -15));
-        camNodeR.lookAt(rival.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
-        
-        rootNode.attachChild(camNodeR);
     }
 }

@@ -310,10 +310,6 @@
                         </effect>
                         <interact onClick="setCarColor(-)" />
                     </image>
-                </panel>
-              
-                <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">       
-                    <text text="${CALL.getCarColorNameSPA()}" id="colorText" name="colorText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
                 </panel> 
              
                 <panel id="panel_texto" height="50%" align="center" valign="center" childLayout="center">      

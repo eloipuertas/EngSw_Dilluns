@@ -59,7 +59,6 @@ public class VehicleProtagonista{
     private Audio brake_sound;
     private Audio idling_car_sound;
     
-    
     //Objeto que encapsula la configuracion del coche
     private CarSettings carSettings;
     
@@ -349,12 +348,12 @@ public class VehicleProtagonista{
     }
         
         
-    private void initAudio() {
-         accelerate_sound = new Audio(vehicleNode, assetManager, "accelerate_sound.wav");
-         decelerate_sound = new Audio(vehicleNode, assetManager, "decelerate_sound.wav");
-         max_velocity_sound = new Audio(vehicleNode, assetManager, "max_velocity_sound.wav", true);
-         brake_sound = new Audio(vehicleNode, assetManager, "brake_sound.wav");
-         idling_car_sound = new Audio(vehicleNode, assetManager, "idling_car_sound.wav", true);
+    public void initAudio() {
+        accelerate_sound = new Audio(vehicleNode, assetManager, "accelerate_sound.wav");
+        decelerate_sound = new Audio(vehicleNode, assetManager, "decelerate_sound.wav");
+        max_velocity_sound = new Audio(vehicleNode, assetManager, "max_velocity_sound.wav", true);
+        brake_sound = new Audio(vehicleNode, assetManager, "brake_sound.wav");
+        idling_car_sound = new Audio(vehicleNode, assetManager, "idling_car_sound.wav", true);
     }
     
     
@@ -406,7 +405,7 @@ public class VehicleProtagonista{
     }
     
     
-    public void soundForward(boolean value) {
+    private void soundForward(boolean value) {
         float speed = getSpeed();
         if (value && speed > 190) {
             decelerate_sound.stop();
@@ -417,14 +416,17 @@ public class VehicleProtagonista{
             decelerate_sound.stop();
             if (speed < 1) {
                 accelerate_sound.play(0.0f);
-            } else {
+            }
+            else {
                 accelerate_sound.play(speed/20.0f);
             }
-        } else if (!value) {
+        }
+        else if (!value) {
             accelerate_sound.stop();
             if (speed > 190) {
                 decelerate_sound.play(0.0f);
-            } else {
+            }
+            else {
                 decelerate_sound.play(10.5f - speed/20.0f);
             }
         }
@@ -494,7 +496,7 @@ public class VehicleProtagonista{
                 //vehicle.brake(vehicle.getWheel(0)., brakeForce*100);
                 vehicle.brake(0, carSettings.getBrakeForce()*5);
                 vehicle.brake(1, carSettings.getBrakeForce()*5);
-            } else {
+            } else {;
                 handBrakeMode = false; 
                 //brake(0f); 
                 vehicle.brake(0, 0);
@@ -514,7 +516,7 @@ public class VehicleProtagonista{
                 brake(0f);
                 back(true);
             }
-        }
+        } 
     }
     
     public float getSpeed(){

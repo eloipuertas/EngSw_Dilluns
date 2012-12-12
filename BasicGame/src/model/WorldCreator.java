@@ -142,12 +142,12 @@ public class WorldCreator {
         DirectionalLight sun = new DirectionalLight();
         Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
         sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone().multLocal(2));
+        sun.setColor(ColorRGBA.LightGray.clone().multLocal(2));
         rootNode.addLight(sun);
 
-        AmbientLight ambient = new AmbientLight();
+        /*AmbientLight ambient = new AmbientLight();
         ambient.setColor(ColorRGBA.LightGray);
-        rootNode.addLight(ambient);
+        rootNode.addLight(ambient);*/
         
         
         brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
@@ -174,17 +174,16 @@ public class WorldCreator {
         rootNode.attachChild(sky);
         
         //Mirem quin circuit ha estat seleccionat en el menu
-        mapaActual = listaMapas.getMapa(menu.getIdCircuit());
+        //mapaActual = listaMapas.getMapa(menu.getIdCircuit());
+        
+        //CARREGA EL MAPA DESITJAT (0,1,2)
+        mapaActual = listaMapas.getMapa(0);
         
         //Road creation
         // We load the scene
         Spatial sceneModel = assetManager.loadModel(mapaActual.getSceneModel());
         sceneModel.setLocalTranslation(0, -5, 0);
-        if(menu.getIdCircuit() == 0) {
-            sceneModel.scale(20,20,20);
-        } else {
-            sceneModel.scale(3,3,3);
-        }
+        sceneModel.scale(mapaActual.getEscala());
         //sceneModel.setMaterial(mat_road);
         
         // We set up collision detection for the scene by creating a
@@ -193,7 +192,7 @@ public class WorldCreator {
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
         RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
-        sceneModel.setShadowMode(ShadowMode.Receive);
+        sceneModel.setShadowMode(ShadowMode.CastAndReceive);
 
         // We attach the scene  and its limits to the rootNode and the physics space,
         // to make them appear in the game world.
@@ -201,10 +200,10 @@ public class WorldCreator {
         space.getPhysicsSpace().add(sceneModel);
         
         //We load the limits of the scene
-        if(mapaActual.getparets() != null) {
-            Spatial boundsModel = assetManager.loadModel(mapaActual.getparets());
+        if(mapaActual.getParets() != null) {
+            Spatial boundsModel = assetManager.loadModel(mapaActual.getParets());
             boundsModel.setLocalTranslation(0, -5, 0);
-            boundsModel.scale(3,3,3);
+            boundsModel.scale(mapaActual.getEscala());
             boundsModel.setMaterial(mat_bounds);
 
             // We set up collision detection for the walls.
@@ -218,7 +217,7 @@ public class WorldCreator {
             space.getPhysicsSpace().add(boundsModel);
         }
         //We load the limits of the scene
-        if(mapaActual.getCarretera() != null) {
+        /*if(mapaActual.getCarretera() != null) {
             roadModel = assetManager.loadModel(mapaActual.getCarretera());
             roadModel.setLocalTranslation(0, -5, 0);
             roadModel.scale(20,0.25f,20);
@@ -232,7 +231,7 @@ public class WorldCreator {
 
             rootNode.attachChild(roadModel);
             space.getPhysicsSpace().add(roadModel);
-        }
+        }*/
         
         //streetlamps creation
         mostrarLlums();
@@ -384,7 +383,7 @@ public class WorldCreator {
         medidas.add(new Vector3f(36, -5, 103));
         medidas.add(new Vector3f(-62, -5, 103));
         medidas.add(new Vector3f(-62, -5, -116));
-        Mapa m = new Mapa(new Vector3f(-10,-2,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",null,"Models/StraightRoad/Carretera/StraightRoad.j3o",luces,cajas,muros,medidas);
+        Mapa m = new Mapa(new Vector3f(-10,-6,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World1/World1.j3o",null,luces,cajas,muros,medidas,2f);
         listaMapas.añadirMapa(m);
         luces = new ArrayList<Vector3f>();
         cajas = new ArrayList<Vector3f>();
@@ -407,8 +406,30 @@ public class WorldCreator {
         medidas.add(new Vector3f(-107, -7, 183));
         medidas.add(new Vector3f(-107, -5, -176));
         medidas.add(new Vector3f(138, -5, -176));
-        m = new Mapa(new Vector3f(11, -6, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World2.j3o","Models/World3/InvisibleWall.j3o",luces,cajas,muros,medidas);
+        m = new Mapa(new Vector3f(11, -7, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World2/World2.j3o","Models/World2/InvisibleWall/InvisibleWall.j3o",luces,cajas,muros,medidas,3f);
         listaMapas.añadirMapa(m);
+        luces = new ArrayList<Vector3f>();
+        cajas = new ArrayList<Vector3f>();
+        muros = new ArrayList<Vector3f>();
+        medidas = new ArrayList<Vector3f>();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        medidas.add(new Vector3f(36, -5, -116));
+        medidas.add(new Vector3f(36, -5, 103));
+        medidas.add(new Vector3f(-62, -5, 103));
+        medidas.add(new Vector3f(-62, -5, -116));
+        m = new Mapa(new Vector3f(-10,-4,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World3.j3o","Models/World3/InvisibleWall/InvisibleWall3.j3o",luces,cajas,muros,medidas,2f);
+        listaMapas.añadirMapa(m);
+
         /*
         luces.clear();
         cajas.clear();
@@ -523,12 +544,10 @@ public class WorldCreator {
     }
 
     public Vector3f getInitialPos(){
-        //return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
         return mapaActual.getOrigen();
     }
     
     public Quaternion getInitialRot(){
-        //return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
         return mapaActual.getRotacionInicial();
     }
 

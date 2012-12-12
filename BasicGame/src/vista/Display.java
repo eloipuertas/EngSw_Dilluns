@@ -15,15 +15,18 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import com.jme3.system.Timer;
 import com.jme3.ui.Picture;
+import controlador.MenuController;
 
 public class Display{
     
     private Node displayNode;
     private Node minimapNode;
     private BitmapText pos;
+    private BitmapText lap;
     private BitmapText chronograph;
     private BitmapText posText;
-    private BitmapFont posFont;
+    private BitmapText lapText;
+    private BitmapFont numbersFont;
     private BitmapFont textFont;
     private BitmapFont chronographFont;
     private AssetManager assetManager;
@@ -34,8 +37,8 @@ public class Display{
     private float totalSecondsPause;    
     private float offsetChronograph;
     private Geometry marcaVermella;  
-    
-    public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer){
+    private MenuController menu;
+    public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer, MenuController menu){
         
         this.assetManager = assetManager;
         this.settings = settings;
@@ -45,9 +48,10 @@ public class Display{
         this.timer = timer;
         this.totalSecondsPause = 0f;      
         this.offsetChronograph = 0f;        
+        this.menu = menu;
     }       
     
-    public void addDisplay(int xDisplay,int yDisplay,float scaleValueDisplay,int xPosText, int yPosText, float scaleValuePosText,int xPos, int yPos,float scaleValuePos, int xChronograph, int yChronograph, float scaleValueChronograph){
+    public void addDisplay(int xDisplay,int yDisplay,float scaleValueDisplay,int xPosText, int yPosText, float scaleValuePosText,int xPos, int yPos,float scaleValuePos, int xChronograph, int yChronograph, float scaleValueChronograph,int xLapText, int yLapText, float scaleValueLapText,int xLap, int yLap,float scaleValueLap){
         
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());      
         
@@ -60,9 +64,9 @@ public class Display{
         chronograph.setLocalTranslation(xChronograph-(chronograph.getLineWidth()/2),yChronograph,0);     // position
         guiNode.attachChild(chronograph);
         
-        //añadimos el la posicion
-        posFont = assetManager.loadFont("Interface/Fonts/MotorOil1937M54.fnt");
-        pos = new BitmapText(posFont, false);        
+        //añadimos el numero de la posicion
+        numbersFont = assetManager.loadFont("Interface/Fonts/MotorOil1937M54.fnt");
+        pos = new BitmapText(numbersFont, false);        
         pos.setSize(minDimension/scaleValuePos);      // font size
         pos.setColor(ColorRGBA.Yellow);                            // font color
         pos.setText("1");                                    // the text
@@ -78,6 +82,22 @@ public class Display{
         posText.setLocalTranslation(xPosText,yPosText,0);     // position
         guiNode.attachChild(posText);
         
+        //añadimos el numero de las vueltas        
+        lap = new BitmapText(numbersFont, false);        
+        lap.setSize(minDimension/scaleValuePos);      // font size
+        lap.setColor(ColorRGBA.Orange);                            // font color
+        lap.setText("5");                                    // the text
+        lap.setLocalTranslation(xLap,yLap,0);     // position
+        guiNode.attachChild(lap);
+        
+        //añadimos el texto VUELTA
+        lapText = new BitmapText(textFont, false);       
+        lapText.setSize(minDimension/scaleValuePosText);      // font size
+        lapText.setColor(ColorRGBA.White);                            // font color
+        lapText.setText("VUELTA");                                    // the text
+        lapText.setLocalTranslation(xLapText,yLapText,0);     // position
+        guiNode.attachChild(lapText);
+        
         //Agregar fondo marcador        
         Picture display = new Picture("display");
         display.setImage(assetManager, "Textures/Display/gauge.png", true);        
@@ -91,14 +111,36 @@ public class Display{
         
         //Agregar minimap
         Picture minimap = new Picture("minimap");
-        minimap.setImage(assetManager, "Textures/Display/minimapa.png", true);
-        //Dibujamos el minimapa a razon de altura = 2*anchura
-        minimap.setWidth((settings.getWidth()/(6.75f)));
-        minimap.setHeight((settings.getWidth()/(6.75f))*2); 
-        minimap.setPosition(0,0);
-        minimap.center();
-        //Situamos el minimapa en el extremo izquierdo inferior de la pantalla, sea cual sea la resolucion
-        minimap.move((settings.getWidth()/6.75f)/2,((settings.getWidth()/(6.75f))*2)/2,-1);
+        if(menu.getIdCircuit() == 0){
+            minimap.setImage(assetManager, "Textures/Display/minimapa.png", true);
+            //Dibujamos el minimapa a razon de altura = 2*anchura
+            minimap.setWidth((settings.getWidth()/(6.75f)));
+            minimap.setHeight((settings.getWidth()/(6.75f))*2);
+            minimap.setPosition(0,0);
+            minimap.center();
+            //Situamos el minimapa en el extremo izquierdo inferior de la pantalla, sea cual sea la resolucion
+            //minimap.move((settings.getWidth()/6.75f)/2,((settings.getWidth()/(6.75f))*2)/2,-1);
+            minimap.move(((settings.getWidth()/(6.75f)))/2,((settings.getWidth()/(6.75f))*2)/2,-1);
+            
+        }else if(menu.getIdCircuit() ==1){
+            minimap.setImage(assetManager,"Textures/Display/minimapa2.png", true);
+            //Dibujamos el minimapa a razon de altura = 2*anchura
+            minimap.setWidth((settings.getWidth()/(6.75f)));
+            minimap.setHeight((settings.getWidth()/(6.75f))*1.46f);
+            
+            minimap.setPosition(0,0);
+            minimap.center();
+            minimap.move(((settings.getWidth()/(6.75f)))/2,((settings.getWidth()/(6.75f))*1.46f)/2,-1);
+        }else if(menu.getIdCircuit() ==2){
+            minimap.setImage(assetManager, "Textures/Display/minimapa3.png", true);
+            minimap.setHeight((settings.getHeight()/(3f)));
+            minimap.setWidth((settings.getHeight()/(3f))*1.12f);
+            minimap.setPosition(0,0);
+            minimap.center();
+            //Situamos el minimapa en el extremo izquierdo inferior de la pantalla, sea cual sea la resolucion
+            //minimap.move((settings.getWidth()/6.75f)/2,((settings.getWidth()/(6.75f))*2)/2,-1);
+            minimap.move(((settings.getHeight()/(3f))*1.12f)/2,((settings.getHeight()/(3f)))/2,-1);
+        }
         minimapNode.attachChild(minimap);
         guiNode.attachChild(minimapNode);
         
@@ -244,17 +286,51 @@ public class Display{
         //Heigth = 2*Width
         x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
         z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
-        if(x_map > (settings.getWidth()/(6.75f))){
-            x_map = (settings.getWidth()/(6.75f));
-        }
-        if (posicion.x > 35){
-            x_map = 0;
-        }
-        if(z_map > ((settings.getWidth()/(6.75f))*2)){
-            z_map = ((settings.getWidth()/(6.75f))*2);
-        }
-        if (posicion.z < -108){
-            z_map = 0;
+        if(menu.getIdCircuit() == 0){
+            x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
+            z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+            if(x_map > ((settings.getWidth()/(6.75f)))){
+                x_map = (settings.getWidth()/(6.75f));
+            }
+            if (posicion.x > 36){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getWidth()/(6.75f))*2)){
+                z_map = ((settings.getWidth()/(6.75f))*2);
+            }
+            if (posicion.z < -109){
+                z_map = 0;
+            }
+        }else if(menu.getIdCircuit() == 1){
+            x_map = (Math.abs(posicion.x+107.2f))*(((settings.getWidth()/(6.75f)))/245.3f);
+            z_map = (Math.abs(posicion.z-182.9f))*(((settings.getWidth()/(6.75f))*1.46f)/359.1f);
+            if(x_map > ((settings.getWidth()/(6.75f)))){
+                x_map = (settings.getWidth()/(6.75f));
+            }
+            if (posicion.x < -107.2){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getWidth()/(6.75f))*1.46f)){
+                z_map = ((settings.getWidth()/(6.75f))*1.46f);
+            }
+            if (posicion.z > 182){
+                z_map = 0;
+            }
+        }else if(menu.getIdCircuit() == 2){
+            x_map = (Math.abs(posicion.x-177.7f))*(((settings.getHeight()/(3f))*1.12f)/240.1f);
+            z_map = (Math.abs(posicion.z+112.5f))*(((settings.getHeight()/(3f)))/214.5f);
+            if(x_map > ((settings.getHeight()/(3f))*1.12f)){
+                x_map = (settings.getHeight()/(3f))*1.12f;
+            }
+            if (posicion.x > 177){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getHeight()/(3f)))){
+                z_map = ((settings.getHeight()/(3f)));
+            }
+            if (posicion.z < -112){
+                z_map = 0;
+            }
         }
         
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el

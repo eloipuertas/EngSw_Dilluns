@@ -327,15 +327,31 @@
                
                    
          </panel>  
-       
-        <panel id="panel_empezar" align="center" childLayout="center">      
-            <image visibleToMouse="true" filename="Interface/Menu/siguiente.png" width="10%" height="70%">
-                <effect>
-                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
-                </effect>
-                <interact onClick="gotoScreen(circuit)" />
-            </image>
-        </panel> 
+
+
+       <panel id="panel_botones" height="5%" width="67%" align="left" childLayout="horizontal"> 
+    
+            <panel id="panel_volver" align="center" childLayout="center">      
+                <image visibleToMouse="true" filename="Interface/Menu/volver.png" width="50%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="gotoScreen(start)" />
+                </image> 
+            </panel>
+            
+            <panel id="panel_seguir" align="left" childLayout="center">      
+                <image visibleToMouse="true" filename="Interface/Menu/siguiente.png" width="50%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="gotoScreen(circuit)" />
+                </image>           
+            </panel>
+            
+       </panel>
+        
+          
          
     </layer>    
   </screen>
@@ -383,7 +399,33 @@
         <panel id="margen_superior" height="8%" align="center">                  
         </panel>
         
-        <panel id="panel_clima" height="10%" width="50%" align="center" childLayout="horizontal">
+        <panel id="panel_dia" height="5%" width="50%" align="center" childLayout="horizontal">
+           
+            <panel id="panel_botonmenos" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsLess" filename="Interface/Menu/izquierda2.png" width="10%" height="30%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setDayState(-)" />
+                </image>
+            </panel> 
+             
+            <panel id="panel_texto" height="50%" width="20%" align="center" valign="center" childLayout="center">      
+                    <text text="${CALL.getDayStateName()}" id="dayStateText" name="dayStateText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            </panel>
+                                   
+            <panel id="panel_botonmas" align="left" childLayout="center">      
+                <image visibleToMouse="true" id="lapsMore" filename="Interface/Menu/derecha2.png" width="10%" height="30%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="setDayState(+)" />
+                </image>
+            </panel> 
+           
+        </panel>
+        
+        <panel id="panel_clima" height="5%" width="50%" align="center" childLayout="horizontal">
            
             <panel id="panel_botonmenos" align="left" childLayout="center">      
                 <image visibleToMouse="true" id="lapsLess" filename="Interface/Menu/izquierda2.png" width="10%" height="30%">
@@ -408,17 +450,25 @@
             </panel> 
            
         </panel>
-    
-                
-
-
-        <panel id="panel_empezar" align="center" childLayout="center">      
-            <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/empezar.png" width="10%" height="70%">
-                <effect>
-                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
-                </effect>
-                <interact onClick="startGame()" />
-            </image>
+        
+        <panel id="panel_empezar" height="5%" width="67%" align="left" childLayout="horizontal">            
+            <panel id="panel_volver" align="center" childLayout="center">      
+                <image visibleToMouse="true" filename="Interface/Menu/volver.png" width="50%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="gotoScreen(coches)" />
+                </image> 
+            </panel>
+            
+            <panel id="panel_seguir" align="left" childLayout="center">      
+                <image visibleToMouse="true" filename="Interface/Menu/empezar.png" width="50%" height="70%">
+                    <effect>
+                        <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    </effect>
+                    <interact onClick="startGame()" />
+                </image>           
+            </panel>
         </panel> 
         
         
@@ -466,18 +516,54 @@
             </effect>
             <interact onClick="unPause()" />
         </image>        
-      </panel>
-     
-      
-    
+      </panel>   
       
     </layer>
            
   </screen>
   
+  <screen id="qualifying" controller="vista.Menu">
+    <layer id="background" childLayout="center">
+        <image filename="Interface/Menu/start_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+    </layer>
+    
+    <layer id="foreground" childLayout="vertical">
+        
+        <panel id="panel_mid2" height="30%" width="65%" align="center" childLayout="center">       
+            <text text="CLASIFICACION" id="lapsText" font="Interface/Fonts/MotorOil1937M54.fnt" width="50%" height="50%" />
+        </panel>
+        
+        <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
+            <text text="POS" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" />
+            <text text="NOMBRE" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            <text text="TIEMPO" id="lapsText"font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+        </panel>        
+
+        <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
+            <text text="1" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
+            <text text="${CALL.getQualifyingName(1)}" id="lapsText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            <text text="${CALL.getQualifyingTime(1)}" id="lapsText" font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+        </panel>
+        
+        <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
+            <text text="2" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
+            <text text="${CALL.getQualifyingName(2)}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            <text text="${CALL.getQualifyingTime(2)}" id="lapsText"font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+        </panel>
+        
+        <panel id="panel_bottom" align="center" childLayout="center">      
+            <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/volver.png" width="15%" height="15%">
+                <effect>
+                    <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                </effect>
+                <interact onClick="gotoScreen(start)" />
+            </image>
+        </panel>
+        
+    </layer>
   
   
-  
+  </screen>
   
    
 </nifty>

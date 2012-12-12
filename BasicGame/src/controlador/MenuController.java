@@ -1,4 +1,3 @@
-
 package controlador;
 
 import com.jme3.app.SimpleApplication;
@@ -77,6 +76,19 @@ public class MenuController implements ActionListener {
     public String getWeatherName(){
         return controller.getWeatherName();
     }
+    
+    public String getDayStateName(){
+        return controller.getDayStateName();
+    }
+    
+    public boolean getMusic(){
+        return controller.getMusic();
+    }
+    
+    public boolean getEffects(){
+        return controller.getEffects();
+    }
+            
     
     public int getIdCircuit(){
         return controller.getIdCircuit();

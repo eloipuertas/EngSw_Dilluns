@@ -162,9 +162,9 @@ public class Menu extends AbstractAppState implements ScreenController {
       dayStates.add(new DayState("Dia"));
       dayStates.add(new DayState("Noche"));     
               
-      circuits.add(new Circuit("Montmelo","circuito1",0,".jpg"));
-      circuits.add(new Circuit("Jerez","circuito2",1,".jpg"));
-      circuits.add(new Circuit("Tsukuba","circuito3",2,".jpg"));
+      circuits.add(new Circuit("Montmelo","circuito1",0,".png"));
+      circuits.add(new Circuit("Jerez","circuito2",1,".png"));
+      circuits.add(new Circuit("Tsukuba","circuito3",2,".png"));
       
       actualCar = initCar;
       actualColor = initCarColor;
@@ -197,6 +197,10 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public boolean isMenuFinished(){
       return isMenuFinished;
+  }
+  
+  public void setIsMenuFinished(boolean isMenuFinished){
+      this.isMenuFinished=isMenuFinished;
   }
 
   public String getPlayerName() {

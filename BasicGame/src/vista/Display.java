@@ -32,17 +32,19 @@ public class Display{
     private AssetManager assetManager;
     private AppSettings settings;
     private Node guiNode;
+    private Node originalGuiNode;
     private Timer timer;
     private Camera camTrasera;
     private float totalSecondsPause;    
     private float offsetChronograph;
     private Geometry marcaVermella;  
     private MenuController menu;
-    public Display(AssetManager assetManager, AppSettings settings,Node guiNode,Timer timer, MenuController menu){
+    public Display(AssetManager assetManager, AppSettings settings,Node originalGuiNode,Timer timer, MenuController menu){
         
         this.assetManager = assetManager;
         this.settings = settings;
-        this.guiNode = guiNode;        
+        this.originalGuiNode = originalGuiNode;
+        this.guiNode = new Node("Master");
         this.displayNode = new Node("Display");
         this.minimapNode = new Node("Minimap");
         this.timer = timer;
@@ -166,6 +168,7 @@ public class Display{
         marcaVermella.setMaterial(marcaVermella_mat);
         guiNode.attachChild(marcaVermella);
         
+        this.originalGuiNode.attachChild(guiNode);
         this.startChronograph();
         this.updatePosition(0);
     }
@@ -183,6 +186,7 @@ public class Display{
         mirror.center();
         mirror.move(xMirror,yMirror,0);                
         guiNode.attachChild(mirror);
+        originalGuiNode.attachChild(guiNode);
         
         camTrasera = cam.clone();
         camTrasera.setViewPort(0.39f,0.61f ,0.76f,0.94f);
@@ -209,7 +213,7 @@ public class Display{
        totalSecondsPause = this.timer.getTimeInSeconds();       
     } 
     
-    private void updateChronograph(){
+    public void updateChronograph(){
         float totalSeconds = this.timer.getTimeInSeconds();        
         totalSeconds = totalSeconds - offsetChronograph;        
         int seconds = (int)totalSeconds%60;
@@ -228,13 +232,19 @@ public class Display{
         }
     }
     
-    private void updatePosition(int pos){
+    public void updatePosition(int pos){
         if (pos > 0){
             this.pos.setText(""+pos);
         }
     }
     
-    private void updateGauge(float speed){
+    public void updateLaps(int laps){
+        if (laps > 0){
+            this.lap.setText(""+laps);
+        }
+    }
+    
+    public void updateGauge(float speed){
         
         speed=Math.abs(speed);
         if(isDisplayAdded()){ //comprobamos si el display se ha creado, en caso contratio no hacemos nada            
@@ -259,13 +269,7 @@ public class Display{
         else{
             return false;
         }
-    }
-    
-    public void updateDisplay(float speed,int position){        
-        this.updateGauge(speed);
-        this.updateChronograph();
-        this.updatePosition(position);      
-    }
+    }   
     
     public void updateMirror(Vector3f lookAtRear, Vector3f cameraPos){
          //Actualizamos camara        
@@ -335,6 +339,10 @@ public class Display{
         
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
         marcaVermella.setLocalTranslation(x_map,z_map,1);
+    }
+    
+    public void destroyAll(){        
+        this.originalGuiNode.detachChild(this.guiNode);
     }
     
 }

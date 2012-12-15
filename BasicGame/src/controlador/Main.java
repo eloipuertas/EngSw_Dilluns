@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
 import model.Audio;
@@ -305,6 +306,10 @@ public class Main extends SimpleApplication{
         initialRot = world.getInitialRot();
     }
     
+    private void deleteWorld() {
+        rootNode.detachChild(world.getNodoMundo());
+    }
+    
     private void addDisplay(){        
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());
         display = new Display(assetManager,settings,guiNode,this.timer,menu);
@@ -326,7 +331,8 @@ public class Main extends SimpleApplication{
         addControlesToProtagonist();
         
         //Añadimos el coche protagonista
-        rootNode.attachChild(car.getSpatial());
+        Node mundo = world.getNodoMundo();
+        mundo.attachChild(car.getSpatial());
         
         //Settejem la camera
         camNode = new CameraNode("CamNode", cam);
@@ -336,7 +342,7 @@ public class Main extends SimpleApplication{
         //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
-        rootNode.attachChild(camNode);
+        mundo.attachChild(camNode);
     }
     
     /*

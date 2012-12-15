@@ -5,8 +5,6 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -69,14 +67,10 @@ public class Main extends SimpleApplication{
         }
         cam.setFrustumFar(150f);
          * 
-         */             
+         */
         
-        display = new Display(assetManager,settings,guiNode,this.timer);        
-
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
-        initAudio();
-
-
+        initAudio();                
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -97,10 +91,25 @@ public class Main extends SimpleApplication{
         gamePaused = false;
     }
     
+    public void destroyWorldProtagonistaAndEnemy(){
+        this.gamePaused=true;
+        this.initScene=false;
+        this.deleteProtagonista();
+        rootNode.detachChild(rival.getSpatial());
+        display.destroyAll();
+    }
+    
+    /*
+    * Metodo para eliminar el protagonista de la escena
+    */
+    private void deleteProtagonista(){
+        rootNode.detachChild(car.getSpatial());
+        rootNode.detachChild(camNode);
+    }
+       
     public boolean isGamePaused(){
         return this.gamePaused;
-    }  
-    
+    }   
 
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
@@ -271,7 +280,10 @@ public class Main extends SimpleApplication{
                 default:
             }
             world.updateMusic();
-            display.updateDisplay(car.getSpeed(),1);      
+            display.updateGauge(car.getSpeed());
+            display.updateChronograph();
+            display.updatePosition(1);
+            display.updateLaps(5);
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
             display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
         }
@@ -295,7 +307,8 @@ public class Main extends SimpleApplication{
     
     private void addDisplay(){        
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());
-        display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f);        
+        display = new Display(assetManager,settings,guiNode,this.timer,menu);
+        display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f,25,(int)(settings.getHeight()*0.975f),40,28,(int)(settings.getHeight()*0.95f),9.23f);        
         display.addMirror(settings.getWidth()/2, (int)(settings.getHeight()*0.88f), 3f,renderManager,cam,car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),rootNode);        
     }        
     
@@ -303,7 +316,6 @@ public class Main extends SimpleApplication{
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
         car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
-        
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
         //Guardamos la posicion inicial y la rotacion del coche

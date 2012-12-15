@@ -1,4 +1,3 @@
-
 package vista;
 
 import com.jme3.app.Application;
@@ -9,7 +8,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.button.ButtonControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -48,6 +46,19 @@ public class Menu extends AbstractAppState implements ScreenController {
   private int actualWeather;
   private ArrayList<Weather> weathers = new ArrayList<Weather>();
   private String imagesPath;
+  private ArrayList<DayState> dayStates = new ArrayList<DayState>();
+  private int actualDayState;
+  private ArrayList<Position> qualifying = new ArrayList<Position>();
+  
+  private class Position{      
+      private String name;
+      private String time;
+      
+      public Position(String name,String time){         
+          this.name=name;
+          this.time=time;
+      }
+  }
   
   private class Car{
       private String carName;
@@ -64,14 +75,20 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
   
   private class Weather{
-      private String weatherName;
-      private String weatherImageFilename;
+      private String weather;     
       
-      public Weather(String weatherName, String weatherImageFilename){
-          this.weatherName = weatherName;
-          this.weatherImageFilename = weatherImageFilename;
+      public Weather(String weather){
+          this.weather = weather;          
       }
-  } 
+  }
+  
+  private class DayState{
+      private String dayState;      
+      
+      public DayState(String dayState){
+          this.dayState=dayState;
+      }
+  }
   
   private class CarColor{
       private String colorNameSPA;
@@ -137,18 +154,26 @@ public class Menu extends AbstractAppState implements ScreenController {
       colors.add(new CarColor("Azul","Blue"));
       colors.add(new CarColor("Lila","Violet"));         
       
-      weathers.add(new Weather("Soleado","sol"));
-      weathers.add(new Weather("Lluvioso","lluvia"));
-      weathers.add(new Weather("Nevado","nieve"));
-      weathers.add(new Weather("Nebuloso","niebla"));
+      weathers.add(new Weather("Despejado"));
+      weathers.add(new Weather("Lluvioso"));
+      weathers.add(new Weather("Nevado"));
+      weathers.add(new Weather("Nebuloso"));
+      
+      dayStates.add(new DayState("Dia"));
+      dayStates.add(new DayState("Noche"));     
               
-      circuits.add(new Circuit("Montmelo","circuito1",0,".jpg"));
-      circuits.add(new Circuit("Jerez","circuito2",1,".jpg"));
+      circuits.add(new Circuit("Montmelo","circuito1",0,".png"));
+      circuits.add(new Circuit("Jerez","circuito2",1,".png"));
+      circuits.add(new Circuit("Tsukuba","circuito3",2,".png"));
       
       actualCar = initCar;
       actualColor = initCarColor;
       actualWeather = initWeather;
       actualCircuit = initCircuit;
+      actualDayState = 0;
+      
+      this.qualifying.add(0, new Position("PLAYER","00:21"));
+      this.qualifying.add(1,new Position("PC","01:23"));
   }
 
   public void startGame() {      
@@ -172,6 +197,10 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public boolean isMenuFinished(){
       return isMenuFinished;
+  }
+  
+  public void setIsMenuFinished(boolean isMenuFinished){
+      this.isMenuFinished=isMenuFinished;
   }
 
   public String getPlayerName() {
@@ -266,6 +295,10 @@ public class Menu extends AbstractAppState implements ScreenController {
     }    
   }
   
+  public boolean getMusic(){
+      return this.music;
+  }
+  
   public String getMusicImagePath(){
       if(this.music){
           return this.imagesPath+"ON.png";
@@ -292,6 +325,10 @@ public class Menu extends AbstractAppState implements ScreenController {
         // change the image with the ImageRenderer
         element.getRenderer(ImageRenderer.class).setImage(newImage);
     }   
+  }
+  
+  public boolean getEffects(){
+      return this.effects;
   }
   
   public String getEffectsImagePath(){
@@ -331,7 +368,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCarImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
 
       // find the element with it's id
-      Element element = screen.findElementByName("carImage");
+      Element element = nifty.getCurrentScreen().findElementByName("carImage");
 
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage); 
@@ -357,13 +394,12 @@ public class Menu extends AbstractAppState implements ScreenController {
       
       // first load the new image
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCarImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
-
-      // find the element with it's id
-      Element element = screen.findElementByName("carImage");
-
-      // change the image with the ImageRenderer
-      element.getRenderer(ImageRenderer.class).setImage(newImage); 
       
+      // find the element with it's id
+      Element element = nifty.getCurrentScreen().findElementByName("carImage");
+           
+      // change the image with the ImageRenderer
+      element.getRenderer(ImageRenderer.class).setImage(newImage);      
   }
   
   public boolean readyToUnPause(){
@@ -391,7 +427,11 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
   
   public String getWeatherName(){
-      return weathers.get(actualWeather).weatherName;
+      return weathers.get(actualWeather).weather;
+  }
+  
+  public String getDayStateName(){
+      return dayStates.get(actualDayState).dayState;
   }
   
   public void setWeather(String scroll){
@@ -410,13 +450,41 @@ public class Menu extends AbstractAppState implements ScreenController {
       }
       
       Element weatherText = nifty.getCurrentScreen().findElementByName("weatherText");
-      weatherText.getRenderer(TextRenderer.class).setText(weathers.get(actualWeather).weatherName);
+      weatherText.getRenderer(TextRenderer.class).setText(weathers.get(actualWeather).weather);
       
        // first load the new image
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCircuitImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
 
       // find the element with it's id
-      Element element = screen.findElementByName("circuitImage");
+      Element element = nifty.getCurrentScreen().findElementByName("circuitImage");
+
+      // change the image with the ImageRenderer
+      element.getRenderer(ImageRenderer.class).setImage(newImage);
+ }
+  
+  public void setDayState(String scroll){
+      if(scroll.equals("-")){
+          actualDayState=actualDayState-1;
+      }
+      else{
+          actualDayState=actualDayState+1;
+      }
+      
+      if(actualDayState >= dayStates.size()){
+          actualDayState=0;
+      }
+      else if(actualDayState < 0){
+          actualDayState = dayStates.size()-1;
+      }
+      
+      Element weatherText = nifty.getCurrentScreen().findElementByName("dayStateText");
+      weatherText.getRenderer(TextRenderer.class).setText(dayStates.get(actualDayState).dayState);
+      
+       // first load the new image
+      NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCircuitImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
+
+      // find the element with it's id
+      Element element = nifty.getCurrentScreen().findElementByName("circuitImage");
 
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage);
@@ -441,14 +509,14 @@ public class Menu extends AbstractAppState implements ScreenController {
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCircuitImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
 
       // find the element with it's id
-      Element element = screen.findElementByName("circuitImage");
+      Element element = nifty.getCurrentScreen().findElementByName("circuitImage");
 
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage);
   }
   
   public String getCircuitImagePath(){
-      return imagesPath+circuits.get(actualCircuit).circuitImageFileName+weathers.get(actualWeather).weatherImageFilename+circuits.get(actualCircuit).imageExtension;       
+      return imagesPath+circuits.get(actualCircuit).circuitImageFileName+dayStates.get(actualDayState).dayState+weathers.get(actualWeather).weather+circuits.get(actualCircuit).imageExtension;       
   }
   
   public String getCircuitName(){
@@ -457,6 +525,18 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public int getIdCircuit(){
       return circuits.get(actualCircuit).idCircuit;
+  }
+  
+  public void setQualifying(int pos,String name,String time){
+      qualifying.add(pos-1, new Position(name,time));
+  }
+  
+  public String getQualifyingName(String pos){      
+      return qualifying.get(Integer.parseInt(pos)-1).name;
+  }
+  
+  public String getQualifyingTime(String pos){
+      return qualifying.get(Integer.parseInt(pos)-1).time;
   }
   
   public int getNumLaps(){

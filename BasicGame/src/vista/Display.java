@@ -5,6 +5,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -37,7 +38,8 @@ public class Display{
     private Camera camTrasera;
     private float totalSecondsPause;    
     private float offsetChronograph;
-    private Geometry marcaVermella;  
+    private Geometry marcaVermella;
+    private Geometry marcaBlava;
     private MenuController menu;
     public Display(AssetManager assetManager, AppSettings settings,Node originalGuiNode,Timer timer, MenuController menu){
         
@@ -166,7 +168,15 @@ public class Display{
         Material marcaVermella_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         marcaVermella_mat.setColor("Color", ColorRGBA.Red);
         marcaVermella.setMaterial(marcaVermella_mat);
+        
+        //Añadimos punto del coche rival
+        marcaBlava = new Geometry("cotxe1", sphere);
+        Material marcaBlava_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        marcaBlava_mat.setColor("Color", ColorRGBA.Blue);
+        marcaBlava.setMaterial(marcaBlava_mat);
+        
         guiNode.attachChild(marcaVermella);
+        guiNode.attachChild(marcaBlava);
         
         this.originalGuiNode.attachChild(guiNode);
         this.startChronograph();
@@ -279,9 +289,12 @@ public class Display{
     
     //Funcion para actualizar la posicion del coche en el minimapa
     //Pasamos como parametro las coordenadas de mundo del coche
-    public void updateMinimap(Vector3f posicion){
+    public void updateMinimap(Vector3f posicion,Vector3f posicionRival){
         float x_map;
         float z_map;
+        
+        float x_map_rival;
+        float z_map_rival;
         //Calculamos las coordenadas de minimapa
         //Restamos un offset a la posicion del coche porque el mundo comienza en 36 en el eje x y -116 en el eje z
         //Multiplicamos esa coordenada por el factor de escala, entre el tamaño del minimapa y el tamaño del mapa real
@@ -290,6 +303,10 @@ public class Display{
         //Heigth = 2*Width
         x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
         z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+        
+        x_map_rival = (Math.abs(posicionRival.x-35))*((settings.getWidth()/(6.75f))/103);
+        z_map_rival = (Math.abs(posicionRival.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+        
         if(menu.getIdCircuit() == 0){
             x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
             z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
@@ -303,6 +320,22 @@ public class Display{
                 z_map = ((settings.getWidth()/(6.75f))*2);
             }
             if (posicion.z < -109){
+                z_map = 0;
+            }
+            
+            
+            x_map_rival = (Math.abs(posicionRival.x-35))*((settings.getWidth()/(6.75f))/103);
+            z_map_rival = (Math.abs(posicionRival.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+            if(x_map_rival > ((settings.getWidth()/(6.75f)))){
+                x_map_rival = (settings.getWidth()/(6.75f));
+            }
+            if (posicionRival.x > 36){
+                x_map_rival = 0;
+            }
+            if(z_map_rival > ((settings.getWidth()/(6.75f))*2)){
+                z_map_rival = ((settings.getWidth()/(6.75f))*2);
+            }
+            if (posicionRival.z < -109){
                 z_map = 0;
             }
         }else if(menu.getIdCircuit() == 1){
@@ -320,6 +353,22 @@ public class Display{
             if (posicion.z > 182){
                 z_map = 0;
             }
+            
+            
+            x_map_rival = (Math.abs(posicionRival.x+107.2f))*(((settings.getWidth()/(6.75f)))/245.3f);
+            z_map_rival = (Math.abs(posicionRival.z-182.9f))*(((settings.getWidth()/(6.75f))*1.46f)/359.1f);
+            if(x_map_rival > ((settings.getWidth()/(6.75f)))){
+                x_map_rival = (settings.getWidth()/(6.75f));
+            }
+            if (posicionRival.x < -107.2){
+                x_map_rival = 0;
+            }
+            if(z_map_rival > ((settings.getWidth()/(6.75f))*1.46f)){
+                z_map_rival = ((settings.getWidth()/(6.75f))*1.46f);
+            }
+            if (posicionRival.z > 182){
+                z_map_rival = 0;
+            }
         }else if(menu.getIdCircuit() == 2){
             x_map = (Math.abs(posicion.x-177.7f))*(((settings.getHeight()/(3f))*1.12f)/240.1f);
             z_map = (Math.abs(posicion.z+112.5f))*(((settings.getHeight()/(3f)))/214.5f);
@@ -335,10 +384,28 @@ public class Display{
             if (posicion.z < -112){
                 z_map = 0;
             }
+            
+            
+            x_map_rival = (Math.abs(posicionRival.x-177.7f))*(((settings.getHeight()/(3f))*1.12f)/240.1f);
+            z_map_rival = (Math.abs(posicionRival.z+112.5f))*(((settings.getHeight()/(3f)))/214.5f);
+            if(x_map_rival > ((settings.getHeight()/(3f))*1.12f)){
+                x_map_rival = (settings.getHeight()/(3f))*1.12f;
+            }
+            if (posicionRival.x > 177){
+                x_map_rival = 0;
+            }
+            if(z_map_rival > ((settings.getHeight()/(3f)))){
+                z_map_rival = ((settings.getHeight()/(3f)));
+            }
+            if (posicionRival.z < -112){
+                z_map_rival = 0;
+            }
+                    
         }
         
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
         marcaVermella.setLocalTranslation(x_map,z_map,1);
+        marcaBlava.setLocalTranslation(x_map_rival,z_map_rival,1);
     }
     
     public void destroyAll(){        

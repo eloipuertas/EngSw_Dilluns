@@ -27,10 +27,10 @@ public class CarSettings {
     private float mass;
     private float steeringValue = 0;
     private float accelerationValue = 0;
-    private float accelerationForce = 0f;
-    private float brakeForce = 0f;
+    private float accelerationForce = 1000.0f;
+    private float brakeForce = 100.0f;
     //Factores para disminuir y aumentar la acceleracion y la frenadas
-    private int accelerationFactor = 0; //Factor multiplicativo
+    private int accelerationFactor = 2; //Factor multiplicativo
     private int brakeForceFactor = 1;   //Factor de division
     private double reverseFactor = 1.5;    //Factor de multiplicacio
     
@@ -40,7 +40,6 @@ public class CarSettings {
     private float stiffness = 200.0f;//200=f1 car
     private float compValue = .2f; //(should be lower than damp)
     private float dampValue = .3f;
-    private float maxSuspensionForce = 10000.0f;
     
     private String patch;
     
@@ -65,13 +64,12 @@ public class CarSettings {
     
     public void loadAtributes(int idModel){
         NodeList nList = doc.getElementsByTagName("car");
-        Node nNode = nList.item(idModel-1); 
+        Node nNode = nList.item(idModel); 
         if (nNode.getNodeType() == Node.ELEMENT_NODE) {
            Element eElement = (Element) nNode;
            maxAccelerateVelocity = Integer.parseInt(getTagValue("maxAccelerateVelocity",eElement));
            maxReverseVelocity = Integer.parseInt(getTagValue("maxReverseVelocity",eElement));
            reverseFactor = Double.parseDouble(getTagValue("reverseFactor",eElement));
-           accelerationFactor = Integer.parseInt(getTagValue("accelerationFactor",eElement));
            steeringValue = Float.parseFloat(getTagValue("steeringValue",eElement));
            accelerationValue = Float.parseFloat(getTagValue("accelerationValue",eElement));
            accelerationForce = Float.parseFloat(getTagValue("accelerationForce",eElement));
@@ -80,7 +78,6 @@ public class CarSettings {
            stiffness = Float.parseFloat(getTagValue("stiffness",eElement));
            compValue = Float.parseFloat(getTagValue("compValue",eElement));
            dampValue = Float.parseFloat(getTagValue("dampValue",eElement));
-           maxSuspensionForce = Float.parseFloat(getTagValue("maxSuspensionForce", eElement));
            patch = getTagValue("patch",eElement);
         }
     }
@@ -196,14 +193,6 @@ public class CarSettings {
         this.dampValue = dampValue;
     }
 
-    public float getMaxSuspensionForce() {
-        return maxSuspensionForce;
-    }
-
-    public void setMaxSuspensionForce(float maxSuspensionForce) {
-        this.maxSuspensionForce = maxSuspensionForce;
-    }
-    
     public String getPatch() {
         return patch;
     }
@@ -211,4 +200,5 @@ public class CarSettings {
     public void setPatch(String patch) {
         this.patch = patch;
     }
+    
 }

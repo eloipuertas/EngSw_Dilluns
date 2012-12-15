@@ -53,6 +53,7 @@ public class WorldCreator {
     static float bHeight = 0.2f;
     
     private Node rootNode;
+    private Node mundo;
     private AssetManager assetManager;
     private BulletAppState space;
     private ViewPort viewPort;
@@ -80,6 +81,7 @@ public class WorldCreator {
     
     public WorldCreator(Node rootNode, AssetManager assetManager, BulletAppState space, ViewPort viewPort, MenuController menu) {
         this.rootNode = rootNode;
+        mundo = new Node(); 
         this.assetManager = assetManager;
         this.space = space;
         this.viewPort = viewPort;
@@ -119,36 +121,27 @@ public class WorldCreator {
     }
     
     private void createWorld() {
-        //Afegim la llum
-        /*boolean sky = menu.getModoNoche();
-        if(sky){
+        //Afegim la iluminacio
+        if(menu.getDayStateName() == "Noche"){
             //Mode nit
             AmbientLight ambient = new AmbientLight();
             ambient.setColor(ColorRGBA.DarkGray);
-            rootNode.addLight(ambient);
+            mundo.addLight(ambient);
+            
+            //streetlamps creation
+            //mostrarLlums();
         }else{
             //Mode dia
             DirectionalLight sun = new DirectionalLight();
             Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
             sun.setDirection(lightDir);
-            sun.setColor(ColorRGBA.White.clone().multLocal(2));
-            rootNode.addLight(sun);
+            sun.setColor(ColorRGBA.LightGray.clone().multLocal(2));
+            mundo.addLight(sun);
 
-            AmbientLight ambient = new AmbientLight();
+            /*AmbientLight ambient = new AmbientLight();
             ambient.setColor(ColorRGBA.LightGray);
-            rootNode.addLight(ambient);
-        }*/
-        
-        DirectionalLight sun = new DirectionalLight();
-        Vector3f lightDir=new Vector3f(-0.37352666f, -0.50444174f, -0.7784704f);
-        sun.setDirection(lightDir);
-        sun.setColor(ColorRGBA.White.clone().multLocal(2));
-        rootNode.addLight(sun);
-
-        AmbientLight ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.LightGray);
-        rootNode.addLight(ambient);
-        
+            rootNode.addLight(ambient);*/
+        }
         
         brick = new Box(Vector3f.ZERO, bLength, bHeight, bWidth);
         brick.scaleTextureCoordinates(new Vector2f(1f, .5f));
@@ -159,19 +152,16 @@ public class WorldCreator {
         viewPort.addProcessor(bsr); 
         
         //Afegim el cel
-        /*
+        
         Node sky = new Node();
-        if(sky){
+        if(menu.getDayStateName() == "Noche"){
             //Mode nit
             sky.attachChild(SkyFactory.createSky(assetManager, assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_west.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_east.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_north.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_south.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_up.jpg"), assetManager.loadTexture("Textures/Sky/Lagoon/lagoon_down.jpg")));
         }else{
             //Mode dia
             sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
         }
-        rootNode.attachChild(sky);*/
-        Node sky = new Node();
-        sky.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/Bright/BrightSky.dds", false));
-        rootNode.attachChild(sky);
+        mundo.attachChild(sky);
         
         //Mirem quin circuit ha estat seleccionat en el menu
         mapaActual = listaMapas.getMapa(menu.getIdCircuit());
@@ -180,11 +170,7 @@ public class WorldCreator {
         // We load the scene
         Spatial sceneModel = assetManager.loadModel(mapaActual.getSceneModel());
         sceneModel.setLocalTranslation(0, -5, 0);
-        if(menu.getIdCircuit() == 0) {
-            sceneModel.scale(20,20,20);
-        } else {
-            sceneModel.scale(3,3,3);
-        }
+        sceneModel.scale(mapaActual.getEscala());
         //sceneModel.setMaterial(mat_road);
         
         // We set up collision detection for the scene by creating a
@@ -193,49 +179,29 @@ public class WorldCreator {
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
         RigidBodyControl landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
-        sceneModel.setShadowMode(ShadowMode.Receive);
+        sceneModel.setShadowMode(ShadowMode.CastAndReceive);
 
         // We attach the scene  and its limits to the rootNode and the physics space,
         // to make them appear in the game world.
-        rootNode.attachChild(sceneModel);
+        mundo.attachChild(sceneModel);
         space.getPhysicsSpace().add(sceneModel);
         
         //We load the limits of the scene
-        if(mapaActual.getparets() != null) {
-            Spatial boundsModel = assetManager.loadModel(mapaActual.getparets());
-            boundsModel.setLocalTranslation(0, -5, 0);
-            boundsModel.scale(3,3,3);
-            boundsModel.setMaterial(mat_bounds);
+        Spatial boundsModel = assetManager.loadModel(mapaActual.getParets());
+        boundsModel.setLocalTranslation(0, -5, 0);
+        boundsModel.scale(mapaActual.getEscala());
+        boundsModel.setMaterial(mat_bounds);
 
-            // We set up collision detection for the walls.
-            CollisionShape boundsShape =
-                    CollisionShapeFactory.createMeshShape((Node) boundsModel);
-            RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
-            boundsModel.addControl(limits);
-            boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);
+        // We set up collision detection for the walls.
+        CollisionShape boundsShape =
+                CollisionShapeFactory.createMeshShape((Node) boundsModel);
+        RigidBodyControl limits = new RigidBodyControl(boundsShape, 0);
+        boundsModel.addControl(limits);
+        boundsModel.setQueueBucket(RenderQueue.Bucket.Transparent);
 
-            rootNode.attachChild(boundsModel);
-            space.getPhysicsSpace().add(boundsModel);
-        }
-        //We load the limits of the scene
-        if(mapaActual.getCarretera() != null) {
-            roadModel = assetManager.loadModel(mapaActual.getCarretera());
-            roadModel.setLocalTranslation(0, -5, 0);
-            roadModel.scale(20,0.25f,20);
-            roadModel.setMaterial(mat_road);
-
-            // We set up collision detection for the walls.
-            CollisionShape roadShape =
-                    CollisionShapeFactory.createMeshShape((Node) roadModel);
-            RigidBodyControl limits = new RigidBodyControl(roadShape, 0);
-            roadModel.addControl(limits);
-
-            rootNode.attachChild(roadModel);
-            space.getPhysicsSpace().add(roadModel);
-        }
+        mundo.attachChild(boundsModel);
+        space.getPhysicsSpace().add(boundsModel);
         
-        //streetlamps creation
-        mostrarLlums();
         
         //wall creation
         mostrarMurs();
@@ -243,14 +209,14 @@ public class WorldCreator {
         //Obstacle creation
         mostrarCaixes();
 
-
         //Creem el efecte de clima que s'hagi seleccionat al menu
         initClima(menu.getWeatherName());
+        rootNode.attachChild(mundo);
     }
     
     
     private void initClima(String weatherName) {
-        if(weatherName == "Soleado"){
+        if(weatherName == "Despejado"){
             
         }else if(weatherName == "Lluvioso"){
             initPluja();
@@ -267,7 +233,17 @@ public class WorldCreator {
         snow = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 1000);
         snow.setMaterial(mat_snow);
         snow.setImagesX(2); snow.setImagesY(2); // 2x2 texture animation
-        snow.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
+        switch(menu.getIdCircuit()){
+            case 0:
+                snow.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
+                break;
+            case 1:
+                snow.setShape(new EmitterBoxShape(new Vector3f(-300f,10f,-300f),new Vector3f(300f,10f,300f)));
+                break;
+            case 2:
+                snow.setShape(new EmitterBoxShape(new Vector3f(-200f,10f,-200f),new Vector3f(200f,10f,200f)));
+                break;
+        }
         snow.setStartColor(ColorRGBA.White);
         snow.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-2,0));
         snow.setStartSize(10.11f);
@@ -278,7 +254,7 @@ public class WorldCreator {
         snow.getParticleInfluencer().setVelocityVariation(0.3f);
         snow.setLocalTranslation(0f, 0f, 0f);
         snow.setParticlesPerSec(200);
-        rootNode.attachChild(snow);
+        mundo.attachChild(snow);
     }
     
     private void initPluja() {
@@ -287,7 +263,17 @@ public class WorldCreator {
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);
         rain.setImagesX(2); rain.setImagesY(2); // 2x2 texture animation
-        rain.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
+        switch(menu.getIdCircuit()){
+            case 0:
+                rain.setShape(new EmitterBoxShape(new Vector3f(-100f,10f,-100f),new Vector3f(100f,10f,100f)));
+                break;
+            case 1:
+                rain.setShape(new EmitterBoxShape(new Vector3f(-300f,10f,-300f),new Vector3f(300f,10f,300f)));
+                break;
+            case 2:
+                rain.setShape(new EmitterBoxShape(new Vector3f(-200f,10f,-200f),new Vector3f(200f,10f,200f)));
+                break;
+        }
         rain.setStartColor(new ColorRGBA(192f,192f,192f,0.2f));
         //rain.setStartColor(new ColorRGBA(0f,0f,255f,1f));
         rain.getParticleInfluencer().setInitialVelocity(new Vector3f(0,-25,0));
@@ -298,7 +284,7 @@ public class WorldCreator {
         rain.setLowLife(6.5f);
         rain.setHighLife(6.5f);
         rain.setParticlesPerSec(2000);
-        rootNode.attachChild(rain);
+        mundo.attachChild(rain);
     }
     
     private void initBoira() {
@@ -338,7 +324,7 @@ public class WorldCreator {
         obstacleModel.setMaterial(mat_box);
         obstacleModel.addControl(new RigidBodyControl(5));
         obstacleModel.setShadowMode(ShadowMode.CastAndReceive);
-        rootNode.attachChild(obstacleModel);
+        mundo.attachChild(obstacleModel);
         space.getPhysicsSpace().add(obstacleModel);
         obstacleList.add(obstacleModel);
     }
@@ -348,19 +334,19 @@ public class WorldCreator {
         caja_parte1.setLocalTranslation(x,y,z);
         caja_parte1.addControl(new RigidBodyControl(5));
         caja_parte1.getControl(RigidBodyControl.class).setFriction(2f);
-        rootNode.attachChild(caja_parte1);
+        mundo.attachChild(caja_parte1);
         space.getPhysicsSpace().add(caja_parte1);
         Spatial caja_parte2 = assetManager.loadModel("Models/caixa_fracturada/medio.j3o");
         caja_parte2.setLocalTranslation(x,y,z);
         caja_parte2.addControl(new RigidBodyControl(5));
         caja_parte2.getControl(RigidBodyControl.class).setFriction(2f);
-        rootNode.attachChild(caja_parte2);
+        mundo.attachChild(caja_parte2);
         space.getPhysicsSpace().add(caja_parte2);
         Spatial caja_parte3 = assetManager.loadModel("Models/caixa_fracturada/inferior.j3o");
         caja_parte3.setLocalTranslation(x,y,z);
         caja_parte3.addControl(new RigidBodyControl(5));
         caja_parte3.getControl(RigidBodyControl.class).setFriction(2f);
-        rootNode.attachChild(caja_parte3);
+        mundo.attachChild(caja_parte3);
         space.getPhysicsSpace().add(caja_parte3);
     }
     
@@ -384,7 +370,7 @@ public class WorldCreator {
         medidas.add(new Vector3f(36, -5, 103));
         medidas.add(new Vector3f(-62, -5, 103));
         medidas.add(new Vector3f(-62, -5, -116));
-        Mapa m = new Mapa(new Vector3f(-10,-2,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/StraightRoad/Ciutat/solo_city.j3o",null,"Models/StraightRoad/Carretera/StraightRoad.j3o",luces,cajas,muros,medidas);
+        Mapa m = new Mapa(new Vector3f(-10,-6,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World1/World1.j3o","Models/World1/InvisibleWall/InvisibleWall1.j3o",luces,cajas,muros,medidas,2f);
         listaMapas.añadirMapa(m);
         luces = new ArrayList<Vector3f>();
         cajas = new ArrayList<Vector3f>();
@@ -407,8 +393,30 @@ public class WorldCreator {
         medidas.add(new Vector3f(-107, -7, 183));
         medidas.add(new Vector3f(-107, -5, -176));
         medidas.add(new Vector3f(138, -5, -176));
-        m = new Mapa(new Vector3f(11, -6, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World2.j3o","Models/World3/InvisibleWall.j3o",luces,cajas,muros,medidas);
+        m = new Mapa(new Vector3f(11, -7, 139),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World2/World2.j3o","Models/World2/InvisibleWall/InvisibleWall.j3o",luces,cajas,muros,medidas,3f);
         listaMapas.añadirMapa(m);
+        luces = new ArrayList<Vector3f>();
+        cajas = new ArrayList<Vector3f>();
+        muros = new ArrayList<Vector3f>();
+        medidas = new ArrayList<Vector3f>();
+        cajas.add(new Vector3f(2,-3,-10));
+        cajas.add(new Vector3f(2,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-50));
+        cajas.add(new Vector3f(-50,-3,-50));
+        cajas.add(new Vector3f(-25,-3,-25));
+        cajas.add(new Vector3f(-50,-3,0));
+        cajas.add(new Vector3f(-50,-3,50));
+        cajas.add(new Vector3f(-50,-3,20));
+        cajas.add(new Vector3f(0,-3,50));
+        muros.add(new Vector3f(-2,-5,10));
+        muros.add(new Vector3f(-55,-5,-15));
+        medidas.add(new Vector3f(36, -5, -116));
+        medidas.add(new Vector3f(36, -5, 103));
+        medidas.add(new Vector3f(-62, -5, 103));
+        medidas.add(new Vector3f(-62, -5, -116));
+        m = new Mapa(new Vector3f(-10,-4,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World3.j3o","Models/World3/InvisibleWall/InvisibleWall3.j3o",luces,cajas,muros,medidas,2f);
+        listaMapas.añadirMapa(m);
+
         /*
         luces.clear();
         cajas.clear();
@@ -437,7 +445,7 @@ public class WorldCreator {
         spot.setColor(ColorRGBA.White.mult(1.3f));         // light color
         spot.setPosition(new Vector3f(x,y,z));               // shine from camera loc
         spot.setDirection(new Vector3f(0,-1,0));             // shine forward from camera loc
-        rootNode.addLight(spot);   
+        mundo.addLight(spot);   
     }
 
     
@@ -509,7 +517,7 @@ public class WorldCreator {
         reBoxg.addControl(new RigidBodyControl(1.5f));
         reBoxg.setShadowMode(ShadowMode.CastAndReceive);
         reBoxg.getControl(RigidBodyControl.class).setFriction(0.6f);
-        rootNode.attachChild(reBoxg);
+        mundo.attachChild(reBoxg);
         space.getPhysicsSpace().add(reBoxg);
         obstacleList.add(reBoxg);
     }
@@ -523,13 +531,14 @@ public class WorldCreator {
     }
 
     public Vector3f getInitialPos(){
-        //return new Vector3f(-10, -2, 80); // lloc on comenca el cotxe
         return mapaActual.getOrigen();
     }
     
     public Quaternion getInitialRot(){
-        //return new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0);
         return mapaActual.getRotacionInicial();
     }
 
+    public Node getNodoMundo() {
+        return mundo;
+    }
 }

@@ -8,6 +8,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -140,13 +141,13 @@ public class Menu extends AbstractAppState implements ScreenController {
       this.main.setDisplayStatView(this.debugInfo); // to hide the statistics 
   
       cars.add(new Car(1,"coche1","coche1",".png"));
-      cars.add(new Car(2,"coche2","coche2",".jpeg"));
+      cars.add(new Car(2,"coche2","coche2",".png"));
      
       colors.add(new CarColor("Rojo","Red"));
       colors.add(new CarColor("Blanco","White"));
       colors.add(new CarColor("Rosa","Pink"));
       colors.add(new CarColor("Naranja","Orange"));
-      colors.add(new CarColor("Marron","Brown"));
+      colors.add(new CarColor("Marrón","Brown"));
       colors.add(new CarColor("Amarillo","Yellow"));
       colors.add(new CarColor("Gris","Gray"));
       colors.add(new CarColor("Verde","Green"));
@@ -341,7 +342,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   }
   
   public String getCarImagePath(){
-      return imagesPath+cars.get(actualCar).carImageFileName+colors.get(actualColor).colorNameSPA+cars.get(actualCar).imageExtension;       
+      return imagesPath+cars.get(actualCar).carImageFileName+colors.get(actualColor).colorNameENG+cars.get(actualCar).imageExtension;       
   }
   
   public String getCarName(){
@@ -351,10 +352,10 @@ public class Menu extends AbstractAppState implements ScreenController {
   public void setCar(String scroll){
       
       if (scroll.equals("-")){
-          actualCar = actualCar -1;          
+          actualCar = actualCar -1;
       }
       else{
-          actualCar= actualCar +1;          
+          actualCar= actualCar +1;
       }      
       
       if(actualCar >= cars.size()){
@@ -363,7 +364,7 @@ public class Menu extends AbstractAppState implements ScreenController {
       else if (actualCar < 0){
           actualCar = cars.size()-1;
       }      
-      
+
       // first load the new image
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCarImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
 
@@ -371,10 +372,18 @@ public class Menu extends AbstractAppState implements ScreenController {
       Element element = nifty.getCurrentScreen().findElementByName("carImage");
 
       // change the image with the ImageRenderer
-      element.getRenderer(ImageRenderer.class).setImage(newImage); 
+      element.getRenderer(ImageRenderer.class).setImage(newImage);
+      
+      if (scroll.equals("+")){
+        nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"moveRightIn");
+      }
+      else{
+         nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"moveLeftIn");
+      }
   }
   
   public void setCarColor(String scroll){
+      
       if(scroll.equals("-")){
           actualColor=actualColor-1;
       }
@@ -389,6 +398,8 @@ public class Menu extends AbstractAppState implements ScreenController {
           actualColor= colors.size()-1;
       }
       
+      nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"fadeIn");
+
       Element colorText = nifty.getCurrentScreen().findElementByName("colorText");
       colorText.getRenderer(TextRenderer.class).setText(this.getCarColorNameSPA());
       
@@ -399,7 +410,9 @@ public class Menu extends AbstractAppState implements ScreenController {
       Element element = nifty.getCurrentScreen().findElementByName("carImage");
            
       // change the image with the ImageRenderer
-      element.getRenderer(ImageRenderer.class).setImage(newImage);      
+      element.getRenderer(ImageRenderer.class).setImage(newImage);
+      
+      nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"fadeOut");
   }
   
   public boolean readyToUnPause(){
@@ -477,6 +490,9 @@ public class Menu extends AbstractAppState implements ScreenController {
           actualDayState = dayStates.size()-1;
       }
       
+      nifty.getCurrentScreen().findElementByName("panel_imagen_circuito").startEffect(EffectEventId.onCustom,null,"fadeIn");
+
+      
       Element weatherText = nifty.getCurrentScreen().findElementByName("dayStateText");
       weatherText.getRenderer(TextRenderer.class).setText(dayStates.get(actualDayState).dayState);
       
@@ -488,6 +504,9 @@ public class Menu extends AbstractAppState implements ScreenController {
 
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage);
+      
+      nifty.getCurrentScreen().findElementByName("panel_imagen_circuito").startEffect(EffectEventId.onCustom,null,"fadeOut");
+
  }
   
   public void setCircuit(String scroll){
@@ -503,7 +522,9 @@ public class Menu extends AbstractAppState implements ScreenController {
       }
       else if (actualCircuit < 0){
           actualCircuit = circuits.size()-1;
-      }     
+      }
+      
+      nifty.getCurrentScreen().findElementByName("panel_imagen_circuito").startEffect(EffectEventId.onCustom,null,"fadeIn");
       
       // first load the new image
       NiftyImage newImage = nifty.getRenderEngine().createImage(this.getCircuitImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
@@ -513,6 +534,9 @@ public class Menu extends AbstractAppState implements ScreenController {
 
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage);
+      
+      nifty.getCurrentScreen().findElementByName("panel_imagen_circuito").startEffect(EffectEventId.onCustom,null,"fadeOut");
+
   }
   
   public String getCircuitImagePath(){

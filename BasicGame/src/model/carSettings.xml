@@ -6,35 +6,33 @@
         <mass>400</mass>
         <steeringValue>0</steeringValue>
         <accelerationValue>0</accelerationValue>
-        <accelerationForce>500</accelerationForce>
+        <accelerationForce>1000</accelerationForce>
         <brakeForce>100</brakeForce>
         <accelerationFactor>2</accelerationFactor>
         <brakeForceFactor>1</brakeForceFactor>
         <reverseFactor>1.5</reverseFactor>
         <maxReverseVelocity>-20</maxReverseVelocity>
-        <stiffness>200.0f</stiffness>
-        <compValue>.2f</compValue>
-        <dampValue>.3f</dampValue>
-        <maxSuspensionForce>10000 </maxSuspensionForce>
+        <stiffness>200</stiffness>
+        <compValue>2</compValue>
+        <dampValue>3</dampValue>
         <patch>Models/tempCar/Car.scene</patch>
     </car>
 
     <!-- Car 2 Golf--> 
     <car id="golf">
         <maxAccelerateVelocity>130</maxAccelerateVelocity>
-        <mass>2000</mass>
+        <mass>400</mass>
         <steeringValue>0</steeringValue>
         <accelerationValue>0</accelerationValue>
-        <accelerationForce>250</accelerationForce>
-        <brakeForce>50</brakeForce>
+        <accelerationForce>1000</accelerationForce>
+        <brakeForce>100</brakeForce>
         <accelerationFactor>2</accelerationFactor>
         <brakeForceFactor>1</brakeForceFactor>
         <reverseFactor>1.5</reverseFactor>
         <maxReverseVelocity>-20</maxReverseVelocity>
-        <stiffness>200.0f</stiffness>
-        <compValue>.2f</compValue>
-        <dampValue>.3f</dampValue>
-        <maxSuspensionForce>10000.0f</maxSuspensionForce>
+        <stiffness>60</stiffness>
+        <compValue>0.2</compValue>
+        <dampValue>0.3</dampValue>
         <patch>Models/golfCar/Car.scene</patch>
     </car>
 </cars>

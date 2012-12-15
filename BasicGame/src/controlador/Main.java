@@ -9,6 +9,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
 import model.Audio;
@@ -95,6 +96,7 @@ public class Main extends SimpleApplication{
         this.gamePaused=true;
         this.initScene=false;
         this.deleteProtagonista();
+        this.deleteWorld();
         rootNode.detachChild(rival.getSpatial());
         display.destroyAll();
     }
@@ -285,7 +287,7 @@ public class Main extends SimpleApplication{
             display.updatePosition(1);
             display.updateLaps(5);
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
-            display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
+            display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null),rival.getSpatial().localToWorld(new Vector3f(0,0,0),null));
         }
         else{
             if (menu.readyToUnPause()){
@@ -305,6 +307,10 @@ public class Main extends SimpleApplication{
         initialRot = world.getInitialRot();
     }
     
+    private void deleteWorld() {
+        rootNode.detachChild(world.getNodoMundo());
+    }
+    
     private void addDisplay(){        
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());
         display = new Display(assetManager,settings,guiNode,this.timer,menu);
@@ -314,7 +320,7 @@ public class Main extends SimpleApplication{
     
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
-        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam, menu.getIdCircuit());
+        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
@@ -326,7 +332,8 @@ public class Main extends SimpleApplication{
         addControlesToProtagonist();
         
         //Añadimos el coche protagonista
-        rootNode.attachChild(car.getSpatial());
+        Node mundo = world.getNodoMundo();
+        mundo.attachChild(car.getSpatial());
         
         //Settejem la camera
         camNode = new CameraNode("CamNode", cam);
@@ -336,7 +343,7 @@ public class Main extends SimpleApplication{
         //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
-        rootNode.attachChild(camNode);
+        mundo.attachChild(camNode);
     }
     
     /*

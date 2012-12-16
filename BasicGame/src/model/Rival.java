@@ -75,7 +75,7 @@ public class Rival {
          matW.getAdditionalRenderState().setWireframe(true);
          matW.setColor("Color", ColorRGBA.Black);
 */
-        Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
+        Node meshNode = (Node) assetManager.loadModel("Models/Cars/tempCar/Car.scene");
         
         chasis1 = findGeom(meshNode,"Car");
         chasis1.rotate(0, 3.135f, 0);

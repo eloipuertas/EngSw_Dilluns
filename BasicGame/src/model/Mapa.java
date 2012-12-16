@@ -19,14 +19,14 @@ public class Mapa {
     private Quaternion rotacionInicial;
     private String sceneModel;
     private String paretsInvisibles;
-    private String carretera;
     private ArrayList<Vector3f> listaLuces;
     private ArrayList<Vector3f> listaCajas;
     private ArrayList<Vector3f> listaMuros;
     private ArrayList<Vector3f> medidas;
     private AssetManager assetManager;
+    private float escala;
     
-    public Mapa(Vector3f origen, Quaternion rotacionInicial, String sceneModel, String parets, ArrayList<Vector3f> listaLuces, ArrayList<Vector3f> listaCajas, ArrayList<Vector3f> listaMuros, ArrayList<Vector3f> medidas) {
+    public Mapa(Vector3f origen, Quaternion rotacionInicial, String sceneModel, String parets, ArrayList<Vector3f> listaLuces, ArrayList<Vector3f> listaCajas, ArrayList<Vector3f> listaMuros, ArrayList<Vector3f> medidas, float escala) {
         this.sceneModel = sceneModel;
         this.paretsInvisibles = parets;
         this.origen = origen;
@@ -34,20 +34,8 @@ public class Mapa {
         this.listaCajas = listaCajas;
         this.listaLuces = listaLuces;
         this.listaMuros = listaMuros;
-        this.carretera = null;
         this.medidas = medidas;
-    }
-    
-    public Mapa(Vector3f origen, Quaternion rotacionInicial, String sceneModel, String parets,String carretera, ArrayList<Vector3f> listaLuces, ArrayList<Vector3f> listaCajas, ArrayList<Vector3f> listaMuros, ArrayList<Vector3f> medidas) {
-        this.sceneModel = sceneModel;
-        this.paretsInvisibles = parets;
-        this.carretera = carretera;
-        this.origen = origen;
-        this.rotacionInicial = rotacionInicial;
-        this.listaCajas = listaCajas;
-        this.listaLuces = listaLuces;
-        this.listaMuros = listaMuros;
-        this.medidas = medidas;
+        this.escala = escala;
     }
     
     public Vector3f getOrigen() {
@@ -66,12 +54,8 @@ public class Mapa {
         return sceneModel;
     }
     
-    public String getparets() {
+    public String getParets() {
         return paretsInvisibles;
-    }
-    
-    public String getCarretera() {
-        return carretera;
     }
     
     public ArrayList<Vector3f> getListaLuces() {
@@ -84,6 +68,10 @@ public class Mapa {
     
     public ArrayList<Vector3f> getListaMuros() {
         return listaMuros;
+    }
+    
+    public float getEscala(){
+        return escala;
     }
     
     public void mostrarMapa() {

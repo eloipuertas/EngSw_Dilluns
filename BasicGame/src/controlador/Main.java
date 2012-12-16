@@ -173,6 +173,10 @@ public class Main extends SimpleApplication{
         }
         
         if(!gamePaused){
+            if (car.getDistancia(car.getPuntControlVolta())<=12) {
+                car.canviaEstatControlVolta(car.getEstatControlVolta()+1);
+            }
+            car.upDateMaxSpeed();
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
@@ -301,9 +305,8 @@ public class Main extends SimpleApplication{
     
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
-        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
+        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam, menu.getIdCircuit());           
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
-        
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
         //Guardamos la posicion inicial y la rotacion del coche
@@ -340,6 +343,14 @@ public class Main extends SimpleApplication{
         controles.add(KeyInput.KEY_SPACE);
         controles.add(KeyInput.KEY_RETURN);
         setControlesToProgatonist(controles);
+    }
+    
+    /*
+     * Metodo para eliminar el protagonista de la escena
+     */
+    private void deleteProtagonista(){
+        rootNode.detachChild(car.getSpatial());
+        rootNode.detachChild(camNode);
     }
     
     /*

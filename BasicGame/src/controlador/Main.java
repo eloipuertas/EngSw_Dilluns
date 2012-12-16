@@ -146,7 +146,6 @@ public class Main extends SimpleApplication implements ActionListener {
             car.handBrake(value);
         }else if (binding.equals("ResetRival")) {
             rival.reset_rival();
-            
         }else if (binding.equals("num1") && value) {//Control de la càmara del rival. Mentre es mantingui la tecla 1 apretada, la càmara seguirà al rival.
             camNode.getControl(CameraControl.class).setEnabled(false);
             camNodeR.getControl(CameraControl.class).setEnabled(true);
@@ -158,7 +157,10 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
 
-    
+    public void deleteRival(){
+        rootNode.detachChild(rival.getSpatial());
+        rootNode.detachChild(camNodeR);
+    }
     /*Metode per comprovar que el cotxe protagonista esta en moviment*/
     public boolean comprovaMoviment (){
         if (car.getVehicle().getLinearVelocity().length()>=1) {
@@ -189,7 +191,6 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         
         if(!gamePaused){
-            System.out.println(car.getVehicle().getPhysicsLocation());
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
@@ -301,32 +302,5 @@ public class Main extends SimpleApplication implements ActionListener {
         rootNode.attachChild(camNodeR);
         
     }
-    private void updatePosicio() {
-    /*   if (car.getNumVoltes>rival.getNumVoltes()){
-            car.setPosicioCarrera(1);
-            rival.setPosicioCarrera(2);
-        } else if (car.getNumVoltes<rival.getNumVoltes()){
-            car.setPosicioCarrera(2);
-            rival.setPosicioCarrera(1);
-        } else {
-            if (car.getEstatControlVolta()>rival.getEstatControlVolta()) {
-                car.setPosicioCarrera(1);
-                rival.setPosicioCarrera(2);
-            } else if (car.getEstatControlVolta()<rival.getEstatControlVolta()){
-                car.setPosicioCarrera(2);
-                rival.setPosicioCarrera(1);
-            } else {
-                if (car.getDistanciaEstatControlVolta()>rival.getDistanciaEstatControlVolta()) {
-                    car.setPosicioCarrera(1);
-                    rival.setPosicioCarrera(2);
-                } else if (car.getDistanciaEstatControlVolta()<rival.getDistanciaEstatControlVolta()){
-                    car.setPosicioCarrera(2);
-                    rival.setPosicioCarrera(1);
-                } else {
-                    car.setPosicioCarrera(1);
-                    rival.setPosicioCarrera(1);
-                }
-            }
-        }*/
-    }
+    
 }

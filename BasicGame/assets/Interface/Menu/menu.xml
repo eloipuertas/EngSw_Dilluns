@@ -224,7 +224,15 @@
     
     <layer id="foreground" childLayout="vertical">
        
-        <panel id="margen_superior" height="15%" align="center">                  
+        <panel id="margen_superior" height="7%" width="100%" childLayout="vertical" align="center">
+        </panel>
+        
+        <panel id="panel_marca" height="8%" width="100%" childLayout="vertical" align="center">
+            <image id="brandImage" filename="${CALL.getBrandImagePath()}" align="center" height="200%" width="40%"></image>   
+            <effect>
+                <onStartScreen name="move" mode="in" direction="top" length="1000" startDelay="00" inherit="true"/>            
+                <onCustom customKey="moveTopIn" name="move" mode="in" direction="top" length="700" startDelay="0" inherit="true"/>
+            </effect>
         </panel>
                      
         <panel id="panel_coche" height="60%" childLayout="horizontal" align="center">             

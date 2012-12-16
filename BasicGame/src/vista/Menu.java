@@ -66,12 +66,16 @@ public class Menu extends AbstractAppState implements ScreenController {
       private String carImageFileName;
       private String imageExtension;
       private int idCar;
+      private String brandName;
+      private String brandExtension;
       
-      public Car(int idCar,String carName,String carImageFileName, String imageExtension){
+      public Car(int idCar,String carName,String carImageFileName, String imageExtension,String brandName,String brandExtension){
           this.idCar = idCar;
           this.carName = carName;
           this.carImageFileName = carImageFileName;
           this.imageExtension = imageExtension;
+          this.brandName = brandName;
+          this.brandExtension = brandExtension;                  
       } 
   }
   
@@ -140,8 +144,8 @@ public class Menu extends AbstractAppState implements ScreenController {
       this.main.setDisplayFps(this.debugInfo); // to hide the FPS
       this.main.setDisplayStatView(this.debugInfo); // to hide the statistics 
   
-      cars.add(new Car(1,"coche1","coche1",".png"));
-      cars.add(new Car(2,"coche2","coche2",".png"));
+      cars.add(new Car(1,"coche1","coche1",".png","ferrari",".png"));
+      cars.add(new Car(2,"coche2","coche2",".png","golf",".png"));
      
       colors.add(new CarColor("Rojo","Red"));
       colors.add(new CarColor("Blanco","White"));
@@ -345,6 +349,10 @@ public class Menu extends AbstractAppState implements ScreenController {
       return imagesPath+cars.get(actualCar).carImageFileName+colors.get(actualColor).colorNameENG+cars.get(actualCar).imageExtension;       
   }
   
+  public String getBrandImagePath(){
+      return imagesPath+cars.get(actualCar).brandName+cars.get(actualCar).brandExtension;
+  }
+  
   public String getCarName(){
       return cars.get(actualCar).carName;
   }
@@ -374,12 +382,23 @@ public class Menu extends AbstractAppState implements ScreenController {
       // change the image with the ImageRenderer
       element.getRenderer(ImageRenderer.class).setImage(newImage);
       
+      // first load the new image
+      newImage = nifty.getRenderEngine().createImage(this.getBrandImagePath(), false); // false means don't linear filter the image, true would apply linear filtering
+
+      // find the element with it's id
+      element = nifty.getCurrentScreen().findElementByName("brandImage");
+
+      // change the image with the ImageRenderer
+      element.getRenderer(ImageRenderer.class).setImage(newImage);
+      
       if (scroll.equals("+")){
         nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"moveRightIn");
       }
       else{
          nifty.getCurrentScreen().findElementByName("panel_imagen_coche").startEffect(EffectEventId.onCustom,null,"moveLeftIn");
       }
+      nifty.getCurrentScreen().findElementByName("panel_marca").startEffect(EffectEventId.onCustom,null,"moveTopIn");
+
   }
   
   public void setCarColor(String scroll){

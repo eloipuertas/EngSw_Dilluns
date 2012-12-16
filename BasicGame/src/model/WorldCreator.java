@@ -208,6 +208,10 @@ public class WorldCreator {
 
         //Obstacle creation
         mostrarCaixes();
+        
+        if(menu.getDayStateName() == "Noche"){
+            mostrarLlums();
+        }
 
         //Creem el efecte de clima que s'hagi seleccionat al menu
         initClima(menu.getWeatherName());
@@ -366,6 +370,25 @@ public class WorldCreator {
         cajas.add(new Vector3f(0,-3,50));
         muros.add(new Vector3f(-2,-5,10));
         muros.add(new Vector3f(-55,-5,-15));
+        luces.add(new Vector3f((float)11.057709,(float) 3.6817183,(float) 70.557945));
+        luces.add(new Vector3f((float)-24.116646, (float)3.365127, (float)70.52438));
+        luces.add(new Vector3f((float)-23.936317, (float)3.7200565, (float)49.05581));
+        luces.add(new Vector3f((float)-25.270641, (float)3.7790525, (float)26.0042));
+        luces.add(new Vector3f((float)-46.638527, (float)3.7798347, (float)14.29488));
+        luces.add(new Vector3f((float)-27.151728, (float)3.6546752, (float)3.2493808));
+        luces.add(new Vector3f((float)-7.360218, (float)3.7280383, (float)2.8712435));
+        luces.add(new Vector3f((float)-7.360218, (float)3.7280383, (float)2.8712435));
+        luces.add(new Vector3f((float)11.829636, (float)3.719032, (float)2.9689732));
+        luces.add(new Vector3f((float)10.426862, (float)3.3665524, (float)25.892347));
+        luces.add(new Vector3f((float)10.071195, (float)3.7138824, (float)47.38325));
+        luces.add(new Vector3f((float)30.038078, (float)3.3638551, (float)-8.739162));
+        luces.add(new Vector3f((float)30.82807, (float)3.7592447, (float)-30.193073));
+        luces.add(new Vector3f((float)30.162527, (float)3.7674172, (float)-53.28356));
+        luces.add(new Vector3f((float)29.575834, (float)3.75111, (float)-76.80468));
+        luces.add(new Vector3f((float)-47.46072, (float)3.7272272, (float)-75.62149));
+        luces.add(new Vector3f((float)-47.46072, (float)3.7272272, (float)-75.62149));
+        luces.add(new Vector3f((float)-47.78743, (float)3.3517253, (float)-53.92456));
+        luces.add(new Vector3f((float)-48.309227,(float) 3.7637587, (float)-32.44741));
         medidas.add(new Vector3f(36, -5, -116));
         medidas.add(new Vector3f(36, -5, 103));
         medidas.add(new Vector3f(-62, -5, 103));
@@ -389,6 +412,23 @@ public class WorldCreator {
         cajas.add(new Vector3f(-54, -6, -39));
         muros.add(new Vector3f(86, -6, 135));
         muros.add(new Vector3f(-5, -5, -145));
+        luces.add(new Vector3f((float)20.77127, (float)7.9598684, (float)-5.7752357));
+        luces.add(new Vector3f((float)20.672327, (float)8.051395, (float)-37.470642));
+        luces.add(new Vector3f((float)21.844162, (float)8.54894, (float)-52.538074));
+        luces.add(new Vector3f((float)44.51233, (float)8.111047, (float)-115.19701));
+        luces.add(new Vector3f((float)45.2996, (float)8.091122, (float)-80.16784));
+        luces.add(new Vector3f((float)46.49883, (float)8.101867, (float)-45.55256));
+        luces.add(new Vector3f((float)45.153137, (float)7.5676866, (float)-13.354753));
+        luces.add(new Vector3f((float)41.73249, (float)7.508127, (float)21.711227));
+        luces.add(new Vector3f((float)41.957577, (float)7.5864325, (float)51.709457));
+        luces.add(new Vector3f((float)42.617905, (float)7.606007, (float)94.684235));
+        luces.add(new Vector3f((float)42.749813, (float)7.5224075, (float)121.49106));
+        luces.add(new Vector3f((float)-40.74521, (float)8.480071, (float)-51.351215));
+        luces.add(new Vector3f((float)-4.843434, (float)8.437189, (float)-51.560776));
+        luces.add(new Vector3f((float)-4.9933906, (float)7.8712263, (float)-4.7589498));
+        luces.add(new Vector3f((float)-40.743893, (float)7.9526534, (float)-5.7472534));
+        luces.add(new Vector3f((float)76.69355, (float)2.3765824, (float)-84.52637));
+        luces.add(new Vector3f((float)124.79213, (float)3.1658466, (float)59.367165));
         medidas.add(new Vector3f(138, -7, 183));
         medidas.add(new Vector3f(-107, -7, 183));
         medidas.add(new Vector3f(-107, -5, -176));
@@ -410,31 +450,31 @@ public class WorldCreator {
         cajas.add(new Vector3f(0,-3,50));
         muros.add(new Vector3f(-2,-5,10));
         muros.add(new Vector3f(-55,-5,-15));
+        luces.add(new Vector3f((float)11.057709,(float) 3.6817183,(float) 70.557945));
+        luces.add(new Vector3f((float)-24.116646, (float)3.365127, (float)70.52438));
+        luces.add(new Vector3f((float)-23.936317, (float)3.7200565, (float)49.05581));
+        luces.add(new Vector3f((float)-25.270641, (float)3.7790525, (float)26.0042));
+        luces.add(new Vector3f((float)-46.638527, (float)3.7798347, (float)14.29488));
+        luces.add(new Vector3f((float)-27.151728, (float)3.6546752, (float)3.2493808));
+        luces.add(new Vector3f((float)-7.360218, (float)3.7280383, (float)2.8712435));
+        luces.add(new Vector3f((float)-7.360218, (float)3.7280383, (float)2.8712435));
+        luces.add(new Vector3f((float)11.829636, (float)3.719032, (float)2.9689732));
+        luces.add(new Vector3f((float)10.426862, (float)3.3665524, (float)25.892347));
+        luces.add(new Vector3f((float)10.071195, (float)3.7138824, (float)47.38325));
+        luces.add(new Vector3f((float)30.038078, (float)3.3638551, (float)-8.739162));
+        luces.add(new Vector3f((float)30.82807, (float)3.7592447, (float)-30.193073));
+        luces.add(new Vector3f((float)30.162527, (float)3.7674172, (float)-53.28356));
+        luces.add(new Vector3f((float)29.575834, (float)3.75111, (float)-76.80468));
+        luces.add(new Vector3f((float)-47.46072, (float)3.7272272, (float)-75.62149));
+        luces.add(new Vector3f((float)-47.46072, (float)3.7272272, (float)-75.62149));
+        luces.add(new Vector3f((float)-47.78743, (float)3.3517253, (float)-53.92456));
+        luces.add(new Vector3f((float)-48.309227,(float) 3.7637587, (float)-32.44741));
         medidas.add(new Vector3f(36, -5, -116));
         medidas.add(new Vector3f(36, -5, 103));
         medidas.add(new Vector3f(-62, -5, 103));
         medidas.add(new Vector3f(-62, -5, -116));
         m = new Mapa(new Vector3f(-10,-4,80),new Quaternion().fromAngles(0, (float)Math.toRadians(-90), 0),"Models/World3/World3.j3o","Models/World3/InvisibleWall/InvisibleWall3.j3o",luces,cajas,muros,medidas,2f);
         listaMapas.añadirMapa(m);
-
-        /*
-        luces.clear();
-        cajas.clear();
-        muros.clear();
-        cajas.add(new Vector3f(2,-3,-10));
-        cajas.add(new Vector3f(2,-3,-50));
-        cajas.add(new Vector3f(-25,-3,-50));
-        cajas.add(new Vector3f(-50,-3,-50));
-        cajas.add(new Vector3f(-25,-3,-25));
-        cajas.add(new Vector3f(-50,-3,0));
-        cajas.add(new Vector3f(-50,-3,50));
-        cajas.add(new Vector3f(-50,-3,20));
-        cajas.add(new Vector3f(0,-3,50));
-        muros.add(new Vector3f(-2,-5,10));
-        muros.add(new Vector3f(-55,-5,-15));
-        m = new Mapa(new Vector3f(0,0,0),new Quaternion().fromAngles(0, (float)Math.toRadians(0), 0),"Models/AngularRoad/AngularRoad.j3o","Models/AngularRoad/InvisibleWalls/InvisibleWalls.scene",luces,cajas,muros);
-        listaMapas.añadirMapa(m);
-         */
     }
     
     private void afegirLlum(float x, float y, float z){
@@ -442,7 +482,7 @@ public class WorldCreator {
         spot.setSpotRange(100f);                           // distance
         spot.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
         spot.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
-        spot.setColor(ColorRGBA.White.mult(1.3f));         // light color
+        spot.setColor(ColorRGBA.White.mult(5f));         // light color
         spot.setPosition(new Vector3f(x,y,z));               // shine from camera loc
         spot.setDirection(new Vector3f(0,-1,0));             // shine forward from camera loc
         mundo.addLight(spot);   
@@ -471,7 +511,7 @@ public class WorldCreator {
         ArrayList<Vector3f> llums = mapaActual.getListaLuces();
         for(int i = 0; i < llums.size();i++) {
             Vector3f v = llums.get(i);
-            afegirLlum((int)v.x,(int)v.y,(int)v.z);
+            afegirLlum((float)v.x,(float)v.y,(float)v.z);
         }
     }
 

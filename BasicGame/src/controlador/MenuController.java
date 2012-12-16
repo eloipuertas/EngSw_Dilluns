@@ -1,4 +1,3 @@
-
 package controlador;
 
 import com.jme3.app.SimpleApplication;
@@ -42,6 +41,9 @@ public class MenuController implements ActionListener {
         this.inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_ESCAPE));
         this.inputManager.addListener(this, "Pause");
         
+        this.inputManager.addMapping("Finish", new KeyTrigger(KeyInput.KEY_K));
+        this.inputManager.addListener(this, "Finish");
+        
     }
     
     public boolean isMenuFinished(){        
@@ -78,6 +80,19 @@ public class MenuController implements ActionListener {
         return controller.getWeatherName();
     }
     
+    public String getDayStateName(){
+        return controller.getDayStateName();
+    }
+    
+    public boolean getMusic(){
+        return controller.getMusic();
+    }
+    
+    public boolean getEffects(){
+        return controller.getEffects();
+    }
+            
+    
     public int getIdCircuit(){
         return controller.getIdCircuit();
     }
@@ -102,6 +117,11 @@ public class MenuController implements ActionListener {
             else{                
                 main.pause();
             }
+        }
+        else if(binding.equals("Finish") && value){            
+            this.gotoScreen("qualifying");
+            controller.setIsMenuFinished(false);
+            this.main.destroyWorldProtagonistaAndEnemy();
         }
     }
     

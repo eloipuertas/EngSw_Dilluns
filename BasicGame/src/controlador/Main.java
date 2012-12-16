@@ -5,12 +5,11 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
 import model.Audio;
@@ -69,14 +68,10 @@ public class Main extends SimpleApplication{
         }
         cam.setFrustumFar(150f);
          * 
-         */             
+         */
         
-        display = new Display(assetManager,settings,guiNode,this.timer);        
-
         menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
-        initAudio();
-
-
+        initAudio();                
     }
     
     private PhysicsSpace getPhysicsSpace() {
@@ -97,10 +92,22 @@ public class Main extends SimpleApplication{
         gamePaused = false;
     }
     
+    public void destroyWorldProtagonistaAndEnemy(){
+        this.gamePaused=true;
+        this.initScene=false;
+        this.deleteProtagonista();
+        rootNode.detachChild(rival.getSpatial());
+        display.destroyAll();
+    }
+    
+    /*
+    * Metodo para eliminar el protagonista de la escena
+    */
+    
+       
     public boolean isGamePaused(){
         return this.gamePaused;
-    }  
-    
+    }   
 
     public void initAudio() {
       menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
@@ -275,7 +282,10 @@ public class Main extends SimpleApplication{
                 default:
             }
             world.updateMusic();
-            display.updateDisplay(car.getSpeed(),1);      
+            display.updateGauge(car.getSpeed());
+            display.updateChronograph();
+            display.updatePosition(1);
+            display.updateLaps(5);
             display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
             display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
         }
@@ -297,9 +307,14 @@ public class Main extends SimpleApplication{
         initialRot = world.getInitialRot();
     }
     
+    private void deleteWorld() {
+        rootNode.detachChild(world.getNodoMundo());
+    }
+    
     private void addDisplay(){        
         float minDimension = Math.min(settings.getWidth(),settings.getHeight());
-        display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f);        
+        display = new Display(assetManager,settings,guiNode,this.timer,menu);
+        display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f,25,(int)(settings.getHeight()*0.975f),40,28,(int)(settings.getHeight()*0.95f),9.23f);        
         display.addMirror(settings.getWidth()/2, (int)(settings.getHeight()*0.88f), 3f,renderManager,cam,car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),rootNode);        
     }        
     
@@ -317,7 +332,8 @@ public class Main extends SimpleApplication{
         addControlesToProtagonist();
         
         //Añadimos el coche protagonista
-        rootNode.attachChild(car.getSpatial());
+        Node mundo = world.getNodoMundo();
+        mundo.attachChild(car.getSpatial());
         
         //Settejem la camera
         camNode = new CameraNode("CamNode", cam);
@@ -327,7 +343,7 @@ public class Main extends SimpleApplication{
         //camNode.setLocalTranslation(new Vector3f(-15, 15, -15));
         camNode.lookAt(car.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
         
-        rootNode.attachChild(camNode);
+        mundo.attachChild(camNode);
     }
     
     /*
@@ -348,7 +364,7 @@ public class Main extends SimpleApplication{
     /*
      * Metodo para eliminar el protagonista de la escena
      */
-    private void deleteProtagonista(){
+   private void deleteProtagonista(){
         rootNode.detachChild(car.getSpatial());
         rootNode.detachChild(camNode);
     }

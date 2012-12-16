@@ -568,7 +568,7 @@ private void rectificarDesviacioRectaEsquerra (int estatAnterior,Vector3f pto,bo
         if (vehicle.getLinearVelocity().length()<2 && enMoviment==true) {
             reset_rival();
         }
-        if (getDistancia(puntControlVolta)<=12) {
+        if (getDistancia(puntControlVolta)<=20) {
             canviaEstatControlVolta(estatControlVolta+1);
         }
         if (this.getDistancia(puntFinal)<=8.f || pasPuntFinal==true) {     /*si hem arribat a la curva o pto de control girem al seguent punt*/

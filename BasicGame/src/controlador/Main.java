@@ -287,7 +287,7 @@ public class Main extends SimpleApplication implements ActionListener {
         comandos.setupKeys(left, right, up, down, space, returN, inputManager);
     }
     
-       private void addRival(){
+    private void addRival(){
          //Aqui creem la classe rival i la afegim al rootNode
         Quaternion initialRotRival = world.getInitialRot();
         //System.out.println(menu.getIdCircuit());

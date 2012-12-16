@@ -221,7 +221,26 @@ public class Display{
     
     public void pauseChronograph(){
        totalSecondsPause = this.timer.getTimeInSeconds();       
-    } 
+    }
+    
+    public String getChronograph(){
+        float totalSeconds = this.timer.getTimeInSeconds();        
+        totalSeconds = totalSeconds - offsetChronograph;        
+        int seconds = (int)totalSeconds%60;
+        int minutes = (int)totalSeconds/60;
+        if (seconds < 10 && minutes < 10){
+            return "0"+minutes+":0"+seconds;            
+        }
+        else if(seconds < 10){
+            return minutes+":0"+seconds;     
+        }
+        else if (minutes < 10){
+            return "0"+minutes+":"+seconds;     
+        }
+        else{
+            return minutes+":"+seconds;     
+        }
+    }
     
     public void updateChronograph(){
         float totalSeconds = this.timer.getTimeInSeconds();        
@@ -406,6 +425,72 @@ public class Display{
         //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
         marcaVermella.setLocalTranslation(x_map,z_map,1);
         marcaBlava.setLocalTranslation(x_map_rival,z_map_rival,1);
+    }
+    
+    public void updateMinimap(Vector3f posicion){
+        float x_map;
+        float z_map;        
+       
+        //Calculamos las coordenadas de minimapa
+        //Restamos un offset a la posicion del coche porque el mundo comienza en 36 en el eje x y -116 en el eje z
+        //Multiplicamos esa coordenada por el factor de escala, entre el tamaño del minimapa y el tamaño del mapa real
+        //Width del mapa = 105 Width del minimapa = Depende de la anchura de la pantalla
+        //Height del mapa = 210 Height del minimapa = Depende de la altura de la pantalla
+        //Heigth = 2*Width
+        x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
+        z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+        
+        
+        if(menu.getIdCircuit() == 0){
+            x_map = (Math.abs(posicion.x-35))*((settings.getWidth()/(6.75f))/103);
+            z_map = (Math.abs(posicion.z+108))*(((settings.getWidth()/(6.75f))*2)/210);
+            if(x_map > ((settings.getWidth()/(6.75f)))){
+                x_map = (settings.getWidth()/(6.75f));
+            }
+            if (posicion.x > 36){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getWidth()/(6.75f))*2)){
+                z_map = ((settings.getWidth()/(6.75f))*2);
+            }
+            if (posicion.z < -109){
+                z_map = 0;
+            }           
+        }
+        else if(menu.getIdCircuit() == 1){
+            x_map = (Math.abs(posicion.x+107.2f))*(((settings.getWidth()/(6.75f)))/245.3f);
+            z_map = (Math.abs(posicion.z-182.9f))*(((settings.getWidth()/(6.75f))*1.46f)/359.1f);
+            if(x_map > ((settings.getWidth()/(6.75f)))){
+                x_map = (settings.getWidth()/(6.75f));
+            }
+            if (posicion.x < -107.2){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getWidth()/(6.75f))*1.46f)){
+                z_map = ((settings.getWidth()/(6.75f))*1.46f);
+            }
+            if (posicion.z > 182){
+                z_map = 0;
+            }      
+            
+        }else if(menu.getIdCircuit() == 2){
+            x_map = (Math.abs(posicion.x-177.7f))*(((settings.getHeight()/(3f))*1.12f)/240.1f);
+            z_map = (Math.abs(posicion.z+112.5f))*(((settings.getHeight()/(3f)))/214.5f);
+            if(x_map > ((settings.getHeight()/(3f))*1.12f)){
+                x_map = (settings.getHeight()/(3f))*1.12f;
+            }
+            if (posicion.x > 177){
+                x_map = 0;
+            }
+            if(z_map > ((settings.getHeight()/(3f)))){
+                z_map = ((settings.getHeight()/(3f)));
+            }
+            if (posicion.z < -112){
+                z_map = 0;
+            }                   
+        }       
+        //Transladamos el punto rojo a los coordenadas del minimapa, encima de el
+        marcaVermella.setLocalTranslation(x_map,z_map,1);
     }
     
     public void destroyAll(){        

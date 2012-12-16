@@ -1,1 +1,0 @@
-Els punts no son correctes a dia 7/12/2012

@@ -549,37 +549,55 @@
   
   <screen id="qualifying" controller="vista.Menu">
     <layer id="background" childLayout="center">
-        <image filename="Interface/Menu/start_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}"></image>
+        <image filename="Interface/Menu/start_background.png" height="${CALL.getHeight()}" width="${CALL.getWidth()}">
+        <effect>
+            <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
+        </effect>
+        </image>
     </layer>
     
     <layer id="foreground" childLayout="vertical">
         
         <panel id="panel_mid2" height="30%" width="65%" align="center" childLayout="center">       
-            <image filename="Interface/Menu/clasificacion.png"></image>
+            <image filename="Interface/Menu/clasificacion.png">
+                <effect>
+                    <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
+                </effect>
+            </image>
         </panel>
         
         <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
             <text text="POS" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" />
             <text text="NOMBRE" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
             <text text="TIEMPO" id="lapsText"font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+            <effect>
+                    <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
+            </effect>
         </panel>        
 
         <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
-            <text text="1" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
-            <text text="${CALL.getQualifyingName(1)}" id="lapsText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            <text text="${CALL.getQualifyingTime(1)}" id="lapsText" font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+            <text text="1" id="1PosText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
+            <text text="${CALL.getQualifyingName(1)}" id="1NameText" font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            <text text="${CALL.getQualifyingTime(1)}" id="1TimeText" font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+            <effect>
+                    <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
+            </effect>
         </panel>
         
         <panel id="panel_mid2" height="10%" width="75%" align="center" childLayout="horizontal">       
-            <text text="2" id="lapsText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
-            <text text="${CALL.getQualifyingName(2)}" id="lapsText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
-            <text text="${CALL.getQualifyingTime(2)}" id="lapsText"font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+            <text text="2" id="2PosText"font="Interface/Fonts/Default.fnt" width="20%" height="50%" color="#fff700" />
+            <text text="${CALL.getQualifyingName(2)}" id="2NameText"font="Interface/Fonts/Default.fnt" width="50%" height="50%" />
+            <text text="${CALL.getQualifyingTime(2)}" id="2TimeText"font="Interface/Fonts/Default.fnt" width="30%" height="50%" />
+            <effect>
+                    <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
+            </effect>
         </panel>
         
         <panel id="panel_bottom" align="center" childLayout="center">      
             <image visibleToMouse="true" id="QuitButton" filename="Interface/Menu/volver.png" width="15%" height="15%">
                 <effect>
                     <onStartHover name="colorPulsate" startColor="#ffffff80" endColor="#000000ff" pulsateType="sin" period="2500" cycle="false" />
+                    <onStartScreen name="fade" start="#0" end="#ffff" length="1000"/>
                 </effect>
                 <interact onClick="gotoScreen(start)" />
             </image>

@@ -39,11 +39,7 @@ public class MenuController implements ActionListener {
         //linkamos el boton escape
         this.inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         this.inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_ESCAPE));
-        this.inputManager.addListener(this, "Pause");
-        
-        this.inputManager.addMapping("Finish", new KeyTrigger(KeyInput.KEY_K));
-        this.inputManager.addListener(this, "Finish");
-        
+        this.inputManager.addListener(this, "Pause");       
     }
     
     public boolean isMenuFinished(){        
@@ -108,6 +104,14 @@ public class MenuController implements ActionListener {
     public void unPauseDone(){
         controller.unPauseDone();
     }
+    
+    public void setIsMenuFinished(boolean isMenuFinished){
+        controller.setIsMenuFinished(isMenuFinished);
+    }
+    
+    public void setQualifying(int pos,String name,String time){        
+        controller.setQualifying(pos, name, time);
+    }
 
     public void onAction(String binding, boolean value, float tpf){
         if (binding.equals("Pause") && value){           
@@ -117,12 +121,7 @@ public class MenuController implements ActionListener {
             else{                
                 main.pause();
             }
-        }
-        else if(binding.equals("Finish") && value){            
-            this.gotoScreen("qualifying");
-            controller.setIsMenuFinished(false);
-            this.main.destroyWorldProtagonistaAndEnemy();
-        }
+        }        
     }
     
     

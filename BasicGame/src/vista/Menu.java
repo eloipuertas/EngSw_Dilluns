@@ -171,14 +171,15 @@ public class Menu extends AbstractAppState implements ScreenController {
       circuits.add(new Circuit("Jerez","circuito2",1,".png"));
       circuits.add(new Circuit("Tsukuba","circuito3",2,".png"));
       
+      qualifying = new ArrayList<Position>();
+      qualifying.add(0,new Position("",""));
+      qualifying.add(1,new Position("",""));
+      
       actualCar = initCar;
       actualColor = initCarColor;
       actualWeather = initWeather;
       actualCircuit = initCircuit;
-      actualDayState = 0;
-      
-      this.qualifying.add(0, new Position("PLAYER","00:21"));
-      this.qualifying.add(1,new Position("PC","01:23"));
+      actualDayState = 0;      
   }
 
   public void startGame() {      
@@ -206,11 +207,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public void setIsMenuFinished(boolean isMenuFinished){
       this.isMenuFinished=isMenuFinished;
-  }
-
-  public String getPlayerName() {
-    return System.getProperty("user.name");
-  }
+  } 
   
   public void setEnemies(String value){
       
@@ -572,9 +569,17 @@ public class Menu extends AbstractAppState implements ScreenController {
   
   public void setQualifying(int pos,String name,String time){
       qualifying.add(pos-1, new Position(name,time));
+      Element text = nifty.getScreen("qualifying").findElementByName("1NameText");
+      text.getRenderer(TextRenderer.class).setText(qualifying.get(0).name);
+      text = nifty.getScreen("qualifying").findElementByName("1TimeText");
+      text.getRenderer(TextRenderer.class).setText(qualifying.get(0).time);
+      text = nifty.getScreen("qualifying").findElementByName("2NameText");
+      text.getRenderer(TextRenderer.class).setText(qualifying.get(1).name);
+      text = nifty.getScreen("qualifying").findElementByName("2TimeText");
+      text.getRenderer(TextRenderer.class).setText(qualifying.get(1).time);      
   }
   
-  public String getQualifyingName(String pos){      
+  public String getQualifyingName(String pos){
       return qualifying.get(Integer.parseInt(pos)-1).name;
   }
   

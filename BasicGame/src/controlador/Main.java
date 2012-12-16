@@ -25,11 +25,14 @@ public class Main extends SimpleApplication{
     private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
     private Rival rival;
+    private CameraNode camNodeR; //Node de la càmara per al rival
     private WorldCreator world;
     private CameraNode camNode;    
     private MenuController menu;
     private boolean initScene = false;
     private Display display;
+    private boolean enemyFinished;
+    private String enemyTime;
     private boolean gamePaused = true; 
     private RigidBodyControl landscape;
     private Vector3f initialPos;
@@ -92,22 +95,41 @@ public class Main extends SimpleApplication{
         gamePaused = false;
     }
     
+    public void displayQualifying(){        
+        
+        if(menu.getMode().equals("carrera")){
+            if(!enemyFinished){
+                menu.setQualifying(1,"PLAYER",display.getChronograph());
+                menu.setQualifying(2, "IA", "DNF");  
+            }
+            else{
+                menu.setQualifying(1,"IA",enemyTime);
+                menu.setQualifying(2, "PLAYER", display.getChronograph()); 
+            }
+        }
+        else{
+            menu.setQualifying(1,"PLAYER",display.getChronograph());
+        }             
+        menu.gotoScreen("qualifying");
+        menu.setIsMenuFinished(false);
+        destroyWorldProtagonistaAndEnemy();        
+    }
+    
     public void destroyWorldProtagonistaAndEnemy(){
         this.gamePaused=true;
         this.initScene=false;
         this.deleteProtagonista();
         this.deleteWorld();
-        rootNode.detachChild(rival.getSpatial());
+        if(menu.getMode().equals("carrera")){
+            rootNode.detachChild(rival.getSpatial());
+        }
         display.destroyAll();
     }
     
     /*
     * Metodo para eliminar el protagonista de la escena
     */
-    private void deleteProtagonista(){
-        rootNode.detachChild(car.getSpatial());
-        rootNode.detachChild(camNode);
-    }
+    
        
     public boolean isGamePaused(){
         return this.gamePaused;
@@ -170,124 +192,61 @@ public class Main extends SimpleApplication{
         if(menu.isMenuFinished() && !initScene){            
             addWorld();            
             addProtagonista();
-            addRival();
-
-            addDisplay();            
+            if(menu.getMode().equals("carrera")){
+                addRival();
+            }                       
+            addDisplay();
             audioGameStarted();
             initScene = true;
             gamePaused=false;
-/*
-            addDisplay();
-            gameStarted = true;
-            setupKeys();
-*/
+            enemyFinished=false;
         }
         
         if(!gamePaused){
+            if (car.getDistancia(car.getPuntControlVolta())<=12) {
+                car.canviaEstatControlVolta(car.getEstatControlVolta()+1);
+            }
+            car.upDateMaxSpeed();
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
-            switch (estado) {
-                case 1:
-                    if(comprovaMoviment()==true) {
-                        estado = 2;
-                    }
-                    break;
-                case 2:
-
-                    if (rival.getVehicle().getPhysicsLocation().getZ()>=30) {
-                        estado = 3;
-                    }
-                    if (rival.velocitat == 0) {
-                        rival.moureEndavant();
-                    }
-                    break;
-
-                case 3:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    if (r.getX()<-0.9f && r.getY()<-0.2f) {
-                        rival.getVehicle().steer(0);
-                        estado = 4;
-
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 4:
-                    if (rival.getVehicle().getPhysicsLocation().getX()<=-40.f) {
-                         estado = 5;
-                    }                
-                    rival.moureEndavant();
-                    break;
-                case 5:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-
-
-                    if (r.getX()>+.2f && r.getY()<-.9f) {
-                        System.out.println(r);
-                        System.out.println("recta 3");
-                        estado = 6;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 6:
-                    if (rival.getVehicle().getPhysicsLocation().getZ()<=-54.f) {
-                        estado = 7;
-                        System.out.println("curva 3");
-                    }
-                    rival.moureEndavant();
-                    break;
-                case 7:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    /*System.out.println("eeee");
-                    System.out.println(r);*/
-                    if (r.getX()>+.9f && r.getY()>+0.f) {
-                        estado = 8;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;
-                case 8:
-                    if (rival.getVehicle().getPhysicsLocation().getX()>=0.f) {
-                        estado = 9;
-                        System.out.println("curva 4");
-                    }
-                    rival.moureEndavant();
-                    break;
-                case 9:
-                    r.setX(rival.getVehicle().getLinearVelocity().getX());
-                    r.setY(rival.getVehicle().getLinearVelocity().getZ());
-                    r = r.normalize();
-                    /*System.out.println("eeee");
-                    System.out.println(r);*/
-                    if (r.getX()<-.2f && r.getY()>+.9f) {
-
-                        estado = 2;
-                        rival.getVehicle().steer(0);
-                    } else {
-                        rival.girarCurva1();
-                    }
-                    break;    
-                default:
+            if (menu.getMode().equals("carrera")){
+                if(comprovaMoviment()==true || rival.comprovaPartidaComensada()) {      /*depen de la tecla up del prota*/
+                    rival.setPartidaComensada(true);
+                    rival.moureRival();
+                    camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
+                    camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+                }
+                if(rival.getNumVoltes() >= menu.getNumLaps()-1){
+                    enemyFinished=true;
+                    enemyTime = display.getChronograph();
+                }
+                display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null),rival.getSpatial().localToWorld(new Vector3f(0,0,0),null));                    
+                if(car.getNumVoltes() >= rival.getNumVoltes()+1){
+                    display.updatePosition(1);
+                }
+                else{
+                    display.updatePosition(2);
+                }
+            }
+            else{
+                display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));                    
+                display.updatePosition(1);
             }
             world.updateMusic();
-            display.updateGauge(car.getSpeed());
-            display.updateChronograph();
-            display.updatePosition(1);
-            display.updateLaps(5);
-            display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
-            display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null),rival.getSpatial().localToWorld(new Vector3f(0,0,0),null));
+            
+                        
+            if(car.getNumVoltes() < menu.getNumLaps()){            
+                display.updateLaps(car.getNumVoltes()+1);
+                display.updateGauge(car.getSpeed());
+                display.updateChronograph();                
+                display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
+            }
+            else{
+                displayQualifying();
+            }
         }
         else{
             if (menu.readyToUnPause()){
@@ -320,7 +279,7 @@ public class Main extends SimpleApplication{
     
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
-        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam);
+        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam, menu.getIdCircuit());           
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);
@@ -362,6 +321,14 @@ public class Main extends SimpleApplication{
     }
     
     /*
+     * Metodo para eliminar el protagonista de la escena
+     */
+   private void deleteProtagonista(){
+        rootNode.detachChild(car.getSpatial());
+        rootNode.detachChild(camNode);
+    }
+    
+    /*
      * Metodo para cambiar los controles del protagonista
      */
     private void setControlesToProgatonist(ArrayList<Integer> controles){
@@ -376,11 +343,16 @@ public class Main extends SimpleApplication{
     }
     
     private void addRival(){
-        //Aqui creem la classe rival i la afegim al rootNode
-        rival = new Rival(getAssetManager(), getPhysicsSpace());
-        rival.buildCar();
-        rival.getVehicle().setPhysicsLocation(new Vector3f(5.f,-4.f,0.f));
-        //Añadimos Rival
+         //Aqui creem la classe rival i la afegim al rootNode
+        Quaternion initialRotRival = world.getInitialRot();
+        //System.out.println(menu.getIdCircuit());
+        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit(),initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
         rootNode.attachChild(rival.getSpatial());
+         //Creem un nou node de la camara per a enfocar al rival
+        camNodeR = new CameraNode("camNodeR", cam);
+        camNodeR.getControl(CameraControl.class).setEnabled(false);
+        camNodeR.setLocalTranslation(new Vector3f(0, 4, -15));
+        camNodeR.lookAt(rival.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
+        rootNode.attachChild(camNodeR);        
     }
 }

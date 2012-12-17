@@ -454,7 +454,10 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
             initAudio();
         }
     }
+<<<<<<< HEAD
         
+=======
+>>>>>>> origin/GrupD_TESTM
     
     private void initAudio() {
         starting_car_sound = new Audio(vehicleNode, assetManager, "starting_car.wav");
@@ -619,10 +622,17 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
                 else {
                     accelerate_sound.play(speed/19.0f);
                 }
+<<<<<<< HEAD
             }
             else {
                 brake_sounds.playNext(); 
             }
+=======
+            }
+            else {
+                brake_sounds.playNext(); 
+            }
+>>>>>>> origin/GrupD_TESTM
         }
         else if (!value) {
             accelerate_sound.stop();

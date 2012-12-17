@@ -194,8 +194,8 @@ public class Rival {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         //mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Blue);
-        Node meshNode = (Node) assetManager.loadModel("Models/Cars/tempCar/Car.scene");
-        
+
+        Node meshNode = (Node) assetManager.loadModel("Models/Cars/tempCar/Car.scene");     
         chasis1 = findGeom(meshNode,"Car");
         chasis1.rotate(0, 3.135f, 0);
         chasis1.setMaterial(mat);
@@ -568,7 +568,10 @@ private void rectificarDesviacioRectaEsquerra (int estatAnterior,Vector3f pto,bo
         if (vehicle.getLinearVelocity().length()<2 && enMoviment==true) {
             reset_rival();
         }
-        if (getDistancia(puntControlVolta)<=12) {
+        //if (getDistancia(puntControlVolta)<=12) {
+
+        if (getDistancia(puntControlVolta)<=20) {
+
             canviaEstatControlVolta(estatControlVolta+1);
         }
         if (this.getDistancia(puntFinal)<=8.f || pasPuntFinal==true) {     /*si hem arribat a la curva o pto de control girem al seguent punt*/

@@ -194,7 +194,7 @@ public class Rival {
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         //mat.getAdditionalRenderState().setWireframe(true);
         mat.setColor("Color", ColorRGBA.Blue);
-        Node meshNode = (Node) assetManager.loadModel("Models/tempCar/Car.scene");
+        Node meshNode = (Node) assetManager.loadModel("Models/Cars/tempCar/Car.scene");
         
         chasis1 = findGeom(meshNode,"Car");
         chasis1.rotate(0, 3.135f, 0);

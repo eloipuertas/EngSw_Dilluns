@@ -194,12 +194,18 @@ public class Main extends SimpleApplication{
             addProtagonista();
             if(menu.getMode().equals("carrera")){
                 addRival();
-            }                       
-            addDisplay();
+            }    
+
+            addDisplay();            
             audioGameStarted();
             initScene = true;
             gamePaused=false;
             enemyFinished=false;
+/*
+            addDisplay();
+            gameStarted = true;
+            setupKeys();
+*/
         }
         
         if(!gamePaused){
@@ -275,7 +281,7 @@ public class Main extends SimpleApplication{
         display = new Display(assetManager,settings,guiNode,this.timer,menu);
         display.addDisplay((int)(settings.getWidth()-(minDimension/2.5f)/2),(int)((minDimension/2.5f)/2),2.5f,(int)(settings.getWidth()-(minDimension/40f)-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.975f),40,(int)(settings.getWidth()-(minDimension/9.23f)-10),(int)(settings.getHeight()*0.95f),9.23f,(int)(settings.getWidth()-(minDimension/11.42f)-10),(int)(settings.getHeight()*0.85f),11.42f,25,(int)(settings.getHeight()*0.975f),40,28,(int)(settings.getHeight()*0.95f),9.23f);        
         display.addMirror(settings.getWidth()/2, (int)(settings.getHeight()*0.88f), 3f,renderManager,cam,car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),rootNode);        
-    }        
+    }
     
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        

@@ -16,6 +16,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import java.util.ArrayList;
+import model.Audio;
 
 public class Menu extends AbstractAppState implements ScreenController {
     
@@ -50,6 +51,7 @@ public class Menu extends AbstractAppState implements ScreenController {
   private ArrayList<DayState> dayStates = new ArrayList<DayState>();
   private int actualDayState;
   private ArrayList<Position> qualifying = new ArrayList<Position>();
+  private Audio menu_music;
   
   private class Position{      
       private String name;
@@ -179,13 +181,21 @@ public class Menu extends AbstractAppState implements ScreenController {
       actualColor = initCarColor;
       actualWeather = initWeather;
       actualCircuit = initCircuit;
-      actualDayState = 0;      
+      actualDayState = 0;
+      
+      initAudio(rootNode, manager);
+  }
+  
+  private void initAudio(Node rootNode, AssetManager manager) {
+      menu_music = new Audio(rootNode, manager, "song_menu.wav", true);
+      menu_music.play();
   }
 
-  public void startGame() {      
-    isMenuFinished = true;
-    gotoScreen("null");
-    //nifty.exit();      
+  public void startGame() {
+      menu_music.stop();
+      isMenuFinished = true;
+      gotoScreen("null");
+      //nifty.exit();
   }
   
   public void gotoScreenCarSelect(String mode){
@@ -284,12 +294,14 @@ public class Menu extends AbstractAppState implements ScreenController {
     Element element = screen.findElementByName("music");
     
     if (music){
+        menu_music.play();
         // first load the new image
         NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"ON.png", false); // false means don't linear filter the image, true would apply linear filtering
         // change the image with the ImageRenderer
         element.getRenderer(ImageRenderer.class).setImage(newImage);
     }
     else{
+        menu_music.stop();
         // first load the new image
         NiftyImage newImage = nifty.getRenderEngine().createImage(this.imagesPath+"OFF.png", false); // false means don't linear filter the image, true would apply linear filtering
         // change the image with the ImageRenderer

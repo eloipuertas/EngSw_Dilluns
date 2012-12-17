@@ -829,52 +829,51 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
 
     public void collision(PhysicsCollisionEvent event) {
         String colObj = event.getNodeB().getName();
+        //System.out.println(event.getNodeA().getName() +" <---> "+ event.getNodeB().getName());
         
-        /*if(event.getNodeA().getName().equals("vehicleProtaNode")){
-            System.out.println(event.getNodeB().getName());
-        }*/
-        
-        if(getSpeed() > 70.0f && event.getNodeA().getName().equals("vehicleProtaNode") &&
+        if(event.getNodeA().getName().equals("vehicleProtaNode") &&
             (colObj.contains("solo_city-scene_node") ||
                 colObj.equals("vehicleNode") ||
-                colObj.equals("World1-scene_node") ||
-                colObj.equals("World3-scene_node") ||
-                colObj.equals("World2-scene_node")))
+                colObj.contains("World1-scene_node") ||
+                colObj.contains("World3-scene_node") ||
+                colObj.contains("World2-scene_node")))
         
         {
-            vehicleNode.detachChild(chasis12);
+            
             Node meshNode1 = null;
             if(idModelCar == 1){
-                if(collisionCounter >= 0 && collisionCounter <= 40){
+                if(collisionCounter >= 50 && collisionCounter <= 100){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/ferrariDeformed/1/Car.scene");
-                }else if (collisionCounter >= 41 && collisionCounter <= 80){
+                }else if (collisionCounter >= 101 && collisionCounter <= 150){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/ferrariDeformed/2/Car.scene");
-                } else if (collisionCounter >= 81){
+                } else if (collisionCounter >= 151){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/ferrariDeformed/3/Car.scene");
                 }
             } else if (idModelCar == 2) {
-                if(collisionCounter >= 0 && collisionCounter <= 40){
+                if(collisionCounter >= 50 && collisionCounter <= 100){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/golfDeformed/1/Car.scene");
-                }else if (collisionCounter >= 41 && collisionCounter <= 80){
+                }else if (collisionCounter >= 101 && collisionCounter <= 150){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/golfDeformed/2/Car.scene");
-                } else if (collisionCounter >= 81){
+                } else if (collisionCounter >= 151){
                     meshNode1 = (Node) assetManager.loadModel("Models/Cars/golfDeformed/3/Car.scene");
                 }
             }
-            chasis12 = findGeom(meshNode1, "Car");
-            chasis12.setLocalTranslation(chasis12.getWorldTranslation().x*0.3f, 
-                                         chasis12.getWorldTranslation().y*0.3f+1.2f, 
-                                         chasis12.getWorldTranslation().z*0.3f);
-            chasis12.setLocalScale(chasis12.getWorldScale().mult(0.3f));
-            chasis1.rotate(0, 3.135f, 0);
-            chasis12.rotate(0, 3.135f, 0);
+            if(collisionCounter >= 50){
+                vehicleNode.detachChild(chasis12);
+                chasis12 = findGeom(meshNode1, "Car");
+                chasis12.setLocalTranslation(chasis12.getWorldTranslation().x*0.3f, 
+                                             chasis12.getWorldTranslation().y*0.3f+1.2f, 
+                                             chasis12.getWorldTranslation().z*0.3f);
+                chasis12.setLocalScale(chasis12.getWorldScale().mult(0.3f));
+                chasis1.rotate(0, 3.135f, 0);
+                chasis12.rotate(0, 3.135f, 0);
 
 
-            chasis12.setMaterial(materials.getMatChasis());
-            vehicleNode.attachChild(chasis12);
-            
-            //System.out.println(event.getNodeA().getName()+" --- "+event.getNodeB().getName());
-            
+                chasis12.setMaterial(materials.getMatChasis());
+                vehicleNode.attachChild(chasis12);
+
+                //System.out.println(event.getNodeA().getName()+" --- "+event.getNodeB().getName());
+            }
             collisionCounter++;
         }
     }

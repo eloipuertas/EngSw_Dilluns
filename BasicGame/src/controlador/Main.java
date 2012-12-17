@@ -238,8 +238,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));                    
                 display.updatePosition(1);
             }
-            world.updateMusic();
-            
                         
             if(car.getNumVoltes() < menu.getNumLaps()){            
                 display.updateLaps(car.getNumVoltes()+1);
@@ -257,7 +255,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
                 camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
             }
-            world.updateMusic();
+            world.updateMusic(false);
             display.updateGauge(car.getSpeed());
             display.updateChronograph();
             display.updatePosition(1);

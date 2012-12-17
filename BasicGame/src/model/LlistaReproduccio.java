@@ -163,6 +163,10 @@ public class LlistaReproduccio {
         audios[audioActual].stop();
     }
     
+    public void unPause() {
+        audios[audioActual].play();
+    }
+    
     public boolean isPlaying() {
         return audios[audioActual].isPlaying();
     }

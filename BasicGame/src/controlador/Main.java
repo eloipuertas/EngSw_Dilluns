@@ -14,6 +14,8 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.ComandosCoche;
 import model.Rival;
 import model.VehicleProtagonista;
@@ -49,6 +51,7 @@ public class Main extends SimpleApplication implements ActionListener {
     float angle; 
     
     public static void main(String[] args) {
+        Logger.getLogger("").setLevel(Level.SEVERE);
         Main app = new Main();
         app.start();
     }

@@ -69,8 +69,11 @@ public class WorldCreator {
     private Spatial roadModel;
     private ListaMapas listaMapas;
     private Mapa mapaActual;
+    private Audio menu_music;
     private Audio rain_sound;
     private LlistaReproduccio game_music;
+    private boolean effects = true;
+    private boolean music = true;
 
     /**
      * creates a simple physics test world with a floor, an obstacle and some test boxes
@@ -91,11 +94,13 @@ public class WorldCreator {
         initMapas();
         initMaterial();
         createWorld();
-        initAudio();
-        
+        if (menu.getMusic()) {
+            initAudio();
+        }
     }
     
     private void initAudio() {
+        menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
         String musicNames[] = new String[3];
         musicNames[0] = "must_destroy.ogg";
         musicNames[1] = "3_point_1.ogg";
@@ -114,10 +119,29 @@ public class WorldCreator {
         rain_sound.play();
     }
     
-    public void updateMusic() {
-        if (game_music.isStopped()) {
-            game_music.playNext();
+    public void updateMusic(boolean isGamePaused) {
+        if (menu.getMusic()) {
+            if (isGamePaused && game_music.isPlaying()) {
+                game_music.pause();
+                menu_music.play();
+            }
+            else if (!isGamePaused && game_music.isStopped()) {
+                menu_music.stop();
+                game_music.playNext();
+            }
+            else if (!isGamePaused && game_music.isPaused()) {
+                menu_music.stop();
+                game_music.unPause();
+            }
         }
+    }
+    
+    public void setEffects(boolean effects){
+        this.effects = effects;
+    }
+    
+    public void setMusic(boolean music){
+        this.music = music;
     }
     
     private void createWorld() {
@@ -266,7 +290,9 @@ public class WorldCreator {
     }
     
     private void initPluja() {
-        initAudioPluja();
+        if (effects) {
+            initAudioPluja();
+        }
         rain = new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 100000);
         rain.setMaterial(mat_rain);
         //rain.setParticlesPerSec(50);

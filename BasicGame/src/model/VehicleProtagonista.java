@@ -54,12 +54,14 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     private boolean handBrakeMode  = false;
     private boolean forwardMode = false;
     
+    private Audio starting_car_sound;
     private Audio accelerate_sound;
     private Audio decelerate_sound;
     private Audio max_velocity_sound;
-    private Audio brake_sound;
     private Audio idling_car_sound;
-    
+    private LlistaReproduccio brake_sounds;
+    private boolean effects = true;
+    private boolean paused = false;
     
     private String puntsVoltaData;
     private int numVoltes;
@@ -251,7 +253,9 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
         vehicle.getWheel(1).setFrictionSlip(9.8f);
         physicsSpace.add(vehicle);
         
-        initAudio();
+        if (effects) {
+            initAudio();
+        }
         
         vehicle.getPhysicsSpace().addCollisionListener(this);
     }
@@ -360,7 +364,9 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
         vehicle.getWheel(1).setFrictionSlip(12.0f);
         physicsSpace.add(vehicle);
         
-        initAudio();
+        if (effects) {
+            initAudio();
+        }
         
         vehicle.getPhysicsSpace().addCollisionListener(this);
     }
@@ -444,16 +450,78 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
         vehicle.getWheel(1).setFrictionSlip(9.8f);
         physicsSpace.add(vehicle);
         
-        initAudio();
+        if (effects) {
+            initAudio();
+        }
     }
         
-        
+    
     private void initAudio() {
-         accelerate_sound = new Audio(vehicleNode, assetManager, "accelerate_sound.wav");
-         decelerate_sound = new Audio(vehicleNode, assetManager, "decelerate_sound.wav");
-         max_velocity_sound = new Audio(vehicleNode, assetManager, "max_velocity_sound.wav", true);
-         brake_sound = new Audio(vehicleNode, assetManager, "brake_sound.wav");
-         idling_car_sound = new Audio(vehicleNode, assetManager, "idling_car_sound.wav", true);
+        starting_car_sound = new Audio(vehicleNode, assetManager, "starting_car.wav");
+        accelerate_sound = new Audio(vehicleNode, assetManager, "accelerate_sound.wav");
+        decelerate_sound = new Audio(vehicleNode, assetManager, "decelerate_sound.wav");
+        max_velocity_sound = new Audio(vehicleNode, assetManager, "max_velocity_sound.wav", true);
+        idling_car_sound = new Audio(vehicleNode, assetManager, "idling_car_sound.wav", true);
+        String brakes[] = new String[2];
+        brakes[0] = "brake_sound.wav";
+        brakes[1] = "brake_sound3.wav";
+        brake_sounds = new LlistaReproduccio(vehicleNode, assetManager, brakes, true);
+        brake_sounds.playNext();
+        brake_sounds.stop();
+
+        starting_car_sound.play();
+    }
+    
+    public void pauseEffects() {
+        paused = true;
+        if (effects) {
+            if (starting_car_sound.isPlaying()) {
+                starting_car_sound.pause();
+            }
+            if (accelerate_sound.isPlaying()) {
+                accelerate_sound.pause();
+            }
+            if (decelerate_sound.isPlaying()) {
+                decelerate_sound.pause();
+            }
+            if (max_velocity_sound.isPlaying()) {
+                max_velocity_sound.pause();
+            }
+            if (idling_car_sound.isPlaying()) {
+                idling_car_sound.pause();
+            }
+            if (brake_sounds.isPlaying()) {
+                brake_sounds.pause();
+            }
+        }
+    }
+    
+    public void unPauseEffects() {
+        paused = false;
+        if (effects) {
+            if (starting_car_sound.isPaused()) {
+                starting_car_sound.play();
+            }
+            if (accelerate_sound.isPaused()) {
+                accelerate_sound.play();
+            }
+            if (decelerate_sound.isPaused()) {
+                decelerate_sound.play();
+            }
+            if (max_velocity_sound.isPaused()) {
+                max_velocity_sound.play();
+            }
+            if (idling_car_sound.isPaused()) {
+                idling_car_sound.play();
+            }
+            if (brake_sounds.isPaused()) {
+                brake_sounds.unPause();
+            }
+        }
+    }
+    
+    public void setEffects(boolean effects) {
+        this.effects = effects;
     }
     
     public Vector3f getPosicio() {
@@ -511,7 +579,9 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     }
 
     public void forward(boolean value) {
-        soundForward(value);
+        if (!paused && effects) {
+            soundForward(value);
+        }
         carSettings.setAccelerationValue(0);
         if (value) {
             forwardMode = true;
@@ -532,32 +602,44 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     }
     
     
-    public void soundForward(boolean value) {
+    private void soundForward(boolean value) {
+        idling_car_sound.stop();
+        max_velocity_sound.stop();
         float speed = getSpeed();
-        if (value && speed > 190) {
+        if (value) {
             decelerate_sound.stop();
-            accelerate_sound.play(10.5f);
-            max_velocity_sound.play();
-        }
-        if (value && speed > -5) {
-            decelerate_sound.stop();
-            if (speed < 1) {
-                accelerate_sound.play(0.0f);
-            } else {
-                accelerate_sound.play(speed/20.0f);
+            if (speed > 190) {
+                accelerate_sound.play(10.5f);
+                max_velocity_sound.play();
             }
-        } else if (!value) {
+            else if (speed > -5) {
+                if (speed < 1) {
+                    accelerate_sound.play(0.0f);
+                }
+                else {
+                    accelerate_sound.play(speed/19.0f);
+                }
+            }
+            else {
+                brake_sounds.playNext(); 
+            }
+        }
+        else if (!value) {
             accelerate_sound.stop();
             if (speed > 190) {
                 decelerate_sound.play(0.0f);
-            } else {
-                decelerate_sound.play(10.5f - speed/20.0f);
+            }
+            else if (speed < 10) {
+                decelerate_sound.play(10.5f);
+                idling_car_sound.play();
+            }
+            else {
+                decelerate_sound.play(10.5f - speed/19.0f);
             }
         }
     }
 
     public void back(boolean value) {
-        brake_sound.play();
         float valueBrake;
         if(!handBrakeMode){
             if (value) {
@@ -567,6 +649,27 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
                 vehicle.accelerate(0f);
                 brake(0f);
             }
+        }
+        if (!paused && effects) {
+            soundBack(value);
+        }
+    }
+    
+    private void soundBack(boolean value) {
+        if (value) {
+            brake_sounds.playNext();
+            accelerate_sound.stop();
+            decelerate_sound.stop();
+            idling_car_sound.stop();
+        }
+        else {
+            brake_sounds.stop();
+        }
+        if (getSpeed() < 5 || (10.5f - getSpeed()/20.0f) < 1.0f) {
+            idling_car_sound.play();
+        }
+        else {
+            decelerate_sound.play(10.5f - getSpeed()/20.0f);
         }
     }
 
@@ -611,7 +714,6 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     }
 
     public void reverse() {
-        idling_car_sound.play();
         float valueBrake;
         if (getSpeed() > 5) {
             valueBrake = carSettings.getBrakeForce() / carSettings.getBrakeForceFactor();
@@ -628,7 +730,6 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     }
     
     public void handBrake(boolean value){
-        brake_sound.play();
         float valueBrake;
         if(!reverseMode){
             if(value){
@@ -663,6 +764,27 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
                 brake(0f);
                 back(true);
             }
+        }
+        if (!paused && effects) {
+            soundBrake(value);
+        }
+    }
+    
+    private void soundBrake(boolean value) {
+        if (value) {
+            brake_sounds.playNext();
+            accelerate_sound.stop();
+            decelerate_sound.stop();
+            idling_car_sound.stop();
+        }
+        else {
+            brake_sounds.stop();
+        }
+        if (getSpeed() < 5 || (10.5f - getSpeed()/20.0f) < 1.0f) {
+            idling_car_sound.play();
+        }
+        else {
+            decelerate_sound.play(10.5f - getSpeed()/20.0f);
         }
     }
     

@@ -20,14 +20,15 @@ import model.WorldCreator;
 import vista.Display;
 
 
-public class Main extends SimpleApplication{
+public class Main extends SimpleApplication implements ActionListener {
 
     private BulletAppState bulletAppState;   
     private VehicleProtagonista car;
     private Rival rival;
     private CameraNode camNodeR; //Node de la càmara per al rival
     private WorldCreator world;
-    private CameraNode camNode;    
+    private CameraNode camNode;
+    private CameraNode camNodeR; //Node de la càmara per al rival
     private MenuController menu;
     private boolean initScene = false;
     private Display display;
@@ -95,6 +96,7 @@ public class Main extends SimpleApplication{
         gamePaused = false;
     }
     
+<<<<<<< HEAD
     public void displayQualifying(){        
         
         if(menu.getMode().equals("carrera")){
@@ -115,14 +117,21 @@ public class Main extends SimpleApplication{
         destroyWorldProtagonistaAndEnemy();        
     }
     
+=======
+>>>>>>> origin/Grup-D
     public void destroyWorldProtagonistaAndEnemy(){
         this.gamePaused=true;
         this.initScene=false;
         this.deleteProtagonista();
+<<<<<<< HEAD
         this.deleteWorld();
         if(menu.getMode().equals("carrera")){
             rootNode.detachChild(rival.getSpatial());
         }
+=======
+        this.deleteRival();
+        rootNode.detachChild(rival.getSpatial());
+>>>>>>> origin/Grup-D
         display.destroyAll();
     }
     
@@ -170,7 +179,16 @@ public class Main extends SimpleApplication{
             car.reset(value, initialPos, initialRot);
         }else if (binding.equals("Space")) {
             car.handBrake(value);
+        }else if (binding.equals("ResetRival")) {
+            rival.reset_rival();
+        }else if (binding.equals("num1") && value) {//Control de la cÃ mara del rival. Mentre es mantingui la tecla 1 apretada, la cÃ mara seguirÃ  al rival.
+            camNode.getControl(CameraControl.class).setEnabled(false);
+            camNodeR.getControl(CameraControl.class).setEnabled(true);
+        }else{
+            camNodeR.getControl(CameraControl.class).setEnabled(false);
+            camNode.getControl(CameraControl.class).setEnabled(true);
         }
+
         
     }
     
@@ -192,10 +210,15 @@ public class Main extends SimpleApplication{
         if(menu.isMenuFinished() && !initScene){            
             addWorld();            
             addProtagonista();
+<<<<<<< HEAD
             if(menu.getMode().equals("carrera")){
                 addRival();
             }    
 
+=======
+            addRival();
+            setupKeys();
+>>>>>>> origin/Grup-D
             addDisplay();            
             audioGameStarted();
             initScene = true;
@@ -216,6 +239,7 @@ public class Main extends SimpleApplication{
             camNode.lookAt(car.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
             
             camNode.setLocalTranslation(car.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+<<<<<<< HEAD
             //System.out.println(car.getVehicle().getPhysicsLocation().getX());
             /*Codi per a moure el rival, cal moure-ho d'aqui*/
             if (menu.getMode().equals("carrera")){
@@ -253,6 +277,21 @@ public class Main extends SimpleApplication{
             else{
                 displayQualifying();
             }
+=======
+            if(comprovaMoviment()==true || rival.comprovaPartidaComensada()) {      /*depen de la tecla up del prota*/
+                rival.setPartidaComensada(true);
+                rival.moureRival();
+                camNodeR.lookAt(rival.getSpatial().getWorldTranslation(), Vector3f.UNIT_Y);
+                camNodeR.setLocalTranslation(rival.getSpatial().localToWorld( new Vector3f( 0, 4, -15), null));
+            }
+            world.updateMusic();
+            display.updateGauge(car.getSpeed());
+            display.updateChronograph();
+            display.updatePosition(1);
+            display.updateLaps(5);
+            display.updateMirror(car.getSpatial().localToWorld(new Vector3f(0,3,-15), null),car.getSpatial().localToWorld( new Vector3f( 0, 3, 0), null));
+            display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));
+>>>>>>> origin/Grup-D
         }
         else{
             if (menu.readyToUnPause()){
@@ -348,17 +387,42 @@ public class Main extends SimpleApplication{
         comandos.setupKeys(left, right, up, down, space, returN, inputManager);
     }
     
+<<<<<<< HEAD
     private void addRival(){
          //Aqui creem la classe rival i la afegim al rootNode
         Quaternion initialRotRival = world.getInitialRot();
         //System.out.println(menu.getIdCircuit());
         rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit(),initialRotRival,2); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
+=======
+   private void addRival(){
+         //Aqui creem la classe rival i la afegim al rootNode
+        Quaternion initialRotRival = world.getInitialRot();
+        //System.out.println(menu.getIdCircuit());
+        rival = new Rival(getAssetManager(), getPhysicsSpace(),menu.getIdCircuit(),initialRotRival,1); /*Creacio del rival, incolu el buildcar i el situar-lo correctament*/       
+>>>>>>> origin/Grup-D
         rootNode.attachChild(rival.getSpatial());
          //Creem un nou node de la camara per a enfocar al rival
         camNodeR = new CameraNode("camNodeR", cam);
         camNodeR.getControl(CameraControl.class).setEnabled(false);
         camNodeR.setLocalTranslation(new Vector3f(0, 4, -15));
         camNodeR.lookAt(rival.getSpatial().getLocalTranslation(), Vector3f.UNIT_Y);
+<<<<<<< HEAD
         rootNode.attachChild(camNodeR);        
+=======
+        
+        rootNode.attachChild(camNodeR); 
     }
+    public void deleteRival() {
+        rootNode.detachChild(rival.getSpatial());
+        rootNode.detachChild(camNodeR);
+>>>>>>> origin/Grup-D
+    }
+    private void setupKeys() {
+        
+        inputManager.addMapping("num1", new KeyTrigger(KeyInput.KEY_1));
+        inputManager.addMapping("ResetRival", new KeyTrigger(KeyInput.KEY_R));
+        inputManager.addListener(this, "num1");
+        inputManager.addListener(this, "ResetRival");
+    }
+
 }

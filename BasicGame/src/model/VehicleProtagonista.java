@@ -694,7 +694,7 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
             if(idModelCar == 1){
                 meshNode1 = (Node) assetManager.loadModel("Models/Cars/ferrari/Car.scene");
             } else if (idModelCar == 2) {
-                meshNode1 = (Node) assetManager.loadModel("Models/Cars/golf/Car.scene");
+                meshNode1 = (Node) assetManager.loadModel("Models/Cars/golfCar/Car.scene");
             }
             chasis12 = findGeom(meshNode1, "Car");
             chasis12.setLocalTranslation(chasis12.getWorldTranslation().x*0.3f, 

@@ -190,13 +190,8 @@ public class Main extends SimpleApplication implements ActionListener {
 
             if(menu.getMode().equals("carrera")){
                 addRival();
-<<<<<<< HEAD
-            }    
-
-=======
             }   
             setupKeys();
->>>>>>> origin/GrupD_TESTM
             addDisplay();
             initScene = true;
             gamePaused=false;
@@ -243,10 +238,6 @@ public class Main extends SimpleApplication implements ActionListener {
                 display.updateMinimap(car.getSpatial().localToWorld(new Vector3f(0,0,0),null));                    
                 display.updatePosition(1);
             }
-<<<<<<< HEAD
-            
-=======
->>>>>>> origin/GrupD_TESTM
                         
             if(car.getNumVoltes() < menu.getNumLaps()){            
                 display.updateLaps(car.getNumVoltes()+1);

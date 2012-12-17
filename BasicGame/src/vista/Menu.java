@@ -182,10 +182,6 @@ public class Menu extends AbstractAppState implements ScreenController {
       actualWeather = initWeather;
       actualCircuit = initCircuit;
       actualDayState = 0;
-<<<<<<< HEAD
-      
-=======
->>>>>>> origin/GrupD_TESTM
       initAudio(rootNode, manager);
   }
   

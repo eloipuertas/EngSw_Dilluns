@@ -231,7 +231,6 @@
             <image id="brandImage" filename="${CALL.getBrandImagePath()}" align="center" height="200%" width="40%"></image>   
             <effect>
                 <onStartScreen name="move" mode="in" direction="top" length="1000" startDelay="00" inherit="true"/>            
-                <onEndScreen name="fade" start="#ffff" end="#0" length="1000"/>
                 <onCustom customKey="moveTopIn" name="move" mode="in" direction="top" length="700" startDelay="0" inherit="true"/>
             </effect>
         </panel>

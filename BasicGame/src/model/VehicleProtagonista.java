@@ -714,6 +714,9 @@ public class VehicleProtagonista implements PhysicsCollisionListener{
     }
 
     public void reverse() {
+        if (!paused && effects) {
+            idling_car_sound.play();
+        }
         float valueBrake;
         if (getSpeed() > 5) {
             valueBrake = carSettings.getBrakeForce() / carSettings.getBrakeForceFactor();

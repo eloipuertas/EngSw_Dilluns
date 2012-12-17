@@ -14,7 +14,6 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import java.util.ArrayList;
-import model.Audio;
 import model.ComandosCoche;
 import model.Rival;
 import model.VehicleProtagonista;
@@ -40,13 +39,6 @@ public class Main extends SimpleApplication implements ActionListener {
     private Vector3f initialPos;
     private Quaternion initialRot;
     private ComandosCoche comandos;
-    
-
-    private Audio menu_music;
-    private Audio starting_car_sound;
-    private Audio rain_sound;
-    private Audio must_destroy;        
-    
 
     /*Variables per a moure el rival per a fer el crcuit. Cal moure-ho en mesura del que es pugui 
     * a dins de la classe Rival*/
@@ -75,15 +67,24 @@ public class Main extends SimpleApplication implements ActionListener {
          * 
          */
         
-        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);   
-        initAudio();                
+        menu = new MenuController(settings,stateManager,assetManager,rootNode,guiViewPort,inputManager,audioRenderer,this,false,1,0,5,2,1,10,true,true,0,0,0,0,this);
     }
     
     private PhysicsSpace getPhysicsSpace() {
         return bulletAppState.getPhysicsSpace();
     }
+    
+    private void setPausedAudio() {
+        world.updateMusic(true);
+        car.pauseEffects();
+    }
+    
+    private void setUnPausedAudio() {
+        car.unPauseEffects();
+    }
 
-    public void pause(){        
+    public void pause(){
+        setPausedAudio();
         gamePaused = true;
         display.pauseChronograph();
         bulletAppState.setSpeed(0); //paro el coche           
@@ -91,6 +92,7 @@ public class Main extends SimpleApplication implements ActionListener {
     }
     
     public void unPause(){
+        setUnPausedAudio();
         display.resumeChronograph();
         menu.gotoScreen("null");
         bulletAppState.setSpeed(1.0f); //vuelvo a dejar mover el coche        
@@ -139,29 +141,7 @@ public class Main extends SimpleApplication implements ActionListener {
        
     public boolean isGamePaused(){
         return this.gamePaused;
-    }   
-
-    public void initAudio() {
-      menu_music = new Audio(rootNode, assetManager, "song_menu.wav", true);
-      menu_music.play();
-      
-      starting_car_sound = new Audio(rootNode, assetManager, "starting_car.wav");
-      
-      rain_sound = new Audio(rootNode, assetManager, "rain_sound.wav", true);
-      
-      must_destroy = new Audio(rootNode, assetManager, "must_destroy.ogg", true);
-      must_destroy.setVolume(0.4f);
     }
-    
-    public void audioGameStarted() {
-      menu_music.stop();
-      starting_car_sound.play();
-      if (menu.getWeatherName().equals("Lluvioso")) {
-          rain_sound.play();
-      }
-      must_destroy.play();
-    }
-
 
     public void onAction(String binding, boolean value, float tpf) {
         if (binding.equals("Lefts")) {
@@ -212,8 +192,7 @@ public class Main extends SimpleApplication implements ActionListener {
                 addRival();
             }   
             setupKeys();
-            addDisplay();            
-            audioGameStarted();
+            addDisplay();
             initScene = true;
             gamePaused=false;
             enemyFinished=false;
@@ -225,6 +204,7 @@ public class Main extends SimpleApplication implements ActionListener {
         }
         
         if(!gamePaused){
+            world.updateMusic(false); //actualitza la musica del mon, passant-li si esta pausat
             if (car.getDistancia(car.getPuntControlVolta())<=12) {
                 car.canviaEstatControlVolta(car.getEstatControlVolta()+1);
             }
@@ -316,7 +296,8 @@ public class Main extends SimpleApplication implements ActionListener {
     
     private void addProtagonista(){
         /*DEBUG BOUNDING BOXES*///bulletAppState.getPhysicsSpace().enableDebug(assetManager);        
-        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam, menu.getIdCircuit());           
+        car = new VehicleProtagonista(getAssetManager(), getPhysicsSpace(), cam, menu.getIdCircuit());
+        car.setEffects(menu.getEffects());
         car.setCocheProtagonista(menu.getIdCar(), menu.getCarColorNameENG());
         car.getVehicle().setPhysicsLocation(initialPos);
         car.getVehicle().setPhysicsRotation(initialRot);

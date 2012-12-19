@@ -233,9 +233,9 @@ public class WorldCreator {
         //Obstacle creation
         mostrarCaixes();
         
-        if(menu.getIdCircuit() == 0 || menu.getIdCircuit()==2) {
+        /*if(menu.getIdCircuit() == 0 || menu.getIdCircuit()==2) {
             mostarCono();
-        }
+        }*/
         
         if(menu.getDayStateName() == "Noche"){
             mostrarLlums();

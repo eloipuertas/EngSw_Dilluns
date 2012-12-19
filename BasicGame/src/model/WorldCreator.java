@@ -511,7 +511,7 @@ public class WorldCreator {
         for(int i = 0; i < cajas.size();i++) {
             Vector3f v = cajas.get(i);
             //crearCaixa((int)v.x,(int)v.y,(int)v.z);
-            System.out.println("POSICIONES "+(int)v.x+ " "+v.y+" " + (int)v.z);
+            //System.out.println("POSICIONES "+(int)v.x+ " "+v.y+" " + (int)v.z);
             crearCaixaFracturada(v.x,v.y,v.z);
         }
     }
